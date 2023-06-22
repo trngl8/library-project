@@ -1,4 +1,6 @@
 import unittest
+from library import Library
+from library import Book
 
 
 class TestLibrary(unittest.TestCase):

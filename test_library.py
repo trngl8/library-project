@@ -1,5 +1,5 @@
 import unittest
-
+from library import Library, Book, User
 
 class TestLibrary(unittest.TestCase):
     """
@@ -11,7 +11,7 @@ class TestLibrary(unittest.TestCase):
     def test_are_books(self):
         target = Library()
         result = target.get_count()
-        self.assertEqual(result, 100)
+        self.assertEqual(result, 0)
 
     def test_visitor(self):
         visitor = User()

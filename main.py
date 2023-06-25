@@ -7,9 +7,9 @@ book1 = Book("Python Crash Course")
 book2 = Book("Learn Python Hard Way")
 book3 = Book("Head First Python")
 
-library.addBook(book1)
-library.addBook(book2)
-library.addBook(book3)
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
 
 user = User()
 

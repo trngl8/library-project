@@ -5,22 +5,24 @@ class Library:
     def get_count(self):
         return len(self.catalog)
     
-    def addBook(self , book):
+    def add_book(self , book):
         self.catalog.append(book)
     
 
 class User:
-    def __init__(self) -> None:
+    def __init__(self , wanted_amount = 10) -> None:
         self.books = []
+        self.wanted_amount = wanted_amount
 
-    def availableLibrary(self , library):
-        if isinstance(library , Library):
+    def available_library(self , library : Library):
+        if library.get_count() > self.wanted_amount:
             return True
-        
-    def orderBook(self , book):
+        return False
+
+    def order_book(self , book):
         self.books.append(book)
     
-    def hasBooks(self):
+    def has_books(self):
         if len(self.books) > 0:
             return True
         return False

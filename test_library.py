@@ -9,24 +9,27 @@ class TestLibrary(unittest.TestCase):
     A reader is able to order a book
     """
 
-    def testLibraryHasBooks(self):
+    def test_library_has_books(self):
         target = Library()
         result = target.get_count()
         self.assertEqual(result, 0)
 
-    def testLibraryConvenient(self):
-        visitor = User()
-        target = Library()
-        result = visitor.availableLibrary(target)
-        self.assertEqual(True, result)
-
-    def testUserBook(self):
+    def test_user_book(self):
         user = User()
         book = Book()
         library = Library()
-        library.addBook(book)
-        user.orderBook(book)
-        self.assertEqual(True, user.hasBooks())
+        library.add_book(book)
+        user.order_book(book)
+        self.assertEqual(True, user.has_books())
+
+    def test_library_convenient(self):
+        library = Library()
+        book = Book()
+        library.add_book(book)
+        visitor = User(0)
+
+        result = visitor.available_library(library)
+        self.assertEqual(True, result)
 
 
 if __name__ == "__main__":

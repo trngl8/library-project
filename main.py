@@ -1,7 +1,8 @@
-form library import Library
+from library import Library
 from library import User
 from library import Book
 
+# TODO: import from csv file
 library = Library()
 book1 = Book("Python Crash Course")
 book2 = Book("Learn Python Hard Way")

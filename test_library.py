@@ -31,6 +31,14 @@ class TestLibrary(unittest.TestCase):
         result = visitor.available_library(library)
         self.assertEqual(True, result)
 
+    def test_book(self):
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        self.assertEqual("Python", book.name)
+        self.assertEqual("Eric Matthes", book.author)
+        self.assertEqual(2019, book.year)
+        self.assertEqual(False, book.available)
+        self.assertEqual(0, book.count)
+
 
 if __name__ == "__main__":
     unittest.main()

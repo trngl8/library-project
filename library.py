@@ -29,5 +29,11 @@ class User:
     
 
 class Book:
-    def __init__(self , name = None) -> None:
-        self.name = name
+    def __init__(self , id = None, ISBN = None, title = None, author = None, year = None , available = None, count = None) -> None:
+        self.id = id 
+        self.isbn = ISBN
+        self.title = title
+        self.author = author
+        self.year = year
+        self.available = available
+        self.count = count

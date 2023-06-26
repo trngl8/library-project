@@ -15,7 +15,7 @@ class User:
         self.wanted_amount = wanted_amount
 
     def available_library(self , library : Library):
-        if library.get_count() > self.wanted_amount:
+        if library.get_count() >= self.wanted_amount:
             return True
         return False
 

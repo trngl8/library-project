@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <title>{{ name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/svg+xml" href="/favicons/favicon.svg">
-    <link rel="alternate icon" type="image/png" sizes="16x16" href="/favicons/favicon16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
 </head>
 
 <body class="d-flex h-100">
@@ -17,12 +14,14 @@
                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person"></i>I
                     </button>
+                    {% if user and user.is_admin %}
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a href="/profile" class="dropdown-item" type="button">Профіль</a></li>
                         <li><a href="/admin/settings" class="dropdown-item" type="button">Налаштування</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a href="/logout" class="dropdown-item" type="button">Вихід</a></li>
                     </ul>
+                    {% endif %}
                 </div>
             </div>
         </header>

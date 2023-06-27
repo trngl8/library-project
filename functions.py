@@ -2,8 +2,19 @@ from library import Library
 from library import User
 from library import Book
 
-# TODO: import from csv file
+file = open("books.csv" , "r")
+lines = file.readlines()
+
 library = Library()
+
+for line in lines:
+    line = line.strip()
+    book1 = Book(line[1])
+    library.add_book(book1)
+    print(line)
+
+file.close()
+
 book1 = Book("Python Crash Course")
 book2 = Book("Learn Python Hard Way")
 book3 = Book("Head First Python")

@@ -1,11 +1,9 @@
 # Library Project
 
-How to install:
-```commandline
-$ pip install -r requirements.txt
-```
+How to install and run:
 
-How to run:
+1. Clone repository to the project directory 
+2. In the project directory
 ```commandline
 $ python main.py
 ```

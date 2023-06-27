@@ -2,7 +2,7 @@
 <html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>{{ name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/svg+xml" href="/favicons/favicon.svg">
     <link rel="alternate icon" type="image/png" sizes="16x16" href="/favicons/favicon16x16.png">
@@ -29,7 +29,7 @@
 
         <main class="text-center px-3">
             <div class="logo mb-5">
-                <img src="/build/images/logo0.png" alt="Metacortex" width="300" height="300">
+                <img src="/build/images/logo0.png" alt="{{ name }}" width="300" height="300">
             </div>
 
             <p class="lead" data-hello-target="output"></p>
@@ -39,7 +39,7 @@
         </main>
 
         <footer class="text-center mt-auto">
-            <p>Licenced by <a href="http://localhost">Metacortex</a>.</p>
+            <p>Licenced by <a href="http://localhost">{{ name }}</a>.</p>
         </footer>
     </div>
 </body>

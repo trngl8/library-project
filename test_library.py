@@ -16,7 +16,7 @@ class TestLibrary(unittest.TestCase):
 
     def test_user_book(self):
         user = User()
-        book = Book()
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
         library = Library()
         library.add_book(book)
         user.order_book(book)
@@ -24,14 +24,22 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_convenient(self):
         library = Library()
-        book1 = Book()
-        book2 = Book()
+        book1 = Book("Python Hard Way", "Zed Shaw", 2013)
+        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
         library.add_book(book1)
         library.add_book(book2)
         visitor = User(2)
 
         result = visitor.available_library(library)
         self.assertEqual(True, result)
+
+    def test_book(self):
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        self.assertEqual("Python Crash Course", book.title)
+        self.assertEqual("Eric Matthes", book.author)
+        self.assertEqual(2019, book.year)
+        self.assertEqual(False, book.available)
+        self.assertEqual(0, book.count)
 
 
 if __name__ == "__main__":

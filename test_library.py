@@ -50,6 +50,14 @@ class TestLibrary(unittest.TestCase):
         ])
         self.assertEqual(3, library.get_count())
 
+    def test_book(self):
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        self.assertEqual("Python Crash Course", book.title)
+        self.assertEqual("Eric Matthes", book.author)
+        self.assertEqual(2019, book.year)
+        self.assertEqual(False, book.available)
+        self.assertEqual(0, book.count)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -37,7 +37,7 @@ class User:
     
 
 class Book:
-    def __init__(self, title, author, year, ISBN = None) -> None:
+    def __init__(self, title, author, year, ISBN=None) -> None:
         self.isbn = ISBN
         self.title = title
         self.author = author

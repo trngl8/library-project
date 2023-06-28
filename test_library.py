@@ -33,7 +33,7 @@ class TestLibrary(unittest.TestCase):
 
     def test_book(self):
         book = Book("Python Crash Course", "Eric Matthes", 2019)
-        self.assertEqual("Python", book.name)
+        self.assertEqual("Python Crash Course", book.name)
         self.assertEqual("Eric Matthes", book.author)
         self.assertEqual(2019, book.year)
         self.assertEqual(False, book.available)

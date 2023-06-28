@@ -32,7 +32,7 @@ class Book:
     def __init__(self , id = None, ISBN = None, title = None, author = None, year = None , available = None, count = None) -> None:
         self.id = id 
         self.isbn = ISBN
-        self.title = title
+        self.name = title
         self.author = author
         self.year = year
         self.available = available

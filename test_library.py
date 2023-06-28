@@ -41,6 +41,15 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(False, book.available)
         self.assertEqual(0, book.count)
 
+    def test_import_books(self):
+        library = Library()
+        library.import_books([
+            ["Python Crash Course", "Eric Matthes", 2019],
+            ["Python Hard Way", "Zed Shaw", 2013],
+            ["Head First Python", "Paul Barry", 2016]
+        ])
+        self.assertEqual(3, library.get_count())
+
 
 if __name__ == "__main__":
     unittest.main()

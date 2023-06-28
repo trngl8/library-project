@@ -1,4 +1,6 @@
 .idea
 .venv
 
+var
+
 __pycache__

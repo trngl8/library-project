@@ -24,9 +24,11 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_convenient(self):
         library = Library()
-        book = Book("Python Hard Way", "Zed Shaw", 2013)
-        library.add_book(book)
-        visitor = User(0)
+        book1 = Book("Python Hard Way", "Zed Shaw", 2013)
+        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
+        library.add_book(book1)
+        library.add_book(book2)
+        visitor = User(2)
 
         result = visitor.available_library(library)
         self.assertEqual(True, result)

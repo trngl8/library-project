@@ -5,6 +5,12 @@
     <title>{{ name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ bootstrap.load_css() }}
+    <style>
+        .cover-container {
+            max-width: 42em;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body class="d-flex h-100">
@@ -12,16 +18,18 @@
         <header class="mb-auto">
             <div class="text-end">
                 <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person"></i>I
-                    </button>
                     {% if user and user.is_admin %}
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="/profile" class="dropdown-item" type="button">Профіль</a></li>
-                        <li><a href="/admin/settings" class="dropdown-item" type="button">Налаштування</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a href="/logout" class="dropdown-item" type="button">Вихід</a></li>
-                    </ul>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a href="/profile" class="dropdown-item" type="button">Профіль</a></li>
+                            <li><a href="/admin/settings" class="dropdown-item" type="button">Налаштування</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a href="/logout" class="dropdown-item" type="button">Вихід</a></li>
+                        </ul>
+                    {% else %}
+                        <a href="/login" class="btn btn-sm btn-outline-secondary"><i class="bi bi-person"></i></a>
                     {% endif %}
                 </div>
             </div>

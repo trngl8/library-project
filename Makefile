@@ -1,10 +1,17 @@
 SHELL := /bin/bash
 
+venv-create:
+	python -m venv .venv
+.PHONY: venv-create
+
+venv-activate:
+	. .venv/bin/activate
+.PHONY: venv-activate
+
 serve:
-	. .venv/bin/activate && flask --app index run
+	flask --app index run
 .PHONY: serve
 
-
 dump-requirements:
-	. .venv/bin/activate && pip freeze > requirements.txt
+	pip freeze > requirements.txt
 .PHONY: dump-requirements

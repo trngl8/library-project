@@ -44,8 +44,8 @@ class TestLibrary(unittest.TestCase):
     def test_import_books(self):
         library = Library()
         book1 = Book("Python Crash Course", "Eric Matthes", 2019)
-        book2 = Book("Python Hard Way", "Zed Shaw", 2019)
-        book3 = Book("Head First Python", "Paul Barry", 2019)
+        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
+        book3 = Book("Head First Python", "Paul Barry", 2016)
         library.import_books([
             ["Python Crash Course", "Eric Matthes", 2019],
             ["Python Hard Way", "Zed Shaw", 2013],

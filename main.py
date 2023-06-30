@@ -6,11 +6,28 @@ def print_exception_range(max_value):
     print(f"You should enter a number between 1 and {max_value}")
 
 
-menu = [
-    "find a book",
-    "find a user",
-]
+def find_book():
+    pass
 
+
+def find_user():
+    pass
+
+
+def import_books():
+    filename = input("Enter filename :> ")
+    # TODO: implement import behavior
+    count = 0
+    return f"Imported {count} books"
+
+
+actions = {
+    "Find a book": find_book,
+    "Find a user": find_user,
+    "Import books": import_books,
+}
+
+menu = list(actions.keys())
 choice = 0
 while choice == 0:
     for i, item in enumerate(menu):
@@ -25,4 +42,5 @@ while choice == 0:
         print_exception_range(len(menu))
         choice = 0
 
-print(choice, menu[choice - 1].capitalize())
+function = actions.get(menu[choice - 1])
+print(function())

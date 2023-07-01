@@ -1,8 +1,10 @@
 .idea
 .venv
+.coverage
 
 var
 
 __pycache__
 
+htmlcov
 instance

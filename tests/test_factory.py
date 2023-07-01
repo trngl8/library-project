@@ -9,5 +9,4 @@ def test_config():
 def test_hello(client):
     response = client.get('/')
     assert response.status_code == 200
-    # assert response.data == b'Library "3 Books"'
-    # assert 'Library "3 Books"' in str(response.data)
+    assert b'3 Books' in response.data

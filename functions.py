@@ -1,6 +1,7 @@
 from library import Library
 from library import User
 from library import Book
+import csv
 
 file = open("books.csv" , "r")
 lines = file.readlines()
@@ -36,13 +37,6 @@ user.release(book1)
 user.ask_order(book2)
 user.borrow(book2)
 
-
-def create_csv(path):
-    column_names = ['id' , 'ISBN' , "Titile" , "Author", "Year", "Available", "Count"]
-    with open(path , 'w') as file:
-        writer = csv.writer(file)
-        writer.writerow(column_names)
-
 def add_book_to_csv(book : Book , path):
     if  not check_if_book_in_csv(path = path, book=book)[0]:
         with open(path, 'r') as file:
@@ -58,8 +52,8 @@ def add_book_to_csv(book : Book , path):
         with open(path, 'r') as file:
             reader = csv.reader(file)
             data = list(reader)
-        data[row_number][4] = int(data[row_number][4])
-        data[row_number][4] += 1
+        data[row_number][5] = int(data[row_number][5])
+        data[row_number][5] += 1
         with open(path , 'w') as file:
             writer = csv.writer(file)
             writer.writerows(data)
@@ -69,7 +63,7 @@ def check_if_book_in_csv(path , book):
         reader = csv.reader(file)
         reader = list(reader)
         for number_of_row , row in enumerate(reader):
-            if book == Book(row[0], row[1], row[2], row[3], row[4]):
+            if book == Book(row[0], row[1], row[2], row[3]):
                 return True , number_of_row
         return False , 0
 

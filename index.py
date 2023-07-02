@@ -31,7 +31,6 @@ def catalog():
 def book(book_id):
     name = 'Library "3 Books"'
     item = Book("Python Crash Course", "Eric Matthes", 2019)
-    # TODO: find by id from the storage
     return render_template('book.html', name=name, book=item)
 
 

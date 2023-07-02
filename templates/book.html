@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class="card d-flex" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ book.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">{{ book.author }}</h6>
+        <p class="card-text">{{ book.title }} {{ book.author }} {{ book.year }}</p>
+        <a href="#" class="card-link">Order</a>
+      </div>
+    </div>
+{% endblock %}

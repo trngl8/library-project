@@ -12,17 +12,17 @@
 
 <nav class="navbar navbar-expand-lg bg-light bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">{{ name }}</a>
+    <a class="navbar-brand" href="{{ url_for('index') }}">{{ name }}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/index">Index</a>
+          <a class="nav-link" href="{{ url_for('catalog') }}">Index</a>
         </li>
       </ul>
       <a href="#" class="btn btn-outline-primary">Login</a>
@@ -32,17 +32,19 @@
 
 <main>
   <div class="container-fluid mt-4">
+    {% block content %}
     {% for book in books %}
-    <div class="card d-flex" style="width: 18rem;">
+    <div class="card d-flex mb-4" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">{{ book.title }}</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">{{ book.author }}</h6>
         <p class="card-text">{{ book.title }} {{ book.author }} {{ book.year }}</p>
-        <a href="#" class="card-link">Details</a>
-        <a href="#" class="card-link">Order</a>
+        <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Details</a>
+        <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Order</a>
       </div>
     </div>
     {% endfor %}
+    {% endblock %}
   </div>
 </main>
 

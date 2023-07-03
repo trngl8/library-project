@@ -20,6 +20,7 @@ class Library:
         with open(path, 'r') as file:
             reader = csv.reader(file)
             reader = list(reader)
+        return reader , len(reader)
 
 
 class User:

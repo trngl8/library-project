@@ -30,7 +30,11 @@ def catalog():
 @app.route('/books/<int:book_id>')
 def book(book_id):
     name = 'Library "3 Books"'
-    item = Book("Python Crash Course", "Eric Matthes", 2019)
+    library = Library()
+    library.add_book(Book("Python Crash Course", "Eric Matthes", 2019))
+    library.add_book(Book("Python Hard Way", "Zed Shaw", 2013))
+    library.add_book(Book("Head First Python", "Paul Barry", 2016))
+    item = library.find_book(book_id)
     return render_template('book.html', name=name, book=item)
 
 

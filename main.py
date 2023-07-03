@@ -1,3 +1,6 @@
+from library import *
+
+
 def print_item(index, value):
     print(f"[{index + 1}]. {value}")
 
@@ -6,8 +9,20 @@ def print_exception_range(max_value):
     print(f"You should enter a number between 1 and {max_value}")
 
 
-def find_book():
-    pass
+def find_book(library : Library):
+    to_find = str(input("Enter title, author or ISBN "))
+    for i in library.catalog:
+        if i.title == to_find and i.available is True:
+            return "There is an available book with such title"
+    list_for_author = []
+    for i in library.catalog:
+        if i.author == to_find and i.available is True:
+            list_for_author.append(i.title)
+    if len(list_for_author) != 0:
+        return "This author has written the following books: " + str(list_for_author)
+    for i in library.catalog:
+        if i.isbn == to_find and i.available is True:
+            return "There is an available book with such isbn"
 
 
 def find_user():

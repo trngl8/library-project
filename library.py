@@ -54,3 +54,6 @@ class Book:
         if self.title == anohter.title and self.author == anohter.author and self.year == anohter.year:
             return True
         return False
+    
+    def __repr__(self) -> str:
+        return f"Book {self.title} ritten by {self.author} in {self.year}"

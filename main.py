@@ -1,4 +1,4 @@
-from library import *
+from library import Library
 
 
 def print_item(index, value):
@@ -11,18 +11,20 @@ def print_exception_range(max_value):
 
 def find_book(library : Library):
     to_find = str(input("Enter title, author or ISBN "))
+    list_for_author = []
+    list_for_title = []
     for i in library.catalog:
         if i.title == to_find and i.available is True:
-            return "There is an available book with such title"
-    list_for_author = []
-    for i in library.catalog:
+            list_for_title.append(i)
         if i.author == to_find and i.available is True:
-            list_for_author.append(i.title)
-    if len(list_for_author) != 0:
-        return "This author has written the following books: " + str(list_for_author)
-    for i in library.catalog:
+            list_for_author.append(i)
         if i.isbn == to_find and i.available is True:
             return "There is an available book with such isbn"
+    if len(list_for_author) > 0:
+        return  "This author has written the following books: " + str(list_for_author)
+    if len(list_for_title) > 0:
+        return "There are the following books with this title: " + str(list_for_title)
+    return "There is no books currently available with this title, author or ISBN"
 
 
 def find_user():

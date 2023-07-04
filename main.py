@@ -1,4 +1,4 @@
-from library import *
+from library import Library
 
 
 def print_item(index, value):
@@ -17,10 +17,14 @@ def find_user():
     pass
 
 
-def import_books(library : Library):
+def import_books():
     filename = input("Enter filename :> ")
-    library.import_books(library.read_from_csv_catalog(filename)[0])
-    return f"Imported {library.read_from_csv_catalog(filename)[1]} books"
+    filename = "var/data/" + filename 
+    library = Library()
+    list_of_books = library.read_from_csv_catalog(filename)
+    number_of_imported_books = len(list_of_books)
+    library.import_books(list_of_books)
+    return f"Imported {number_of_imported_books} books"
 
 
 actions = {

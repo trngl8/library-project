@@ -1,0 +1,18 @@
+[project]
+name = "next"
+description = "A simple app to start library system"
+version = "1.0.0"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["next"]

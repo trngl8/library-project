@@ -9,7 +9,14 @@ class Library:
         return len(self.catalog)
 
     def add_book(self, book):
+        book.id = len(self.catalog) + 1
         self.catalog.append(book)
+
+    def find_book(self, find_id):
+        for item in self.catalog:
+            if item.id == find_id:
+                return item
+        return None
 
     def import_books(self, list_of_books):
         for item in list_of_books:
@@ -44,7 +51,7 @@ class User:
 
 class Book:
     def __init__(self, title, author, year, ISBN=None) -> None:
-        self.id = 1
+        self.id = None
         self.isbn = ISBN
         self.title = title
         self.author = author

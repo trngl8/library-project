@@ -3,7 +3,6 @@ from flask import render_template
 from flask_bootstrap import Bootstrap5
 
 from library import Library
-from library import Book
 
 app = Flask(__name__)
 
@@ -20,9 +19,8 @@ def index():
 def catalog():
     name = 'Library "3 Books"'
     library = Library()
-    library.add_book(Book("Python Crash Course", "Eric Matthes", 2019))
-    library.add_book(Book("Python Hard Way", "Zed Shaw", 2013))
-    library.add_book(Book("Head First Python", "Paul Barry", 2016))
+    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+
     books = library.catalog
     return render_template('index.html', name=name, books=books)
 
@@ -30,7 +28,9 @@ def catalog():
 @app.route('/books/<int:book_id>')
 def book(book_id):
     name = 'Library "3 Books"'
-    item = Book("Python Crash Course", "Eric Matthes", 2019)
+    library = Library()
+    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    item = library.find_book(book_id)
     return render_template('book.html', name=name, book=item)
 
 

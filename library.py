@@ -29,9 +29,15 @@ class Library:
             reader = list(reader)
         return reader
 
+    def add_user(self, user):
+        pass
+
 
 class User:
-    def __init__(self, wanted_amount=10) -> None:
+    def __init__(self, name, email, phone, wanted_amount=10) -> None:
+        self.name = name
+        self.email = email
+        self.phone = phone
         self.books = []
         self.wanted_amount = wanted_amount
 

@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, redirect, url_for
 from flask import render_template
 from flask_bootstrap import Bootstrap5
 
@@ -24,19 +24,15 @@ def catalog():
     books = library.catalog
     return render_template('index.html', name=name, books=books)
 
-@app.route('/enter' , methods = ["POST", "GET"])
+
+@app.route('/enter', methods=["POST"])
 def enter():
-    if request.method == "POST":
-        user = request.form["nm"]
-        resp = make_response(render_template("readcookie.html"))
-        resp.set_cookie("userID", user)
+    user = request.form["username"]
+    resp = redirect(url_for('catalog'))
+    resp.set_cookie("SERVER_COOKIE", user)
 
-        return resp
+    return resp
 
-@app.route("/getcookie")
-def getcookie():
-    name = request.cookies.get("userID")
-    return '<h1>welcome ' + name + '</h1>'
 
 @app.route('/books/<int:book_id>')
 def book(book_id):

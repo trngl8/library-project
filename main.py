@@ -1,4 +1,5 @@
 from library import Library
+from library import User
 
 
 def print_item(index, value):
@@ -40,13 +41,17 @@ def import_books(library: Library):
     return f"Imported {number_of_imported_books} books"
 
 
+def add_user(library: Library):
+    name = input("Name :> ")
+    email = input("Email :> ")
+    phone = input("Phone :> ")
+    user = User(name, email, phone, 1)
+    library.add_user(user)
+    return f"User {name} added"
+
+
 def get_choice_function(param=None):
-    choices = {
-        "Find a book": find_book,
-        "Find a user": find_user,
-        "Import books": import_books,
-    }
-    return choices.get(param, lambda val: val)
+    return actions.get(param, lambda val: val)
 
 
 def menu_choice():
@@ -59,6 +64,7 @@ actions = {
     "Find a book": find_book,
     "Find a user": find_user,
     "Import books": import_books,
+    "Add user": add_user,
 }
 
 menu = list(actions.keys())

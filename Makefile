@@ -25,3 +25,8 @@ unit-coverage:
 	python -m coverage report
 	python -m coverage html
 .PHONY: unit-coverage
+
+integration-coverage:
+	coverage run -m pytest
+	coverage html
+.PHONY: integration-coverage

@@ -77,17 +77,21 @@
 <main>
   <div class="container-fluid mt-4">
     {% block content %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4 mb-4">
     {% for book in books %}
-    <div class="card d-flex mb-4" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ book.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-body-secondary">{{ book.author }}</h6>
-        <p class="card-text">{{ book.title }} {{ book.author }} {{ book.year }}</p>
-        <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Details</a>
-        <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Order</a>
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{ book.author }}</h6>
+            <p class="card-text">{{ book.title }} {{ book.author }} {{ book.year }}</p>
+            <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Details</a>
+            <a href="{{ url_for('book', book_id=book.id) }}" class="card-link">Order</a>
+          </div>
+        </div>
       </div>
-    </div>
     {% endfor %}
+    </div>
     {% endblock %}
   </div>
 </main>

@@ -70,8 +70,8 @@ class Book:
         self.available = False
         self.count = 0
 
-    def __eq__(self, anohter) -> bool:
-        if self.title == anohter.title and self.author == anohter.author and self.year == anohter.year:
+    def __eq__(self, another) -> bool:
+        if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
 

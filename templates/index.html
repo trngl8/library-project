@@ -25,7 +25,7 @@
           <a class="nav-link" href="{{ url_for('catalog') }}">Index</a>
         </li>
       </ul>
-      <a href="#" class="btn btn-outline-primary">Login</a>
+      <a href="#" class="btn btn-outline-primary">{%if user %}{{ user }}{% else %}Login{% endif %}</a>
     </div>
   </div>
 </nav>

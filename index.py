@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, make_response, redirect, url_for
 from flask import render_template
 from flask_bootstrap import Bootstrap5
 
@@ -9,6 +9,8 @@ app = Flask(__name__)
 bootstrap = Bootstrap5(app)
 
 
+
+
 @app.route('/')
 def index():
     name = 'Library "3 Books"'
@@ -17,12 +19,13 @@ def index():
 
 @app.route('/index')
 def catalog():
+    user = request.cookies.get('SERVER_COOKIE')
     name = 'Library "3 Books"'
     library = Library()
     library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
-
     books = library.catalog
-    return render_template('index.html', name=name, books=books)
+    resp = make_response(render_template('index.html', name=name, books=books, user=user))
+    return resp
 
 
 @app.route('/enter', methods=["POST"])
@@ -36,11 +39,13 @@ def enter():
 
 @app.route('/books/<int:book_id>')
 def book(book_id):
+    user = request.cookies.get('SERVER_COOKIE')
     name = 'Library "3 Books"'
     library = Library()
     library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
     item = library.find_book(book_id)
-    return render_template('book.html', name=name, book=item)
+    resp = make_response(render_template('book.html', name=name, book=item, user=user))
+    return resp
 
 
 if __name__ == '__main__':

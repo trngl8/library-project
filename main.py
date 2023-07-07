@@ -1,4 +1,4 @@
-from library import Library
+from library import Library, Book
 from library import User
 
 
@@ -28,6 +28,17 @@ def find_book(library: Library):
     return "There is no books currently available with this title, author or ISBN"
 
 
+def get_book(library: Library) -> list:
+    title = input("Enter title :> ")
+    author = input("Enter author :> ")
+    year = input("Enter year :> ")
+    isbn = input("Enter ISBN :> ")
+    for book in library.catalog:
+        if book.title == title and book.author == author and book.year == year and book.isbn == isbn:
+            return []
+
+
+
 def find_user():
     pass
 
@@ -50,36 +61,41 @@ def add_user(library: Library):
     return f"User {name} added"
 
 
-def get_choice_function(param=None):
+def get_choice_function(actions, param=None):
     return actions.get(param, lambda val: val)
 
 
-def menu_choice():
+def menu_choice(actions, choice):
     library = Library()
-    choice_function = get_choice_function(menu[choice - 1])
+    choice_function = get_choice_function(actions, list(actions.keys())[choice - 1])
     return choice_function(library)
 
 
-actions = {
-    "Find a book": find_book,
-    "Find a user": find_user,
-    "Import books": import_books,
-    "Add user": add_user,
-}
+def main():
+    actions = {
+        "Find a book": find_book,
+        "Find a user": find_user,
+        "Import books": import_books,
+        "Add user": add_user,
+    }
 
-menu = list(actions.keys())
-choice = 0
-while choice == 0:
-    for i, item in enumerate(menu):
-        print_item(i, item)
+    menu = list(actions.keys())
+    choice = 0
+    while choice == 0:
+        for i, item in enumerate(menu):
+            print_item(i, item)
 
-    try:
-        choice = int(input("Enter your choice :> "))
-    except ValueError:
-        print_exception_range(len(menu))
+        try:
+            choice = int(input("Enter your choice :> "))
+        except ValueError:
+            print_exception_range(len(menu))
 
-    if choice < 1 or choice > len(menu):
-        print_exception_range(len(menu))
-        choice = 0
+        if choice < 1 or choice > len(menu):
+            print_exception_range(len(menu))
+            choice = 0
 
-print(menu_choice())
+    print(menu_choice(actions, choice))
+
+
+if __name__ == "__main__":
+    main()

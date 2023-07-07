@@ -38,7 +38,6 @@ def get_book(library: Library) -> list:
             return []
 
 
-
 def find_user():
     pass
 
@@ -79,12 +78,14 @@ def main():
     }
 
     menu = list(actions.keys())
-    choice = 1
+    menu_active = True
     library = Library()
-    while choice > 0:
+    while menu_active:
         print("#######################")
         for i, item in enumerate(menu):
             print_item(i, item)
+
+        choice = 0
 
         try:
             choice = int(input("Enter your choice :> "))
@@ -93,9 +94,10 @@ def main():
 
         if choice < 1 or choice > len(menu):
             print_exception_range(len(menu))
-            choice = 0
-
-        print(menu_choice(library, actions, choice))
+            menu_active = False
+        else:
+            print(menu_choice(library, actions, choice))
+            input("Press any key to continue... ")
 
 
 if __name__ == "__main__":

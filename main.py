@@ -65,8 +65,7 @@ def get_choice_function(actions, param=None):
     return actions.get(param, lambda val: val)
 
 
-def menu_choice(actions, choice):
-    library = Library()
+def menu_choice(library: Library, actions, choice):
     choice_function = get_choice_function(actions, list(actions.keys())[choice - 1])
     return choice_function(library)
 
@@ -80,8 +79,10 @@ def main():
     }
 
     menu = list(actions.keys())
-    choice = 0
-    while choice == 0:
+    choice = 1
+    library = Library()
+    while choice > 0:
+        print("#######################")
         for i, item in enumerate(menu):
             print_item(i, item)
 
@@ -94,7 +95,7 @@ def main():
             print_exception_range(len(menu))
             choice = 0
 
-    print(menu_choice(actions, choice))
+        print(menu_choice(library, actions, choice))
 
 
 if __name__ == "__main__":

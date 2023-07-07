@@ -9,8 +9,6 @@ app = Flask(__name__)
 bootstrap = Bootstrap5(app)
 
 
-
-
 @app.route('/')
 def index():
     name = 'Library "3 Books"'

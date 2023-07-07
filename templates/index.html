@@ -69,7 +69,20 @@
           <a class="nav-link" href="{{ url_for('catalog') }}">Index</a>
         </li>
       </ul>
-      <a href="#" class="btn btn-outline-primary">{%if user %}{{ user }}{% else %}Login{% endif %}</a>
+      {% if user %}
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person"></i> {{ user }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+              <li><a href="/profile" class="dropdown-item" type="button">Profile</a></li>
+              <li><a href="/settings" class="dropdown-item" type="button">Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a href="/logout" class="dropdown-item" type="button">Exit</a></li>
+          </ul>
+      {% else %}
+          <a href="/login" class="btn btn-outline-primary" type="button">Login</a>
+      {% endif %}
+
     </div>
   </div>
 </nav>
@@ -77,7 +90,7 @@
 <main>
   <div class="container-fluid mt-4">
     {% block content %}
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4 mb-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-2">
     {% for book in books %}
       <div class="col">
         <div class="card h-100">

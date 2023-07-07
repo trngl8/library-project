@@ -76,4 +76,4 @@ class Book:
         return False
 
     def __repr__(self) -> str:
-        return f"Book {self.title} ritten by {self.author} in {self.year}"
+        return f"Book {self.title} written by {self.author} in {self.year}"

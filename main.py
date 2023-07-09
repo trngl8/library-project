@@ -1,4 +1,4 @@
-from library import Library, Book
+from library import Library
 from library import User
 
 
@@ -28,14 +28,13 @@ def find_book(library: Library):
     return "There is no books currently available with this title, author or ISBN"
 
 
-def get_book(library: Library) -> list:
+def find_books(library: Library) -> str:
     title = input("Enter title :> ")
     author = input("Enter author :> ")
     year = input("Enter year :> ")
     isbn = input("Enter ISBN :> ")
-    for book in library.catalog:
-        if book.title == title and book.author == author and book.year == year and book.isbn == isbn:
-            return []
+    result = library.find_books(title=title, author=author, year=year, isbn=isbn)
+    return f"{len(result)} books found"
 
 
 def find_user():
@@ -69,36 +68,32 @@ def menu_choice(library: Library, actions, choice):
     return choice_function(library)
 
 
-def main():
-    actions = {
-        "Find a book": find_book,
-        "Find a user": find_user,
-        "Import books": import_books,
-        "Add user": add_user,
-    }
+menu_actions = {
+    "Find a book": find_books,
+    "Find a user": find_user,
+    "Import books": import_books,
+    "Add user": add_user,
+}
 
-    menu = list(actions.keys())
-    menu_active = True
-    library = Library()
-    while menu_active:
-        print("#######################")
-        for i, item in enumerate(menu):
-            print_item(i, item)
+menu = list(menu_actions.keys())
+menu_active = True
+main_library = Library()
 
-        choice = 0
+while menu_active:
+    print("#" * 40)
+    for i, item in enumerate(menu):
+        print_item(i, item)
 
-        try:
-            choice = int(input("Enter your choice :> "))
-        except ValueError:
-            print_exception_range(len(menu))
+    user_choice = 0
 
-        if choice < 1 or choice > len(menu):
-            print_exception_range(len(menu))
-            menu_active = False
-        else:
-            print(menu_choice(library, actions, choice))
-            input("Press any key to continue... ")
+    try:
+        user_choice = int(input("Enter your choice :> "))
+    except ValueError:
+        print_exception_range(len(menu))
 
-
-if __name__ == "__main__":
-    main()
+    if user_choice < 1 or user_choice > len(menu):
+        print_exception_range(len(menu))
+        menu_active = False
+    else:
+        print(menu_choice(main_library, menu_actions, user_choice))
+        input("Press any key to continue... ")

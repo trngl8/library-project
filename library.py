@@ -32,6 +32,25 @@ class Library:
     def add_user(self, user):
         pass
 
+    def find_books(self, **kwargs):
+        if not kwargs:
+            return []
+
+        year = kwargs.get("year", 0)
+        title = kwargs.get("title", '')
+        author = kwargs.get("author", '')
+
+        filtered = self.catalog
+
+        if year:
+            filtered = [book for book in filtered if year == book.year]
+        if len(title) > 0:
+            filtered = [book for book in filtered if title.lower() in book.title.lower()]
+        if len(author) > 0:
+            filtered = [book for book in filtered if author.lower() in book.author.lower()]
+
+        return filtered
+
 
 class Visitor:
     def __init__(self, wanted_amount=1):

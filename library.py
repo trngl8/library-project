@@ -24,9 +24,13 @@ class Library:
 
     @staticmethod
     def read_from_csv_catalog(path):
-        with open(path, 'r') as file:
-            reader = csv.reader(file)
-            reader = list(reader)
+        try:
+            with open(path, 'r') as file:
+                reader = csv.reader(file)
+                reader = list(reader)
+        except FileNotFoundError:
+            print("Checkout if file exists in var/data/")
+            exit()
         return reader
 
     def add_user(self, user):

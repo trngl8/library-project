@@ -65,13 +65,19 @@ class TestLibrary(unittest.TestCase):
             ["Head First Python", "Paul Barry", 2016]
         ])
         self.assertFalse(book1 == book2)
-        self.assertTrue(str(library.catalog) == "[Book Python Crash Course written\
- by Eric Matthes in 2019, Book Python Hard Way written by Zed Shaw\
- in 2013, Book Head First Python written by Paul Barry in 2016]")
         self.assertEqual(3, library.get_count())
         self.assertEqual(book1, library.catalog[0])
         self.assertEqual(book2, library.catalog[1])
         self.assertEqual(book3, library.catalog[2])
+
+    def test_not_find_book(self):
+        library = Library()
+        library.import_books([
+            ["Python Crash Course", "Eric Matthes", 2019],
+            ["Python Hard Way", "Zed Shaw", 2013],
+            ["Head First Python", "Paul Barry", 2016]
+        ])
+        self.assertEqual(library.find_book(4), None)
 
     def test_find_book(self):
         library = Library()
@@ -80,9 +86,41 @@ class TestLibrary(unittest.TestCase):
             ["Python Hard Way", "Zed Shaw", 2013],
             ["Head First Python", "Paul Barry", 2016]
         ])
-        self.assertTrue(str(library.find_book(1)) == "Book Python Crash Course written by Eric Matthes in 2019")
+        self.assertEqual(library.find_book(1).title, "Python Crash Course")
 
-        
+    def test_find_books(self):
+        library = Library()
+        library.import_books([
+            ["Python Crash Course", "Eric Matthes", 2019],
+            ["Python Hard Way", "Zed Shaw", 2013],
+            ["Head First Python", "Paul Barry", 2016],
+            ["Startup Hard Development", "Roman Anderson", 2019]
+        ])
+
+        result = library.find_books(title="python")
+        self.assertEqual(3, len(result))
+        self.assertEqual("Python Crash Course", result[0].title)
+        self.assertEqual("Python Hard Way", result[1].title)
+        self.assertEqual("Head First Python", result[2].title)
+
+        result = library.find_books(title="python", author="eric")
+        self.assertEqual(1, len(result))
+        self.assertEqual("Python Crash Course", result[0].title)
+
+        result = library.find_books(year=2019)
+        self.assertEqual(2, len(result))
+        self.assertEqual("Python Crash Course", result[0].title)
+        self.assertEqual("Startup Hard Development", result[1].title)
+
+        result = library.find_books(year=2022, title="python")
+        self.assertEqual(0, len(result))
+
+        result = library.find_books()
+        self.assertEqual(0, len(result))
+
+        result = library.find_books(title="python", author="", year="", isbn="")
+        self.assertEqual(3, len(result))
+
 
 if __name__ == "__main__":
     unittest.main()

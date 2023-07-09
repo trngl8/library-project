@@ -28,6 +28,15 @@ def find_book(library: Library):
     return "There is no books currently available with this title, author or ISBN"
 
 
+def find_books(library: Library) -> str:
+    title = input("Enter title :> ")
+    author = input("Enter author :> ")
+    year = input("Enter year :> ")
+    isbn = input("Enter ISBN :> ")
+    result = library.find_books(title=title, author=author, year=year, isbn=isbn)
+    return f"{len(result)} books found"
+
+
 def find_user():
     pass
 
@@ -50,36 +59,41 @@ def add_user(library: Library):
     return f"User {name} added"
 
 
-def get_choice_function(param=None):
+def get_choice_function(actions, param=None):
     return actions.get(param, lambda val: val)
 
 
-def menu_choice():
-    library = Library()
-    choice_function = get_choice_function(menu[choice - 1])
+def menu_choice(library: Library, actions, choice):
+    choice_function = get_choice_function(actions, list(actions.keys())[choice - 1])
     return choice_function(library)
 
 
-actions = {
-    "Find a book": find_book,
+menu_actions = {
+    "Find a book": find_books,
     "Find a user": find_user,
     "Import books": import_books,
     "Add user": add_user,
 }
 
-menu = list(actions.keys())
-choice = 0
-while choice == 0:
+menu = list(menu_actions.keys())
+menu_active = True
+main_library = Library()
+
+while menu_active:
+    print("#" * 40)
     for i, item in enumerate(menu):
         print_item(i, item)
 
+    user_choice = 0
+
     try:
-        choice = int(input("Enter your choice :> "))
+        user_choice = int(input("Enter your choice :> "))
     except ValueError:
         print_exception_range(len(menu))
 
-    if choice < 1 or choice > len(menu):
+    if user_choice < 1 or user_choice > len(menu):
         print_exception_range(len(menu))
-        choice = 0
-
-print(menu_choice())
+        menu_active = False
+    else:
+        print(menu_choice(main_library, menu_actions, user_choice))
+        input("Press any key to continue... ")

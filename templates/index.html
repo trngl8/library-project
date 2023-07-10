@@ -90,13 +90,13 @@
 <main>
     <div class="container-fluid mt-4">
       <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
+        <ol class="breadcrumb">
         {% block breadcrumbs %}
-        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Index</li>
+          <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Index</li>
         {% endblock %}
-      </ol>
-    </nav>
+        </ol>
+      </nav>
     </div>
 
     <div class="container-fluid mt-4">

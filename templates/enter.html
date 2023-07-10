@@ -18,19 +18,7 @@
         <header class="mb-auto">
             <div class="text-end">
                 <div class="btn-group">
-                    {% if user and user.is_admin %}
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a href="/profile" class="dropdown-item" type="button">Профіль</a></li>
-                            <li><a href="/admin/settings" class="dropdown-item" type="button">Налаштування</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a href="/logout" class="dropdown-item" type="button">Вихід</a></li>
-                        </ul>
-                    {% else %}
-                        <a href="/login" class="btn btn-sm btn-outline-secondary"><i class="bi bi-person"></i></a>
-                    {% endif %}
+                    <a href="{{ url_for('catalog') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-grid"></i></a>
                 </div>
             </div>
         </header>

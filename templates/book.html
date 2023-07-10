@@ -1,4 +1,11 @@
 {% extends 'index.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('catalog') }}">Index</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ book.title }}</li>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">

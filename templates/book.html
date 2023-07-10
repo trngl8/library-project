@@ -1,13 +1,23 @@
 {% extends 'index.html' %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('catalog') }}">Index</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ book.title }}</li>
+{% endblock %}
+
 {% block content %}
-<div class="container">
+<div class="container p-0">
     <div class="row">
-        <div class="col-md-3">
-            <div >
-                <img src="..." class="img-thumbnail" alt="{{ book.title }}">
+        <div class="col-md-4">
+            <div class="bd-example mb-4 border-0">
+                <svg class="bd-placeholder-img img-thumbnail" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{ book.title }}" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>{{ book.title }}</title><rect width="100%" height="100%" fill="#868e96"/>
+                    <text x="40%" y="50%" fill="#dee2e6" dy=".3em">placeholder</text>
+                </svg>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-8">
             <div class="card mb-4">
               <div class="card-body">
                 <h5 class="card-title">{{ book.title }}</h5>

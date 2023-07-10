@@ -88,7 +88,19 @@
 </nav>
 
 <main>
-  <div class="container-fluid mt-4">
+    <div class="container-fluid mt-4">
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        {% block breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Index</li>
+        {% endblock %}
+        </ol>
+      </nav>
+    </div>
+
+    <div class="container-fluid mt-4">
+
     {% block content %}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-2">
     {% for book in books %}
@@ -106,6 +118,7 @@
     {% endfor %}
     </div>
     {% endblock %}
+
   </div>
 </main>
 

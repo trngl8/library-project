@@ -1,7 +1,7 @@
-from flask import Flask, request, make_response, redirect, url_for
+from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask_bootstrap import Bootstrap5
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from wtforms import Form, BooleanField, StringField, validators
 
 from library import Library
 
@@ -55,7 +55,7 @@ def book(book_id):
     return resp
 
 
-@app.route('/books/<int:book_id>/borrow')
+@app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
 def order(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     name = 'Library "3 Books"'
@@ -67,8 +67,8 @@ def order(book_id):
         # user = User(form.username.data, form.email.data,
         #             form.password.data)
         # db_session.add(user)
-        # flash('Thanks for registering')
-        return redirect(url_for('login'))
+        flash('Thanks for order')
+        return redirect(url_for('catalog'))
 
     resp = make_response(render_template('book_order.html', name=name, book=item, form=form, user=user))
     return resp

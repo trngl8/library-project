@@ -12,7 +12,9 @@ bootstrap = Bootstrap5(app)
 @app.route('/')
 def index():
     name = 'Library "3 Books"'
-    return render_template('enter.html', name=name)
+    library = Library()
+    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    return render_template('enter.html', name=name, library=library)
 
 
 @app.route('/index')

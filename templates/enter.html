@@ -108,7 +108,9 @@
                     <circle style="fill:#333333;" cx="197.984" cy="152.682" r="9.685"/>
                 </g>
                 </svg>
-
+            </div>
+            <div class="text-center">
+                <h3>There are {{library.get_count()}} books currently available</h3>
             </div>
             <div class="container d-flex justify-content-center">
                 <form class="row g-2" action="{{ url_for('enter') }}" method="post">

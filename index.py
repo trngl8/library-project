@@ -1,12 +1,21 @@
 from flask import Flask, request, make_response, redirect, url_for
 from flask import render_template
 from flask_bootstrap import Bootstrap5
+from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 from library import Library
 
 app = Flask(__name__)
 
 bootstrap = Bootstrap5(app)
+
+
+class OrderForm(Form):
+    firstname = StringField('Firstname', [validators.Length(min=4, max=25)])
+    lastname = StringField('Lastname', [validators.Length(min=4, max=25)])
+    email = StringField('Email', [validators.Length(min=6, max=35)])
+    address = StringField('Address', [validators.Length(min=6, max=35)])
+    accept = BooleanField('I accept agreement', [validators.DataRequired()])
 
 
 @app.route('/')
@@ -43,6 +52,25 @@ def book(book_id):
     library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
     item = library.find_book(book_id)
     resp = make_response(render_template('book.html', name=name, book=item, user=user))
+    return resp
+
+
+@app.route('/books/<int:book_id>/borrow')
+def order(book_id):
+    user = request.cookies.get('SERVER_COOKIE')
+    name = 'Library "3 Books"'
+    library = Library()
+    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    item = library.find_book(book_id)
+    form = OrderForm(request.form)
+    if request.method == 'POST' and form.validate():
+        # user = User(form.username.data, form.email.data,
+        #             form.password.data)
+        # db_session.add(user)
+        # flash('Thanks for registering')
+        return redirect(url_for('login'))
+
+    resp = make_response(render_template('book_order.html', name=name, book=item, form=form, user=user))
     return resp
 
 

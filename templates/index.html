@@ -74,7 +74,7 @@
               <i class="bi bi-person"></i> {{ user }}
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-              <li><a href="/profile" class="dropdown-item" type="button">Profile</a></li>
+              <li><a href="{{url_for('profile', user_id=user_id)}}" class="dropdown-item" type="button">Profile</a></li>
               <li><a href="/settings" class="dropdown-item" type="button">Settings</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a href="/logout" class="dropdown-item" type="button">Exit</a></li>

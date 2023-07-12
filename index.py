@@ -46,5 +46,11 @@ def book(book_id):
     return resp
 
 
+@app.route('/profile/<int:user_id>')
+def profile(user_id):
+    user = request.cookies.get('SERVER_COOKIE')
+    books = user.books
+    return render_template("profile.html", books=books, user=user)
+
 if __name__ == '__main__':
     app.run()

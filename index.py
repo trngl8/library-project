@@ -43,9 +43,10 @@ def catalog():
 @app.route('/enter', methods=["POST"])
 def enter():
     user = request.form["username"]
+    if len(user) < 1 and len(user) > 100:
+        flash("Invalid name, try again.", category="error")
     resp = redirect(url_for('catalog'))
     resp.set_cookie("SERVER_COOKIE", user)
-
     return resp
 
 

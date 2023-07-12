@@ -2,7 +2,7 @@
 <html lang="en" class="h-100" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>{{ name }}</title>
+    <title>{{ library.name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ bootstrap.load_css() }}
     <style>
@@ -27,7 +27,7 @@
             <div class="logo mb-5">
 
                 <?xml version="1.0" encoding="iso-8859-1"?>
-                <svg height="180px" width="180px" version="1.1" id="{{ name }}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                <svg height="180px" width="180px" version="1.1" id="{{ library.name }}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                      viewBox="0 0 512 512" xml:space="preserve">
                 <polygon style="fill:#F95428;" points="186.268,406.163 186.268,466.42 143.084,443.174 99.9,466.42 99.9,406.163 99.9,373.801
                     99.9,332.98 186.268,332.98 186.268,373.878 "/>
@@ -125,7 +125,7 @@
         </main>
 
         <footer class="text-center mt-auto">
-            <p>Licenced by <a href="http://localhost">{{ name }}</a>.</p>
+            <p>Licenced by <a href="http://localhost">{{ library.name }}</a>.</p>
         </footer>
     </div>
 

@@ -2,8 +2,11 @@ import csv
 
 
 class Library:
-    def __init__(self) -> None:
+    def __init__(self, name, path="var/data"):
+        self.name = name
+        self.path = path
         self.catalog = []
+        self.import_books(self.read_from_csv_catalog(path + "/books.csv"))
 
     def get_count(self):
         return len(self.catalog)

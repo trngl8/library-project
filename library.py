@@ -18,9 +18,11 @@ class Library:
                 return item
         return None
 
-    def import_books(self, list_of_books):
+    def import_books(self, list_of_books, skip_lines=1):
+        for i in range(skip_lines):
+            list_of_books.pop(0)
         for item in list_of_books:
-            self.add_book(Book(item[0], item[1], item[2]))
+            self.add_book(Book(item[1], item[2], item[3]))
 
     @staticmethod
     def read_from_csv_catalog(path):

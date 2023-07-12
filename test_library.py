@@ -9,6 +9,16 @@ class TestLibrary(unittest.TestCase):
     A reader is able to order a book
     """
 
+    def setUp(self):
+        self.library = Library()
+        self.library.import_books([
+            ["ID", "TITLE", "AUTHOR", "YEAR"],
+            [1, "Python Crash Course", "Eric Matthes", 2019],
+            [2, "Python Hard Way", "Zed Shaw", 2013],
+            [3, "Head First Python", "Paul Barry", 2016],
+            [4, "Startup Hard Development", "Roman Anderson", 2019]
+        ])
+
     def test_library_no_books(self):
         target = Library()
         result = target.get_count()
@@ -55,47 +65,26 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(0, book.count)
 
     def test_import_books(self):
-        library = Library()
+        library = self.library
         book1 = Book("Python Crash Course", "Eric Matthes", 2019)
         book2 = Book("Python Hard Way", "Zed Shaw", 2013)
         book3 = Book("Head First Python", "Paul Barry", 2016)
-        library.import_books([
-            ["Python Crash Course", "Eric Matthes", 2019],
-            ["Python Hard Way", "Zed Shaw", 2013],
-            ["Head First Python", "Paul Barry", 2016]
-        ])
         self.assertFalse(book1 == book2)
-        self.assertEqual(3, library.get_count())
+        self.assertEqual(4, library.get_count())
         self.assertEqual(book1, library.catalog[0])
         self.assertEqual(book2, library.catalog[1])
         self.assertEqual(book3, library.catalog[2])
 
     def test_not_find_book(self):
-        library = Library()
-        library.import_books([
-            ["Python Crash Course", "Eric Matthes", 2019],
-            ["Python Hard Way", "Zed Shaw", 2013],
-            ["Head First Python", "Paul Barry", 2016]
-        ])
-        self.assertEqual(library.find_book(4), None)
+        library = self.library
+        self.assertEqual(library.find_book(5), None)
 
     def test_find_book(self):
-        library = Library()
-        library.import_books([
-            ["Python Crash Course", "Eric Matthes", 2019],
-            ["Python Hard Way", "Zed Shaw", 2013],
-            ["Head First Python", "Paul Barry", 2016]
-        ])
+        library = self.library
         self.assertEqual(library.find_book(1).title, "Python Crash Course")
 
     def test_find_books(self):
-        library = Library()
-        library.import_books([
-            ["Python Crash Course", "Eric Matthes", 2019],
-            ["Python Hard Way", "Zed Shaw", 2013],
-            ["Head First Python", "Paul Barry", 2016],
-            ["Startup Hard Development", "Roman Anderson", 2019]
-        ])
+        library = self.library
 
         result = library.find_books(title="python")
         self.assertEqual(3, len(result))

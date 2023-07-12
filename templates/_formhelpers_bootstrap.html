@@ -1,6 +1,6 @@
 {% macro render_field(field) %}
  <div class="mb-3">
-     {% if field.errors %}{% set valid = 'is-invalid' %}{% else %}{% set valid = 'is-valid' %}{% endif %}
+     {% if field.errors %}{% set valid = 'is-invalid' %}{% else %}{% set valid = '' %}{% endif %}
      {% if field.type == "BooleanField" %}
         {{ field(class="form-check-input "+valid, )|safe }}
         {{ field.label(class="form-check-label") }}

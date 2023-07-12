@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask_bootstrap import Bootstrap5
-from wtforms import Form, BooleanField, StringField, validators
+from wtforms import Form, BooleanField, StringField, EmailField, SelectField, validators
 
 from library import Library
 
@@ -14,8 +14,10 @@ bootstrap = Bootstrap5(app)
 class OrderForm(Form):
     firstname = StringField('Firstname', [validators.Length(min=4, max=25)])
     lastname = StringField('Lastname', [validators.Length(min=4, max=25)])
-    email = StringField('Email', [validators.Length(min=6, max=35)])
+    email = EmailField('Email', [validators.Email()])
+    phone = StringField('Email', [validators.Length(min=6, max=11)])
     address = StringField('Address', [validators.Length(min=6, max=35)])
+    period = SelectField('Period', choices=[('2', '2 weeks'), ('4', '4 weeks'), ('16', '16 weeks')])
     accept = BooleanField('I accept agreement', [validators.DataRequired()])
 
 
@@ -65,9 +67,6 @@ def order(book_id):
     item = library.find_book(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        # user = User(form.username.data, form.email.data,
-        #             form.password.data)
-        # db_session.add(user)
         flash('Thanks for order')
         return redirect(url_for('catalog'))
 

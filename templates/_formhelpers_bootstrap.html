@@ -1,0 +1,20 @@
+{% macro render_field(field) %}
+ <div class="mb-3">
+     {% if field.errors %}{% set valid = 'is-invalid' %}{% else %}{% set valid = '' %}{% endif %}
+     {% if field.type == "BooleanField" %}
+        {{ field(class="form-check-input "+valid, )|safe }}
+        {{ field.label(class="form-check-label") }}
+     {% else %}
+        {{ field.label(class="form-label") }}
+        {{ field(class="form-control "+valid, aria_describedby=field.id+'feedback', **kwargs)|safe }}
+     {% endif %}
+
+    {% if field.errors %}
+    <div id="{{ field.id }}feedback" class="invalid-feedback">
+    {% for error in field.errors %}
+      {{ error }}
+    {% endfor %}
+    </div>
+  {% endif %}
+  </div>
+{% endmacro %}

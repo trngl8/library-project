@@ -6,6 +6,7 @@ from wtforms import Form, BooleanField, StringField, validators
 from library import Library
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 bootstrap = Bootstrap5(app)
 

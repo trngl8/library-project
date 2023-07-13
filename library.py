@@ -2,8 +2,12 @@ import csv
 
 
 class Library:
-    def __init__(self) -> None:
+    def __init__(self, name, path=None):
+        self.name = name
+        self.path = path
         self.catalog = []
+        if path:
+            self.import_books(self.read_from_csv_catalog(path + "/books.csv"))
 
     def get_count(self):
         return len(self.catalog)
@@ -32,7 +36,7 @@ class Library:
                 reader = list(reader)
         except FileNotFoundError:
             print("Checkout if file exists in var/data/")
-            exit()
+            return []
         return reader
 
     def add_user(self, user):

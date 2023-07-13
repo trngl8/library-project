@@ -23,20 +23,16 @@ class OrderForm(Form):
 
 @app.route('/')
 def index():
-    name = 'Library "3 Books"'
-    library = Library()
-    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
-    return render_template('enter.html', name=name, library=library)
+    library = Library("3 Books")
+    return render_template('enter.html', library=library)
 
 
 @app.route('/index')
 def catalog():
     user = request.cookies.get('SERVER_COOKIE')
-    name = 'Library "3 Books"'
-    library = Library()
-    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    library = Library("3 Books")
     books = library.catalog
-    resp = make_response(render_template('index.html', name=name, books=books, user=user))
+    resp = make_response(render_template('index.html', books=books, user=user))
     return resp
 
 
@@ -52,27 +48,23 @@ def enter():
 @app.route('/books/<int:book_id>')
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    name = 'Library "3 Books"'
-    library = Library()
-    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    library = Library("3 Books")
     item = library.find_book(book_id)
-    resp = make_response(render_template('book.html', name=name, book=item, user=user))
+    resp = make_response(render_template('book.html', book=item, user=user))
     return resp
 
 
 @app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
 def order(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    name = 'Library "3 Books"'
-    library = Library()
-    library.import_books(library.read_from_csv_catalog("var/data/books.csv"))
+    library = Library("3 Books")
     item = library.find_book(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
         flash('Thanks for order')
         return redirect(url_for('catalog'))
 
-    resp = make_response(render_template('book_order.html', name=name, book=item, form=form, user=user))
+    resp = make_response(render_template('book_order.html', book=item, form=form, user=user))
     return resp
 
 

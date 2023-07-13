@@ -52,7 +52,7 @@ def profile():
     books = user.books
     return render_template("profile.html", books=books, user=user)
 
-@app.route('/profile')
+@app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user)

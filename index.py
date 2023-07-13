@@ -23,14 +23,14 @@ class OrderForm(Form):
 
 @app.route('/')
 def index():
-    library = Library("3 Books")
+    library = Library("3 Books", "var/data")
     return render_template('enter.html', library=library)
 
 
 @app.route('/index')
 def catalog():
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books")
+    library = Library("3 Books", "var/data")
     books = library.catalog
     resp = make_response(render_template('index.html', books=books, user=user))
     return resp
@@ -48,7 +48,7 @@ def enter():
 @app.route('/books/<int:book_id>')
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books")
+    library = Library("3 Books", "var/data")
     item = library.find_book(book_id)
     resp = make_response(render_template('book.html', book=item, user=user))
     return resp
@@ -57,7 +57,7 @@ def book(book_id):
 @app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
 def order(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books")
+    library = Library("3 Books", "var/data")
     item = library.find_book(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():

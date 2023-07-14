@@ -1,6 +1,6 @@
 from library import Library
 from library import User
-from functions import add_user
+from functions import save_user
 
 def print_item(index, value):
     print(f"[{index + 1}]. {value}")
@@ -56,7 +56,7 @@ def add_user(library: Library):
     phone = input("Phone :> ")
     user = User(name, email, phone, 1)
     library.add_user(user)
-    add_user(user)
+    save_user(user)
     return f"User {name} added"
 
 

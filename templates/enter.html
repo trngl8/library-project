@@ -112,6 +112,18 @@
             <div class="text-center">
                 <h3>There are {{library.get_count()}} books currently available</h3>
             </div>
+
+            {% with messages = get_flashed_messages() %}
+
+              {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
             <div class="container d-flex justify-content-center">
                 <form class="row g-2" action="{{ url_for('enter') }}" method="post">
                     <div class="col-auto mb-3">

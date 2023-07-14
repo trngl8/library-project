@@ -45,6 +45,7 @@ def catalog():
 def enter():
     user = request.form["username"]
     if not re.match(r"[A-Za-z0-9_-]+", user):
+        flash("Your name is not valid" , category="error")
         return redirect(url_for("index"))
     resp = redirect(url_for('catalog'))
     resp.set_cookie("SERVER_COOKIE", user)

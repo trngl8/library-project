@@ -67,3 +67,10 @@ def check_if_book_in_csv(path , book):
                 return True , number_of_row
         return False , 0
 
+def add_user(user : User):
+    with open("var/data/users.csv", "r") as file:
+        data = list(csv.reader(file))
+    data.append([user.name, user.email, user.phone, user.wanted_amount])
+    with open("var/data/users.csv", 'w') as file:
+        csv.writer(file).writerows(data)
+

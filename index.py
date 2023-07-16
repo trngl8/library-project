@@ -49,8 +49,7 @@ def book(book_id):
 @app.route('/profile')
 def profile():
     user = request.cookies.get('SERVER_COOKIE')
-    books = user.books
-    return render_template("profile.html", books=books, user=user)
+    return render_template("profile.html", user=user)
 
 @app.route('/settings')
 def settings():

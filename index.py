@@ -2,6 +2,7 @@ from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask_bootstrap import Bootstrap5
 from wtforms import Form, BooleanField, StringField, EmailField, SelectField, validators
+import re
 
 from library import Library
 
@@ -39,9 +40,11 @@ def catalog():
 @app.route('/enter', methods=["POST"])
 def enter():
     user = request.form["username"]
+    if not re.match(r"[A-Za-z0-9_-]+", user):
+        flash("Your name is not valid" , category="error")
+        return redirect(url_for("index"))
     resp = redirect(url_for('catalog'))
     resp.set_cookie("SERVER_COOKIE", user)
-
     return resp
 
 

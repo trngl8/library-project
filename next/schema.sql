@@ -1,9 +1,11 @@
 DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS books_orders;
 
 CREATE TABLE orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   first_name TEXT NOT NULL,
-  second_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone TEXT NOT NULL,
   address TEXT NOT NULL,

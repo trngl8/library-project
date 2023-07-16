@@ -57,5 +57,9 @@ def settings():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user)
 
+@app.route("/logout")
+def logout():
+    return render_template("enter.html")
+
 if __name__ == '__main__':
     app.run()

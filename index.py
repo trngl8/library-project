@@ -62,10 +62,19 @@ def order(book_id):
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
         flash('Thanks for order')
-        return redirect(url_for('catalog'))
+        return redirect(url_for('confirm', book_id=book_id))
 
     resp = make_response(render_template('book_order.html', book=item, form=form, user=user))
     return resp
+
+
+@app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
+def confirm(book_id):
+    user = request.cookies.get('SERVER_COOKIE')
+    library = Library("3 Books", "var/data")
+    item = library.find_book(book_id)
+
+    return make_response(render_template('order_confirm.html', book=item, user=user))
 
 
 if __name__ == '__main__':

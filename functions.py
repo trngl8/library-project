@@ -1,7 +1,7 @@
 from library import Library
 from library import User
 from library import Book
-import csv
+import csv, os
 
 
 def add_book_to_csv(book: Book, path):
@@ -37,6 +37,8 @@ def check_if_book_in_csv(path, book):
 
 
 def save_user(user: User):
+    if not os.path.exists("var/data/users.csv"):
+        open("var/data/users.csv", 'w')
     with open("var/data/users.csv", "r") as file:
         data = list(csv.reader(file))
     data.append([user.name, user.email, user.phone, user.wanted_amount])

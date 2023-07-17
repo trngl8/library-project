@@ -2,8 +2,13 @@ import csv
 
 
 class Library:
-    def __init__(self) -> None:
+    def __init__(self, name, path=None):
+        self.name = name
+        self.path = path
         self.catalog = []
+        self.users = []
+        if path:
+            self.import_books(self.read_from_csv_catalog(path + "/books.csv"))
 
     def get_count(self):
         return len(self.catalog)
@@ -18,9 +23,14 @@ class Library:
                 return item
         return None
 
-    def import_books(self, list_of_books):
+    def import_books(self, list_of_books, skip_lines=1):
+        if len(list_of_books) == 0:
+            return
+
+        for i in range(skip_lines):
+            list_of_books.pop(0)
         for item in list_of_books:
-            self.add_book(Book(item[0], item[1], item[2]))
+            self.add_book(Book(item[1], item[2], item[3]))
 
     @staticmethod
     def read_from_csv_catalog(path):
@@ -30,11 +40,11 @@ class Library:
                 reader = list(reader)
         except FileNotFoundError:
             print("Checkout if file exists in var/data/")
-            exit()
+            return []
         return reader
 
     def add_user(self, user):
-        pass
+        self.users.append(user)
 
     def find_books(self, **kwargs):
         if not kwargs:

@@ -6,6 +6,7 @@ class Library:
         self.name = name
         self.path = path
         self.catalog = []
+        self.users = []
         if path:
             self.import_books(self.read_from_csv_catalog(path + "/books.csv"))
 
@@ -43,7 +44,7 @@ class Library:
         return reader
 
     def add_user(self, user):
-        pass
+        self.users.append(user)
 
     def find_books(self, **kwargs):
         if not kwargs:

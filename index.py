@@ -58,7 +58,9 @@ def settings():
 
 @app.route("/logout")
 def logout():
-    return render_template("enter.html")
+    response = make_response(render_template("enter.html"))
+    response.delete_cookie('SERVER_COOKIE')
+    return response
 
 if __name__ == '__main__':
     app.run()

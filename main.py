@@ -54,7 +54,7 @@ def add_user(library: Library):
     name = input("Name :> ")
     email = input("Email :> ")
     phone = input("Phone :> ")
-    user = User(name, email, phone, 1)
+    user = User(name, email, phone)
     library.add_user(user)
     save_user(user)
     return f"User {name} added"

@@ -41,7 +41,7 @@ def save_user(user: User):
         open("var/data/users.csv", 'w')
     with open("var/data/users.csv", "r") as file:
         data = list(csv.reader(file))
-    data.append([user.name, user.email, user.phone, user.wanted_amount])
+    data.append([user.name, user.email, user.phone])
     with open("var/data/users.csv", 'w') as file:
         csv.writer(file).writerows(data)
 

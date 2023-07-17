@@ -23,6 +23,9 @@ class Library:
         return None
 
     def import_books(self, list_of_books, skip_lines=1):
+        if len(list_of_books) == 0:
+            return
+
         for i in range(skip_lines):
             list_of_books.pop(0)
         for item in list_of_books:

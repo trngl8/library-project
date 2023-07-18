@@ -1,5 +1,5 @@
 import unittest
-from library import Library, Book, User, Visitor
+from library import Library, Book, User, Visitor, DataStorage
 
 
 class TestLibrary(unittest.TestCase):
@@ -109,6 +109,15 @@ class TestLibrary(unittest.TestCase):
 
         result = library.find_books(title="python", author="", year="", isbn="")
         self.assertEqual(3, len(result))
+
+    def test_data_storage(self):
+        storage = DataStorage()
+
+        storage.save_user(User('test name', 'test@test.com', '+380001111111'))
+        user = storage.find_one(email='test@test.com')
+
+        self.assertEqual('test name', user.name)
+        self.assertEqual('+380001111111', user.phone)
 
 
 if __name__ == "__main__":

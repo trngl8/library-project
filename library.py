@@ -1,4 +1,24 @@
 import csv
+import os
+
+
+class DataStorage:
+
+    def __init__(self):
+        if not os.path.exists("var/data/users.csv"):
+            open("var/data/users.csv", 'w')
+        self.data = []
+
+    def save_user(self, user):
+        with open("var/data/users.csv", "a") as file_object:
+            file_object.write(user.name + ',' + user.email + ',' + user.phone + '\n')
+        self.data.append([user.name, user.email, user.phone])
+
+    def find_one(self, email):
+        for item in self.data:
+            if item[1] == email:
+                return User(item[0], item[1], item[2])
+        raise Exception("User not found")
 
 
 class Library:

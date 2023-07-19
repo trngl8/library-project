@@ -1,5 +1,6 @@
 import unittest
-from library import Library, Book, User, Visitor, DataStorage
+from library import Library, Book, User, Visitor
+from storage import DataStorage
 
 
 class TestLibrary(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestLibrary(unittest.TestCase):
     """
 
     def setUp(self):
-        self.library = Library('test')
+        self.library = Library('test', DataStorage())
         self.library.import_books([
             ["ID", "TITLE", "AUTHOR", "YEAR"],
             [1, "Python Crash Course", "Eric Matthes", 2019],
@@ -20,12 +21,12 @@ class TestLibrary(unittest.TestCase):
         ])
 
     def test_library_no_books(self):
-        target = Library('test')
+        target = Library('test', DataStorage())
         result = target.get_count()
         self.assertEqual(result, 0)
 
     def test_library_has_books(self):
-        target = Library('test')
+        target = Library('test', DataStorage())
         book = Book("Python Crash Course", "Eric Matthes", 2019)
         target.add_book(book)
         result = target.get_count()
@@ -34,20 +35,20 @@ class TestLibrary(unittest.TestCase):
     def test_user_book(self):
         user = User('test', 'test@test.com', '123456789')
         book = Book("Python Crash Course", "Eric Matthes", 2019)
-        library = Library('test')
+        library = Library('test', DataStorage())
         library.add_book(book)
         self.assertEqual(False, user.has_books())
         user.order_book(book)
         self.assertEqual(True, user.has_books())
 
     def test_library_not_convenient(self):
-        library = Library('test')
+        library = Library('test', DataStorage())
         visitor = Visitor(2)
         result = visitor.available_library(library)
         self.assertEqual(False, result)
 
     def test_library_convenient(self):
-        library = Library('test')
+        library = Library('test', DataStorage())
         book1 = Book("Python Hard Way", "Zed Shaw", 2013)
         book2 = Book("Python Hard Way", "Zed Shaw", 2013)
         library.add_book(book1)
@@ -116,10 +117,16 @@ class TestLibrary(unittest.TestCase):
         storage.save_user(User('test name', 'test@test.com', '+380001111111'))
         user = storage.find_one(email='test@test.com')
 
-        self.assertEqual('test name', user.name)
-        self.assertEqual('+380001111111', user.phone)
+        self.assertEqual('test name', user['name'])
+        self.assertEqual('+380001111111', user['phone'])
+
+    def test_data_storage_not_found(self):
+        storage = DataStorage()
+
+        storage.save_user(User('test name', 'test@test.com', '+380001111111'))
 
         self.assertRaises(Exception, storage.find_one, "notexist@test.com")
+
 
 if __name__ == "__main__":
     unittest.main()

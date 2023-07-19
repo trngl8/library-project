@@ -22,8 +22,7 @@ class Library:
                 return item
         return None
 
-    def import_books(self, skip_lines=1):
-        list_of_books = self.storage.read_from_csv_catalog()
+    def import_books(self, list_of_books, skip_lines=1):
         if len(list_of_books) == 0:
             return
 
@@ -31,8 +30,6 @@ class Library:
             list_of_books.pop(0)
         for item in list_of_books:
             self.add_book(Book(item[1], item[2], item[3]))
-
-
 
     def add_user(self, user):
         self.users.append(user)

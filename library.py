@@ -99,8 +99,7 @@ class Book:
         if ISBN == None or re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", ISBN):
             self.isbn = ISBN
         else:
-            print("You enetered wrong ISBN")
-            exit()
+            raise Exception("You enetered wrong ISBN")
         self.title = title
         self.author = author
         self.year = year

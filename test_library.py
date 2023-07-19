@@ -122,11 +122,13 @@ class TestLibrary(unittest.TestCase):
 
     def test_data_storage_not_found(self):
         storage = DataStorage()
-
         storage.save_user(User('test name', 'test@test.com', '+380001111111'))
-
         self.assertRaises(Exception, storage.find_one, "notexist@test.com")
 
+    def test_isbn_validator(self):
+        book1 = Book("Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
+        self.assertEqual(book1.isbn, "978-3-16-148410-0")
+        self.assertRaises(Exception, Book, "Python Crash Course", "Eric Matthes", 2019, "1234567890")
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS books_orders;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,4 +33,10 @@ CREATE TABLE books_orders (
   price INTEGER NOT NULL,
   FOREIGN KEY (order_id) REFERENCES orders (id),
   FOREIGN KEY (book_id) REFERENCES books (id)
+);
+
+CREATE TABLE users (
+  first_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL
 );

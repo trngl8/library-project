@@ -10,6 +10,9 @@ INSERT INTO books_orders (order_id, book_id, price)
 VALUES
   (1, 1, 10);
 
+INSERT INTO users (first_name, email, phone)
+VALUES
+  ("Example_name", "example@gmail.com", "+380000000000")
 
 
 

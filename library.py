@@ -32,6 +32,7 @@ class Library:
             self.add_book(Book(item[1], item[2], item[3]))
 
     def add_user(self, user):
+        self.storage.save_user(user)
         self.users.append(user)
 
     def find_books(self, **kwargs):

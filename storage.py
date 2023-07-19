@@ -13,7 +13,7 @@ class DataStorage:
                 "NAME", "EMAIL", "PHONE"
             ]
         }
-        self.path = "var/data"
+        self.path = "var/data/"
         if not os.path.exists("var/data/users.csv"):
             open("var/data/users.csv", 'w')
         self.data = []
@@ -30,12 +30,13 @@ class DataStorage:
                 return {'name': item[0], 'email': item[1], 'phone': item[2]}
         raise Exception("User not found")
 
-    def read_from_csv_catalog(self):
+    def read_from_csv_catalog(self, filename):
         try:
-            with open(self.path, 'r') as file:
+            with open(self.path + filename, 'r') as file:
                 reader = csv.reader(file)
                 reader = list(reader)
         except FileNotFoundError:
             print("Checkout if file exists in var/data/")
             return []
         return reader
+

@@ -38,5 +38,5 @@ CREATE TABLE books_orders (
 CREATE TABLE users (
   first_name TEXT NOT NULL,
   email TEXT NOT NULL,
-  phone TEXT NOT NULL,
+  phone TEXT NOT NULL
 );

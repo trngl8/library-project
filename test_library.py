@@ -119,6 +119,7 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual('test name', user.name)
         self.assertEqual('+380001111111', user.phone)
 
+        self.assertRaises(Exception, storage.find_one, "notexist@test.com")
 
 if __name__ == "__main__":
     unittest.main()

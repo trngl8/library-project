@@ -37,6 +37,7 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(result, 1)
 
     def test_user_book(self):
+        storage = Mock()
         user = User('test', 'test@test.com', '123456789')
         book = Book("Python Crash Course", "Eric Matthes", 2019)
         library = Library('test', storage)
@@ -63,7 +64,6 @@ class TestLibrary(unittest.TestCase):
         result = visitor.available_library(library)
         self.assertEqual(True, result)
 
-    def test_book(self):
     def test_book(self):
         book = Book("Python Crash Course", "Eric Matthes", 2019)
         self.assertEqual("Python Crash Course", book.title)

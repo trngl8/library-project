@@ -110,6 +110,10 @@ class TestLibrary(unittest.TestCase):
         result = library.find_books(title="python", author="", year="", isbn="")
         self.assertEqual(3, len(result))
 
+    def test_isbn_validator(self):
+        book1 = Book("Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
+        self.assertEqual(book1.isbn, "978-3-16-148410-0")
+        self.assertRaises(Exception, Book, "Python Crash Course", "Eric Matthes", 2019, "1234567890")
 
 if __name__ == "__main__":
     unittest.main()

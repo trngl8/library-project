@@ -1,4 +1,4 @@
-import csv
+import csv, re
 
 
 class Library:
@@ -96,7 +96,10 @@ class User(Visitor):
 class Book:
     def __init__(self, title, author, year, ISBN=None) -> None:
         self.id = None
-        self.isbn = ISBN
+        if ISBN == None or re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", ISBN):
+            self.isbn = ISBN
+        else:
+            raise Exception("You enetered wrong ISBN")
         self.title = title
         self.author = author
         self.year = year

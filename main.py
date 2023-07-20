@@ -1,6 +1,7 @@
 from library import Library
 from library import User
-from functions import save_user
+from storage import DataStorage
+
 
 def print_item(index, value):
     print(f"[{index + 1}]. {value}")
@@ -43,8 +44,7 @@ def find_user():
 
 def import_books(library: Library):
     filename = input("Enter filename :> ")
-    filename = "var/data/" + filename
-    list_of_books = library.read_from_csv_catalog(filename)
+    list_of_books = library.storage.read_from_csv_catalog(filename)
     number_of_imported_books = len(list_of_books)
     library.import_books(list_of_books)
     return f"Imported {number_of_imported_books} books"
@@ -56,7 +56,6 @@ def add_user(library: Library):
     phone = input("Phone :> ")
     user = User(name, email, phone)
     library.add_user(user)
-    save_user(user)
     return f"User {name} added"
 
 
@@ -78,7 +77,7 @@ menu_actions = {
 
 menu = list(menu_actions.keys())
 menu_active = True
-main_library = Library()
+main_library = Library('3 Books', DataStorage())
 
 while menu_active:
     print("#" * 40)

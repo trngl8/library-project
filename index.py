@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap5
 from wtforms import Form, BooleanField, StringField, EmailField, SelectField, validators
 import re
 
+from storage import DataStorage
 from library import Library
 
 app = Flask(__name__)
@@ -24,14 +25,14 @@ class OrderForm(Form):
 
 @app.route('/')
 def index():
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     return render_template('enter.html', library=library)
 
 
 @app.route('/index')
 def catalog():
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     books = library.catalog
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
     return resp
@@ -51,7 +52,7 @@ def enter():
 @app.route('/books/<int:book_id>')
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     item = library.find_book(book_id)
     resp = make_response(render_template('book.html', book=item, user=user, library=library))
     return resp
@@ -60,7 +61,7 @@ def book(book_id):
 @app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
 def order(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     item = library.find_book(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -94,7 +95,7 @@ def logout():
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     item = library.find_book(book_id)
     return make_response(render_template('order_confirm.html', book=item, user=user))
 

@@ -1,5 +1,6 @@
 import unittest
 from library import Library, Book, User, Visitor
+from unittest.mock import Mock
 
 
 class TestLibrary(unittest.TestCase):
@@ -10,7 +11,8 @@ class TestLibrary(unittest.TestCase):
     """
 
     def setUp(self):
-        self.library = Library('test')
+        storage = Mock()
+        self.library = Library('test', storage)
         self.library.import_books([
             ["ID", "TITLE", "AUTHOR", "YEAR"],
             [1, "Python Crash Course", "Eric Matthes", 2019],
@@ -20,34 +22,39 @@ class TestLibrary(unittest.TestCase):
         ])
 
     def test_library_no_books(self):
-        target = Library('test')
+        storage = Mock()
+        target = Library('test', storage)
         result = target.get_count()
         self.assertEqual(result, 0)
 
     def test_library_has_books(self):
-        target = Library('test')
+        storage = Mock()
+        target = Library('test', storage)
         book = Book("Python Crash Course", "Eric Matthes", 2019)
         target.add_book(book)
         result = target.get_count()
         self.assertEqual(result, 1)
 
     def test_user_book(self):
+        storage = Mock()
         user = User('test', 'test@test.com', '123456789')
         book = Book("Python Crash Course", "Eric Matthes", 2019)
-        library = Library('test')
+        library = Library('test', storage)
         library.add_book(book)
         self.assertEqual(False, user.has_books())
         user.order_book(book)
         self.assertEqual(True, user.has_books())
 
     def test_library_not_convenient(self):
-        library = Library('test')
+        storage = Mock()
+        library = Library('test', storage)
         visitor = Visitor(2)
         result = visitor.available_library(library)
         self.assertEqual(False, result)
 
     def test_library_convenient(self):
-        library = Library('test')
+        storage = Mock()
+        library = Library('test', storage)
         book1 = Book("Python Hard Way", "Zed Shaw", 2013)
         book2 = Book("Python Hard Way", "Zed Shaw", 2013)
         library.add_book(book1)
@@ -114,6 +121,7 @@ class TestLibrary(unittest.TestCase):
         book1 = Book("Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
         self.assertEqual(book1.isbn, "978-3-16-148410-0")
         self.assertRaises(Exception, Book, "Python Crash Course", "Eric Matthes", 2019, "1234567890")
+
 
 if __name__ == "__main__":
     unittest.main()

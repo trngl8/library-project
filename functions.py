@@ -36,16 +36,6 @@ def check_if_book_in_csv(path, book):
         return False, 0
 
 
-def save_user(user: User):
-    if not os.path.exists("var/data/users.csv"):
-        open("var/data/users.csv", 'w')
-    with open("var/data/users.csv", "r") as file:
-        data = list(csv.reader(file))
-    data.append([user.name, user.email, user.phone])
-    with open("var/data/users.csv", 'w') as file:
-        csv.writer(file).writerows(data)
-
-
 def temp():
     file = open("books.csv", "r")
     lines = file.readlines()

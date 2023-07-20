@@ -33,7 +33,7 @@ def catalog():
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", "var/data")
     books = library.catalog
-    resp = make_response(render_template('index.html', books=books, user=user))
+    resp = make_response(render_template('index.html', books=books, user=user, library=library))
     return resp
 
 
@@ -53,7 +53,7 @@ def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", "var/data")
     item = library.find_book(book_id)
-    resp = make_response(render_template('book.html', book=item, user=user))
+    resp = make_response(render_template('book.html', book=item, user=user, library=library))
     return resp
 
 
@@ -66,20 +66,22 @@ def order(book_id):
     if request.method == 'POST' and form.validate():
         flash('Thanks for order')
         return redirect(url_for('confirm', book_id=book_id))
-    resp = make_response(render_template('book_order.html', book=item, form=form, user=user))
+    resp = make_response(render_template('book_order.html', book=item, form=form, user=user, library=library))
     return resp
 
 
 @app.route('/profile')
 def profile():
     user = request.cookies.get('SERVER_COOKIE')
-    return render_template("profile.html", user=user)
+    library = Library("3 Books", "var/data")
+    return render_template("profile.html", user=user, library=library)
 
   
 @app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
-    return render_template("settings.html", user=user)
+    library = Library("3 Books", "var/data")
+    return render_template("settings.html", user=user, library=library)
 
   
 @app.route("/logout")

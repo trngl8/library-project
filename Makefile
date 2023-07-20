@@ -20,11 +20,11 @@ dump-requirements:
 	pip freeze > requirements.txt
 .PHONY: dump-requirements
 
-unit-coverage:
+unit:
 	python -m coverage run -m unittest
 	python -m coverage report
 	python -m coverage html
-.PHONY: unit-coverage
+.PHONY: unit
 
 integration-coverage:
 	coverage run -m pytest

@@ -117,6 +117,19 @@ class TestLibrary(unittest.TestCase):
         result = library.find_books(title="python", author="", year="", isbn="")
         self.assertEqual(3, len(result))
 
+    def test_find_books_all(self):
+        storage = Mock()
+        storage.find_all_books.return_value = [
+                ["ID", "TITLE", "AUTHOR", "YEAR"],
+                [1, "Python Crash Course", "Eric Matthes", 2019],
+                [2, "Python Hard Way", "Zed Shaw", 2013],
+                [3, "Head First Python", "Paul Barry", 2016],
+                [4, "Startup Hard Development", "Roman Anderson", 2019]
+        ]
+        library = Library('test', storage)
+        list_books = library.get_repository('books').find_all()
+        self.assertEqual(6, len(list_books))
+
     def test_isbn_validator(self):
         book1 = Book("Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
         self.assertEqual(book1.isbn, "978-3-16-148410-0")

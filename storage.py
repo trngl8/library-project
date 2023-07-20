@@ -1,6 +1,10 @@
 import os
 import csv
 
+class BooksRepository():
+    def find_all(self):
+        self.storage.find_all_books()
+
 
 class DataStorage:
 
@@ -30,7 +34,7 @@ class DataStorage:
                 return {'name': item[0], 'email': item[1], 'phone': item[2]}
         raise Exception("User not found")
 
-    def read_from_csv_catalog(self, filename):
+    def find_all_books(self, filename):
         try:
             with open(self.path + filename, 'r') as file:
                 reader = csv.reader(file)

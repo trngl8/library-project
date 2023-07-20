@@ -1,4 +1,4 @@
-from storage import DataStorage
+from storage import DataStorage, BooksRepository
 import re
 
 
@@ -53,6 +53,11 @@ class Library:
             filtered = [book for book in filtered if author.lower() in book.author.lower()]
 
         return filtered
+
+    def get_repository(self, repository_name):
+        if repository_name == "books":
+            return BooksRepository()
+        raise Exception("No such repository")
 
 
 class Visitor:

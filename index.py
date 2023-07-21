@@ -87,7 +87,7 @@ def settings():
   
 @app.route("/logout")
 def logout():
-    response = make_response(render_template("enter.html"))
+    response = make_response(redirect(url_for('index')))
     response.delete_cookie('SERVER_COOKIE')
     return response
 

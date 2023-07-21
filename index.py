@@ -87,8 +87,7 @@ def settings():
   
 @app.route("/logout")
 def logout():
-    library = Library("3 Books", "var/data")
-    response = make_response(render_template("enter.html", library=library))
+    response = make_response(redirect(url_for('index')))
     response.delete_cookie('SERVER_COOKIE')
     return response
 

@@ -1,10 +1,6 @@
 import os
 import csv
 
-class BooksRepository():
-    def find_all(self):
-        self.storage.find_all_books()
-
 
 class DataStorage:
 
@@ -17,11 +13,12 @@ class DataStorage:
                 "NAME", "EMAIL", "PHONE"
             ]
         }
+        self.ext = '.csv'
         self.path = "var/data/"
         if not os.path.exists("var/data/users.csv"):
             open("var/data/users.csv", 'w')
         self.data = []
-        #self.read_from_csv_catalog(path + "/books.csv")
+        # self.read_from_csv_catalog(path + "/books.csv")
 
     def save_user(self, user):
         with open("var/data/users.csv", "a") as file_object:
@@ -36,7 +33,7 @@ class DataStorage:
 
     def find_all_books(self, filename):
         try:
-            with open(self.path + filename, 'r') as file:
+            with open(self.path + filename + self.ext, 'r') as file:
                 reader = csv.reader(file)
                 reader = list(reader)
         except FileNotFoundError:
@@ -44,3 +41,7 @@ class DataStorage:
             return []
         return reader
 
+    def get_file_lines(self, filename):
+        with open(self.path + filename + self.ext, 'r') as file_object:
+            lines = file_object.read().splitlines()
+        return lines

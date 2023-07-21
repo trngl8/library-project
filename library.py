@@ -2,6 +2,41 @@ from storage import DataStorage
 import re
 
 
+class Repository:
+
+    def __init__(self, name, storage: DataStorage):
+        self.name = name
+        self.storage = storage
+        self.items = []
+
+    def load_items(self):
+        self.items = []
+        lines = self.storage.get_file_lines(self.name)
+
+        columns = [x.lower() for x in lines.pop(0).split(',')]
+        for line in lines:
+            values = line.split(',')
+            self.items.append(dict(zip(columns, values)))
+
+    def find_all(self) -> list:
+        if 0 == len(self.items):
+            self.load_items()
+
+        result = []
+        for item in self.items:
+            result.append(Book(int(item['id']), item['title'], item['author'], item['year']))
+        return result
+
+    def find(self, item_id):
+        if 0 == len(self.items):
+            self.load_items()
+
+        for item in self.items:
+            if item_id == int(item['id']):
+                return Book(int(item['id']), item['title'], item['author'], item['year'])
+        raise Exception(f"Item with id {item_id} not found")
+
+
 class Library:
     def __init__(self, name, storage: DataStorage):
         self.name = name
@@ -29,7 +64,7 @@ class Library:
         for i in range(skip_lines):
             list_of_books.pop(0)
         for item in list_of_books:
-            self.add_book(Book(item[1], item[2], item[3]))
+            self.add_book(Book(item[0], item[1], item[2], item[3]))
 
     def add_user(self, user):
         self.storage.save_user(user)
@@ -53,6 +88,9 @@ class Library:
             filtered = [book for book in filtered if author.lower() in book.author.lower()]
 
         return filtered
+
+    def get_repository(self, name):
+        return Repository(name, self.storage)
 
 
 class Visitor:
@@ -83,8 +121,8 @@ class User(Visitor):
 
 
 class Book:
-    def __init__(self, title, author, year, ISBN=None) -> None:
-        self.id = None
+    def __init__(self, id, title, author, year, ISBN=None) -> None:
+        self.id = id
         if ISBN == None or re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", ISBN):
             self.isbn = ISBN
         else:

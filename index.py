@@ -33,7 +33,7 @@ def index():
 def catalog():
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", DataStorage())
-    books = library.catalog
+    books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
     return resp
 
@@ -53,7 +53,7 @@ def enter():
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", DataStorage())
-    item = library.find_book(book_id)
+    item = library.get_repository('books').find(book_id)
     resp = make_response(render_template('book.html', book=item, user=user, library=library))
     return resp
 
@@ -62,7 +62,7 @@ def book(book_id):
 def order(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", DataStorage())
-    item = library.find_book(book_id)
+    item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
         flash('Thanks for order')
@@ -74,14 +74,14 @@ def order(book_id):
 @app.route('/profile')
 def profile():
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     return render_template("profile.html", user=user, library=library)
 
   
 @app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
-    library = Library("3 Books", "var/data")
+    library = Library("3 Books", DataStorage())
     return render_template("settings.html", user=user, library=library)
 
   
@@ -96,8 +96,8 @@ def logout():
 def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     library = Library("3 Books", DataStorage())
-    item = library.find_book(book_id)
-    return make_response(render_template('order_confirm.html', book=item, user=user))
+    item = library.get_repository('books').find(book_id)
+    return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
 if __name__ == '__main__':

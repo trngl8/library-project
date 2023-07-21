@@ -30,7 +30,7 @@ class TestLibrary(unittest.TestCase):
     def test_library_has_books(self):
         storage = Mock()
         target = Library('test', storage)
-        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        book = Book(1, "Python Crash Course", "Eric Matthes", 2019)
         target.add_book(book)
         result = target.get_count()
         self.assertEqual(result, 1)
@@ -38,7 +38,7 @@ class TestLibrary(unittest.TestCase):
     def test_user_book(self):
         storage = Mock()
         user = User('test', 'test@test.com', '123456789')
-        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        book = Book(1, "Python Crash Course", "Eric Matthes", 2019)
         library = Library('test', storage)
         library.add_book(book)
         self.assertEqual(False, user.has_books())
@@ -55,8 +55,8 @@ class TestLibrary(unittest.TestCase):
     def test_library_convenient(self):
         storage = Mock()
         library = Library('test', storage)
-        book1 = Book("Python Hard Way", "Zed Shaw", 2013)
-        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
+        book1 = Book(1, "Python Hard Way", "Zed Shaw", 2013)
+        book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)
         library.add_book(book1)
         library.add_book(book2)
         visitor = Visitor(2)
@@ -64,7 +64,7 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(True, result)
 
     def test_book(self):
-        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        book = Book(1, "Python Crash Course", "Eric Matthes", 2019)
         self.assertEqual("Python Crash Course", book.title)
         self.assertEqual("Eric Matthes", book.author)
         self.assertEqual(2019, book.year)
@@ -73,9 +73,9 @@ class TestLibrary(unittest.TestCase):
 
     def test_import_books(self):
         library = self.library
-        book1 = Book("Python Crash Course", "Eric Matthes", 2019)
-        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
-        book3 = Book("Head First Python", "Paul Barry", 2016)
+        book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019)
+        book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)
+        book3 = Book(3, "Head First Python", "Paul Barry", 2016)
         self.assertFalse(book1 == book2)
         self.assertEqual(4, library.get_count())
         self.assertEqual(book1, library.catalog[0])
@@ -117,10 +117,39 @@ class TestLibrary(unittest.TestCase):
         result = library.find_books(title="python", author="", year="", isbn="")
         self.assertEqual(3, len(result))
 
+    def test_find_books_all(self):
+        storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+            '3,Head First Python,Paul Barry,2016',
+            '4,Startup Hard Development,Roman Anderson,2019'
+        ]
+        library = Library('test', storage)
+        list_books = library.get_repository('books').find_all()
+        self.assertEqual(4, len(list_books))
+
+    def test_find_book_by_id(self):
+        storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+            '3,Head First Python,Paul Barry,2016',
+            '4,Startup Hard Development,Roman Anderson,2019'
+        ]
+        library = Library('test', storage)
+        book = library.get_repository('books').find(2)
+        self.assertEqual('Python Hard Way', book.title)
+
     def test_isbn_validator(self):
-        book1 = Book("Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
+        book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
         self.assertEqual(book1.isbn, "978-3-16-148410-0")
-        self.assertRaises(Exception, Book, "Python Crash Course", "Eric Matthes", 2019, "1234567890")
+
+    def test_isbn_exception(self):
+        with self.assertRaises(Exception):
+            Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-1")
 
 
 if __name__ == "__main__":

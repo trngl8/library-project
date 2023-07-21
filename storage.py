@@ -14,13 +14,15 @@ class DataStorage:
             ]
         }
         self.ext = '.csv'
-        self.path = "var/data/"
-        if not os.path.exists("var/data/users.csv"):
-            open("var/data/users.csv", 'w')
+        self.path = os.path.dirname(__file__) + "/var/data/"
+        if not os.path.exists(self.path + "users.csv"):
+            open(self.path + "users.csv", 'w')
+        if not os.path.exists(self.path + "books.csv"):
+            open(self.path + "books.csv", 'w')
         self.data = []
 
     def save_user(self, user):
-        with open("var/data/users.csv", "a") as file_object:
+        with open(self.path + "users.csv", "a") as file_object:
             file_object.write(user.name + ',' + user.email + ',' + user.phone + '\n')
         self.data.append([user.name, user.email, user.phone])
 

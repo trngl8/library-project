@@ -15,9 +15,9 @@ class DataStorage:
         }
         self.ext = '.csv'
         self.path = os.path.dirname(__file__) + "/var/data/"
-        if not os.path.exists(self.path + "users.csv"):
+        if not os.path.exists(self.path + "users" + self.ext):
             open(self.path + "users.csv", 'w')
-        if not os.path.exists(self.path + "books.csv"):
+        if not os.path.exists(self.path + "books" + self.ext):
             open(self.path + "books.csv", 'w')
         self.data = []
 

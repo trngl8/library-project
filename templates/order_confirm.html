@@ -1,8 +1,8 @@
 {% extends 'index.html' %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-<li class="breadcrumb-item"><a href="{{ url_for('catalog') }}">Index</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('book', book_id=book.id) }}">{{ book.title[:] }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">Order confirm</li>
 {% endblock %}

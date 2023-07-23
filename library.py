@@ -104,7 +104,7 @@ class Visitor:
 
 
 class User(Visitor):
-    def __init__(self, name, email, phone, wanted_amount=10) -> None:
+    def __init__(self, name, email, phone, wanted_amount=10):
         super().__init__(wanted_amount)
         self.name = name
         self.email = email
@@ -121,12 +121,12 @@ class User(Visitor):
 
 
 class Book:
-    def __init__(self, id, title, author, year, ISBN=None) -> None:
+    def __init__(self, id, title, author, year, ISBN=None):
         self.id = id
-        if ISBN == None or re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", ISBN):
+        if ISBN is None or re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", ISBN):
             self.isbn = ISBN
         else:
-            raise Exception("You enetered wrong ISBN")
+            raise Exception("You entered wrong ISBN")
         self.title = title
         self.author = author
         self.year = year
@@ -137,6 +137,3 @@ class Book:
         if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
-
-    def __repr__(self) -> str:
-        return f"Book {self.title} written by {self.author} in {self.year}"

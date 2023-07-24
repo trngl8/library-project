@@ -20,3 +20,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate(self):
         self.assertEqual(True, self.validator.validate())
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -106,7 +106,7 @@
             </div>
             <div class="text-center mb-5">
                 <h1>{{ library.name }}</h1>
-                <p class="mb-4">{{library.get_count()}} books available</p>
+                <p class="mb-4">{{ library_count }} books available</p>
             </div>
 
             {% with messages = get_flashed_messages() %}

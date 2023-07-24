@@ -8,6 +8,8 @@ from forms import OrderForm
 from storage import DataStorage
 from library import Library
 
+from dotenv import load_dotenv
+
 app = Flask(__name__)
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
@@ -18,7 +20,8 @@ library = Library("3 Books", DataStorage())
 
 @app.route('/')
 def home():
-    return render_template('enter.html', library=library)
+    library_count = len(library.get_repository('books').find_all())
+    return render_template('enter.html', library=library, library_count=library_count)
 
 
 @app.route('/index')

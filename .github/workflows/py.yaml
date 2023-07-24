@@ -28,3 +28,4 @@ jobs:
       run: |
         python test_library.py -v
         python test_validator.py -v
+      shell: bash

@@ -21,5 +21,8 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Test
-      run: python test_library.py -v
+      run: |
+        python test_library.py -v
+        python test_index.py -v
+        python test_validator.py -v
       shell: bash

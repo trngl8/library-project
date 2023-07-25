@@ -59,6 +59,7 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
+        load_dotenv()
         response = requests.get(os.getenv("URI_PROCESSING_ADDRESS"))
         response_json = response.json()
         if response.status_code == 200 and response_json["status"] == "new":

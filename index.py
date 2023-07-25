@@ -20,6 +20,7 @@ bootstrap = Bootstrap5(app)
 library = Library("3 Books", DataStorage())
 
 load_dotenv()
+processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 
 
 @app.route('/')
@@ -61,7 +62,15 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        response = requests.post(os.getenv("URI_PROCESSING_ADDRESS"))
+        print(processing_address)
+        response = requests.post(processing_address, {
+            'firstname': form.firstname.data,
+            'lastname': form.lastname.data,
+            'email': form.email.data,
+            'phone': form.phone.data,
+            'address': form.address.data,
+            'period': form.period.data,
+        })
         response_json = response.json()
         if response.status_code == 200 and response_json["status"] == "new":
             flash('Thanks for order')

@@ -1,6 +1,7 @@
 .idea
 .venv
 .coverage
+.env.local
 
 var
 

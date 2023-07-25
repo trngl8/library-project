@@ -62,7 +62,6 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        print(processing_address)
         response = requests.post(processing_address, {
             'firstname': form.firstname.data,
             'lastname': form.lastname.data,

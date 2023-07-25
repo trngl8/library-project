@@ -9,6 +9,8 @@ from storage import DataStorage
 from library import Library
 
 from dotenv import load_dotenv
+import requests
+import os
 
 app = Flask(__name__)
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
@@ -57,7 +59,12 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        flash('Thanks for order')
+        response = requests.get(os.getenv("URI_PROCESSING_ADDRESS"))
+        response_json = response.json()
+        if response.status_code == 200 and response_json["status"] == "new":
+            flash('Thanks for order')
+        else:
+            flash("Processing failed")
         return redirect(url_for('confirm', book_id=book_id))
     resp = make_response(render_template('book_order.html', book=item, form=form, user=user, library=library))
     return resp

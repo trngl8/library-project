@@ -8,12 +8,20 @@ from forms import OrderForm
 from storage import DataStorage
 from library import Library
 
+from dotenv import load_dotenv
+import requests
+import os
+
 app = Flask(__name__)
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
 library = Library("3 Books", DataStorage())
+
+load_dotenv()
+load_dotenv('.env.local', override=True)
+processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 
 
 @app.route('/')
@@ -54,7 +62,19 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        flash('Thanks for order')
+        response = requests.post(processing_address, {
+            'firstname': form.firstname.data,
+            'lastname': form.lastname.data,
+            'email': form.email.data,
+            'phone': form.phone.data,
+            'address': form.address.data,
+            'period': form.period.data,
+        })
+        response_json = response.json()
+        if response.status_code == 200 and response_json["status"] == "new":
+            flash('Thanks for order')
+        else:
+            flash("Processing failed")
         return redirect(url_for('confirm', book_id=book_id))
     resp = make_response(render_template('book_order.html', book=item, form=form, user=user, library=library))
     return resp

@@ -26,8 +26,7 @@ processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 
 @app.route('/')
 def home():
-    library_count = len(library.get_repository('books').find_all())
-    return render_template('enter.html', library=library, library_count=library_count)
+    return render_template('enter.html', library=library)
 
 
 @app.route('/index')

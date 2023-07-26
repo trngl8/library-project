@@ -7,10 +7,16 @@ class DataStorage:
     def __init__(self):
         struct = {
             'books': [
-                "ID", "TITLE", "AUTHOR", "YEAR", "ISBN"
+                "ID", "TITLE", "AUTHOR", "YEAR", "ISBN", "AVAILABLE", "CREATED"
             ],
             'users': [
-                "NAME", "EMAIL", "PHONE"
+                "ID", "NAME", "EMAIL", "PHONE"
+            ],
+            'orders': [
+                "ID", "FIRST_NAME", "LAST_NAME", "EMAIL", "PHONE", "ADDRESS", "PERIOD", "TOTAL_PRICE", "CREATED"
+            ],
+            'books_orders': [
+                "ID", "BOOK_ID", "ORDER_ID", "PRICE"
             ]
         }
         self.ext = '.csv'

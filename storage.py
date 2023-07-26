@@ -7,18 +7,24 @@ class DataStorage:
     def __init__(self):
         struct = {
             'books': [
-                "ID", "TITLE", "AUTHOR", "YEAR", "ISBN"
+                "ID", "TITLE", "AUTHOR", "YEAR", "ISBN", "AVAILABLE", "CREATED"
             ],
             'users': [
-                "NAME", "EMAIL", "PHONE"
+                "ID", "NAME", "EMAIL", "PHONE"
+            ],
+            'orders': [
+                "ID", "FIRST_NAME", "LAST_NAME", "EMAIL", "PHONE", "ADDRESS", "PERIOD", "TOTAL_PRICE", "CREATED"
+            ],
+            'books_orders': [
+                "ID", "BOOK_ID", "ORDER_ID", "PRICE"
             ]
         }
         self.ext = '.csv'
         self.path = os.path.dirname(__file__) + "/var/data/"
-        if not os.path.exists(self.path + "users" + self.ext):
-            open(self.path + "users.csv", 'w')
-        if not os.path.exists(self.path + "books" + self.ext):
-            open(self.path + "books.csv", 'w')
+        for key, value in struct.items():
+            if not os.path.exists(self.path + key + self.ext):
+                with open(self.path + key + self.ext, 'w') as file_object:
+                    file_object.write(",".join(value) + '\n')
         self.data = []
 
     def save_user(self, user):

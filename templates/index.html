@@ -115,6 +115,24 @@
       {% endif %}
     {% endwith %}
 
+
+    {% if books|length == 0 %}
+      <div class="alert alert-warning" role="alert">
+        No books found
+      </div>
+      <p>Upload new data</p>
+      <form action="#" method="post">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <input type=file name=file class="form-control" />
+        </div>
+        <div class="col-auto">
+          <input type=submit class="btn btn-outline-primary" value=Upload />
+        </div>
+      </div>
+      </form>
+    {% endif %}
+
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-2">
     {% for book in books %}
       <div class="col">

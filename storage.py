@@ -54,3 +54,15 @@ class DataStorage:
         with open(self.path + filename + self.ext, 'r') as file_object:
             lines = file_object.read().splitlines()
         return lines
+
+    def add(self, item):
+        with open(self.path + "books.csv", "a") as file_object:
+            file_object.write(",".join(item.values()) + "\n")
+
+    def remove(self, item_id):
+        with open(self.path + "books.csv", "r") as file_object:
+            lines = file_object.readlines()
+        with open(self.path + "books.csv", "w") as f:
+            for line in lines:
+                if int(line.strip("\n")) != item_id:
+                    f.write(line)

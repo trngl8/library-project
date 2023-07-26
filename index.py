@@ -20,6 +20,7 @@ bootstrap = Bootstrap5(app)
 library = Library("3 Books", DataStorage())
 
 load_dotenv()
+load_dotenv('.env.local', override=True)
 processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 
 

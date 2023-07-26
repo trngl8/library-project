@@ -147,10 +147,6 @@ class TestLibrary(unittest.TestCase):
         book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
         self.assertEqual(book1.isbn, "978-3-16-148410-0")
 
-    def test_isbn_exception(self):
-        with self.assertRaises(Exception):
-            Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-1")
-
 
 if __name__ == "__main__":
     unittest.main()

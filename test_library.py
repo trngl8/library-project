@@ -73,6 +73,9 @@ class TestLibrary(unittest.TestCase):
 
     def test_import_books(self):
         library = self.library
+        storage = Mock()
+        import_library = Library('No import', storage)
+        self.assertEqual(None, import_library.import_books([]))
         book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019)
         book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)
         book3 = Book(3, "Head First Python", "Paul Barry", 2016)
@@ -142,11 +145,16 @@ class TestLibrary(unittest.TestCase):
         library = Library('test', storage)
         book = library.get_repository('books').find(2)
         self.assertEqual('Python Hard Way', book.title)
+        with self.assertRaises(Exception):
+            library.get_repository('books').find(9)
 
     def test_isbn_validator(self):
         book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
         self.assertEqual(book1.isbn, "978-3-16-148410-0")
 
+    def test_add_user(self):
+        library = self.library
+        library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,9 +12,10 @@ class Repository:
     def load_items(self):
         self.items = []
         lines = self.storage.get_file_lines(self.name)
+        col_lines = lines[:]
 
-        columns = [x.lower() for x in lines.pop(0).split(',')]
-        for line in lines:
+        columns = [x.lower() for x in col_lines.pop(0).split(',')]
+        for line in col_lines:
             values = line.split(',')
             self.items.append(dict(zip(columns, values)))
 

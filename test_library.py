@@ -48,6 +48,7 @@ class TestLibrary(unittest.TestCase):
     def test_library_not_convenient(self):
         storage = Mock()
         storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
         ]
         library = Library('test', storage)
         visitor = Visitor(2)

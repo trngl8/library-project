@@ -12,6 +12,13 @@ class TestLibrary(unittest.TestCase):
 
     def setUp(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+            '3,Head First Python,Paul Barry,2016',
+            '4,Startup Hard Development,Roman Anderson,2019'
+        ]
         self.library = Library('test', storage)
         self.library.import_books([
             ["ID", "TITLE", "AUTHOR", "YEAR"],
@@ -23,12 +30,19 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_no_books(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+        ]
         target = Library('test', storage)
         result = target.get_count()
         self.assertEqual(result, 0)
 
     def test_library_has_books(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+        ]
         target = Library('test', storage)
         book = Book(1, "Python Crash Course", "Eric Matthes", 2019)
         target.add_book(book)
@@ -47,6 +61,9 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_not_convenient(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+        ]
         library = Library('test', storage)
         visitor = Visitor(2)
         result = visitor.available_library(library)
@@ -54,6 +71,11 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_convenient(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+        ]
         library = Library('test', storage)
         book1 = Book(1, "Python Hard Way", "Zed Shaw", 2013)
         book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)

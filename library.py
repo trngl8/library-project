@@ -46,7 +46,7 @@ class Library:
         self.storage = storage
 
     def get_count(self):
-        return len(self.catalog)
+        return len(self.get_repository('books').find_all())
 
     def add_book(self, book):
         book.id = len(self.catalog) + 1

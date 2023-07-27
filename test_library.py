@@ -42,7 +42,6 @@ class TestLibrary(unittest.TestCase):
         storage.get_file_lines.return_value = [
             'ID,TITLE,AUTHOR,YEAR',
             '1,Python Crash Course,Eric Matthes,2019',
-            '2,Python Hard Way,Zed Shaw,2013',
         ]
         target = Library('test', storage)
         book = Book(1, "Python Crash Course", "Eric Matthes", 2019)

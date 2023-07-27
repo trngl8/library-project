@@ -47,6 +47,13 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_not_convenient(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+            '3,Head First Python,Paul Barry,2016',
+            '4,Startup Hard Development,Roman Anderson,2019'
+        ]
         library = Library('test', storage)
         visitor = Visitor(2)
         result = visitor.available_library(library)
@@ -54,6 +61,13 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_convenient(self):
         storage = Mock()
+        storage.get_file_lines.return_value = [
+            'ID,TITLE,AUTHOR,YEAR',
+            '1,Python Crash Course,Eric Matthes,2019',
+            '2,Python Hard Way,Zed Shaw,2013',
+            '3,Head First Python,Paul Barry,2016',
+            '4,Startup Hard Development,Roman Anderson,2019'
+        ]
         library = Library('test', storage)
         book1 = Book(1, "Python Hard Way", "Zed Shaw", 2013)
         book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)

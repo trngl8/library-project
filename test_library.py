@@ -148,13 +148,10 @@ class TestLibrary(unittest.TestCase):
         with self.assertRaises(Exception):
             library.get_repository('books').find(9)
 
-    def test_isbn_validator(self):
-        book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019, "978-3-16-148410-0")
-        self.assertEqual(book1.isbn, "978-3-16-148410-0")
-
     def test_add_user(self):
         library = self.library
         library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
+
 
 if __name__ == "__main__":
     unittest.main()

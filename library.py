@@ -1,5 +1,4 @@
 from storage import DataStorage
-import re
 
 
 class Repository:

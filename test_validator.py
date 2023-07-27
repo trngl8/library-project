@@ -2,6 +2,7 @@ import unittest
 from validator import Validator
 from library import Book
 
+
 class TestValidator(unittest.TestCase):
     def setUp(self):
         self.validator = Validator()

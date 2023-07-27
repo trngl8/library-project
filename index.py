@@ -7,10 +7,7 @@ from flask_bootstrap import Bootstrap5
 from forms import OrderForm
 from storage import DataStorage
 from library import Library
-
-from dotenv import load_dotenv
-import requests
-import os
+from processing import Processing
 
 app = Flask(__name__)
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
@@ -19,13 +16,18 @@ bootstrap = Bootstrap5(app)
 
 library = Library("3 Books", DataStorage())
 
-load_dotenv()
-load_dotenv('.env.local', override=True)
-processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 
-
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def home():
+    if request.method == 'POST':
+        username = request.form["username"]
+        if not re.match(r"[A-Za-z0-9_-]+", username):
+            flash("Your name is not valid", category="error")
+            return redirect(url_for("home"))
+        resp = redirect(url_for('index'))
+        resp.set_cookie("SERVER_COOKIE", username)
+        return resp
+
     return render_template('enter.html', library=library)
 
 
@@ -34,17 +36,6 @@ def index():
     user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
-    return resp
-
-
-@app.route('/enter', methods=["POST"])
-def enter():
-    user = request.form["username"]
-    if not re.match(r"[A-Za-z0-9_-]+", user):
-        flash("Your name is not valid" , category="error")
-        return redirect(url_for("home"))
-    resp = redirect(url_for('index'))
-    resp.set_cookie("SERVER_COOKIE", user)
     return resp
 
 
@@ -62,19 +53,11 @@ def order(book_id):
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
-        response = requests.post(processing_address, {
-            'firstname': form.firstname.data,
-            'lastname': form.lastname.data,
-            'email': form.email.data,
-            'phone': form.phone.data,
-            'address': form.address.data,
-            'period': form.period.data,
-        })
-        response_json = response.json()
-        if response.status_code == 200 and response_json["status"] == "new":
+        result = Processing().create_order(form)
+        if result:
             flash('Thanks for order')
         else:
-            flash("Processing failed")
+            flash("Processing failed", category="error")
         return redirect(url_for('confirm', book_id=book_id))
     resp = make_response(render_template('book_order.html', book=item, form=form, user=user, library=library))
     return resp

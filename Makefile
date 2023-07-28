@@ -16,9 +16,9 @@ next:
 	flask --app next run --debug
 .PHONY: next
 
-dump-requirements:
+requirements:
 	pip freeze > requirements.txt
-.PHONY: dump-requirements
+.PHONY: requirements
 
 unit:
 	python -m coverage run -m unittest

@@ -21,6 +21,8 @@ class DataStorage:
         }
         self.ext = '.csv'
         self.path = os.path.dirname(__file__) + "/var/data/"
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
         for key, value in struct.items():
             if not os.path.exists(self.path + key + self.ext):
                 with open(self.path + key + self.ext, 'w') as file_object:

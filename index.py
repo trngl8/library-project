@@ -1,4 +1,5 @@
 import re
+import os
 
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
@@ -6,8 +7,9 @@ from flask_bootstrap import Bootstrap5
 
 from forms import OrderForm
 from storage import DataStorage
-from library import Library
+from library import Library, Book
 from processing import Processing
+from validator import Validator
 
 app = Flask(__name__)
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
@@ -31,8 +33,12 @@ def home():
     return render_template('enter.html', library=library)
 
 
-@app.route('/index')
+@app.route('/index', methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        file = request.files['file']
+        file.save(os.path.join("var/import/" + file.filename))
+        return redirect(url_for("import_books", file_name=file.filename))
     user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
@@ -89,5 +95,36 @@ def confirm(book_id):
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
+@app.route('/books/import/<string:file_name>')
+def import_books(file_name):
+        with open(os.path.join("var/import/" + file_name)) as file:
+            file_containment = file.readlines()
+        result = []
+        result.append(file_containment[0])
+        flag = False
+        validator = Validator()
+        for line in file_containment[1:]:
+            line = line.replace('\n', '').split(",")
+            book = Book(int(line[0]), line[1], line[2], int(line[3]))
+            if validator.validate(book=book):
+                for j in result:
+                    try:
+                        if j == book:
+                            flag = True
+                    except:
+                        continue
+            if not flag:
+                result.append(book)
+            flag = False
+        with open(os.path.join("var/import/" + file_name), 'w') as file:
+            file.write(result[0])
+            for i in result[1:]:
+                file.write(str(i.id) + "," + i.title + ',' + i.author + ',' + str(i.year) + '\n')
+        user = request.cookies.get('SERVER_COOKIE')
+        books = library.get_repository('books').find_all()
+        resp = make_response(render_template('enter.html', books=books, user=user, library=library))
+        return resp
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

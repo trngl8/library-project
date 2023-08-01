@@ -1,4 +1,25 @@
-{% extends 'index.html' %}
+{% extends 'blank.html' %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    function addToCart(el) {
+      const book_url = {{ url_for("add_to_cart", book_id=book.id)|tojson}}
+      const cart = document.getElementById("cart_top")
+      let data = new FormData()
+      data.append("quantity", 1)
+      fetch(book_url, {
+        "method": "POST",
+        "body": data,
+      })
+        .then(response => response.json())
+        .then(cart.classList.remove("d-none"))
+        .catch(
+          error => console.log(error)
+      );
+    }
+  </script>
+{% endblock %}
 
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
@@ -45,6 +66,7 @@
               </div>
             </div>
             <a href="{{ url_for('order', book_id=book.id) }}" class="btn btn-outline-primary" title="Borrow">Order</a>
+            <button type="button" onclick="addToCart(this)" class="btn btn-outline-primary" title="Borrow"><span id="book_cart_"></span>Add to cart</button>
         </div>
     </div>
 

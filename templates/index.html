@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ bootstrap.load_css() }}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -70,6 +71,13 @@
           <a class="nav-link" href="{{ url_for('index') }}">Index</a>
         </li>
       </ul>
+      <button type="button" class="btn btn-outline-danger position-relative mx-2 d-none" id="cart_top">
+        <i class="bi bi-cart"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          1
+          <span class="visually-hidden">items in the cart</span>
+        </span>
+      </button>
       {% if user %}
           <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person"></i> {{ user }}
@@ -160,6 +168,7 @@
 </footer>
 
 {{ bootstrap.load_js() }}
+{% block scripts %}{% endblock %}
 </body>
 
 </html>

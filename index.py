@@ -89,5 +89,13 @@ def confirm(book_id):
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
+@app.route('/cart/<int:book_id>/add', methods=["POST"])
+def add_to_cart(book_id):
+    item = library.get_repository('books').find(book_id)
+    return {
+        "result": item.id,
+    }
+
+
 if __name__ == '__main__':
     app.run()

@@ -36,7 +36,9 @@ def home():
 @app.route('/index', methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        file = request.files['file']
+        file = request.files['file']    
+        if not os.path.exists(os.path.dirname(__file__) + "/var/import/"):
+            os.makedirs(os.path.dirname(__file__) + "/var/import/")
         file.save(os.path.join("var/import/" + file.filename))
         return redirect(url_for("import_books", file_name=file.filename))
     user = request.cookies.get('SERVER_COOKIE')
@@ -122,7 +124,8 @@ def import_books(file_name):
                 file.write(str(i.id) + "," + i.title + ',' + i.author + ',' + str(i.year) + '\n')
         user = request.cookies.get('SERVER_COOKIE')
         books = library.get_repository('books').find_all()
-        resp = make_response(render_template('enter.html', books=books, user=user, library=library))
+        flash("Your file was imported successfully", category='success')
+        resp = make_response(render_template('index.html', books=books, user=user, library=library))
         return resp
 
 

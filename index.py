@@ -4,19 +4,30 @@ import os
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask_bootstrap import Bootstrap5
+from werkzeug.utils import secure_filename
 
 from forms import OrderForm
 from storage import DataStorage
-from library import Library, Book
+from library import Library
 from processing import Processing
-from validator import Validator
+from file import FileImport
+
+
+UPLOAD_FOLDER = 'var/import/'
+ALLOWED_EXTENSIONS = {'csv', 'tsv'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
 library = Library("3 Books", DataStorage())
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -36,11 +47,20 @@ def home():
 @app.route('/index', methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        file = request.files['file']    
-        if not os.path.exists(os.path.dirname(__file__) + "/var/import/"):
-            os.makedirs(os.path.dirname(__file__) + "/var/import/")
-        file.save(os.path.join("var/import/" + file.filename))
-        return redirect(url_for("import_books", file_name=file.filename))
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            import_service = FileImport()
+            import_service.process_file(filename)
+            flash("Your file was imported successfully", category='success')
+            return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
@@ -76,20 +96,20 @@ def profile():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("profile.html", user=user, library=library)
 
-  
+
 @app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user, library=library)
 
-  
+
 @app.route("/logout")
 def logout():
     response = make_response(redirect(url_for('home')))
     response.delete_cookie('SERVER_COOKIE')
     return response
 
-  
+
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
@@ -97,37 +117,5 @@ def confirm(book_id):
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
-@app.route('/books/import/<string:file_name>')
-def import_books(file_name):
-        with open(os.path.join("var/import/" + file_name)) as file:
-            file_containment = file.readlines()
-        result = []
-        result.append(file_containment[0])
-        flag = False
-        validator = Validator()
-        for line in file_containment[1:]:
-            line = line.replace('\n', '').split(",")
-            book = Book(int(line[0]), line[1], line[2], int(line[3]))
-            if validator.validate(book=book):
-                for j in result:
-                    try:
-                        if j == book:
-                            flag = True
-                    except:
-                        continue
-            if not flag:
-                result.append(book)
-            flag = False
-        with open(os.path.join("var/import/" + file_name), 'w') as file:
-            file.write(result[0])
-            for i in result[1:]:
-                file.write(str(i.id) + "," + i.title + ',' + i.author + ',' + str(i.year) + '\n')
-        user = request.cookies.get('SERVER_COOKIE')
-        books = library.get_repository('books').find_all()
-        flash("Your file was imported successfully", category='success')
-        resp = make_response(render_template('index.html', books=books, user=user, library=library))
-        return resp
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

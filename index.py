@@ -1,5 +1,5 @@
 import re
-import os
+
 
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
@@ -56,9 +56,8 @@ def index():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            import_service = FileImport()
-            import_service.process_file(filename)
+            import_service = FileImport(app.config['UPLOAD_FOLDER'])
+            import_service.process_file(file, filename)
             flash("Your file was imported successfully", category='success')
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')

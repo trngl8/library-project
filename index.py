@@ -45,8 +45,6 @@ def index():
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
-    if 'cart' in session:
-        cart = session['cart']
     resp = make_response(render_template('book.html', book=item, user=user, library=library))
     return resp
 

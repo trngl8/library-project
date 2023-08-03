@@ -2,6 +2,7 @@ import re
 
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
+from flask import session
 from flask_bootstrap import Bootstrap5
 
 from forms import OrderForm
@@ -43,6 +44,8 @@ def index():
 def book(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
+    if 'cart' in session:
+        cart = session['cart']
     resp = make_response(render_template('book.html', book=item, user=user, library=library))
     return resp
 
@@ -89,8 +92,22 @@ def confirm(book_id):
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
+@app.route('/cart', methods=["GET", "POST"])
+def cart():
+    user = request.cookies.get('SERVER_COOKIE')
+    if request.method == 'POST':
+        if 'cart' in session:
+            session.pop('cart', None)
+
+    return make_response(render_template('cart.html', library=library, user=user))
+
+
 @app.route('/cart/<int:book_id>/add', methods=["POST"])
 def add_to_cart(book_id):
+    session['cart'] = {
+        "book_id": request.form['book_id'],
+        "quantity": request.form['quantity'],
+    }
     item = library.get_repository('books').find(book_id)
     return {
         "result": item.id,

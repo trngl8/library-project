@@ -70,14 +70,17 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('index') }}">Index</a>
         </li>
+        <li>
+          <a href="{{ url_for('cart') }}" class="btn {% if session['cart'] %}btn-outline-danger{% else %}btn-outline-secondary{% endif %} position-relative mx-2" id="cart_top">
+            <i class="bi bi-cart"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger {% if session['cart'] %}{% else %}d-none{% endif %}" id="cart_top_count">
+              1
+              <span class="visually-hidden">items in the cart</span>
+            </span>
+          </a>
+        </li>
       </ul>
-      <button type="button" class="btn btn-outline-danger position-relative mx-2 d-none" id="cart_top">
-        <i class="bi bi-cart"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          1
-          <span class="visually-hidden">items in the cart</span>
-        </span>
-      </button>
+
       {% if user %}
           <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person"></i> {{ user }}

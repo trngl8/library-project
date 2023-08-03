@@ -43,6 +43,7 @@ class Library:
         self.catalog = []
         self.users = []
         self.storage = storage
+        self.cart = Cart()
 
     def get_count(self):
         return len(self.get_repository('books').find_all())
@@ -134,3 +135,20 @@ class Book:
         if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
+
+
+class Cart:
+    def __init__(self):
+        self.items = []
+
+    def add_item(self, item):
+        self.items.append(item)
+
+    def get_total(self) -> int:
+        total = 0
+        for item in self.items:
+            total += item.price
+        return total
+
+    def clear(self):
+        self.items = []

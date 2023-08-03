@@ -2,11 +2,13 @@ import re
 
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
+from flask import session
 from flask_bootstrap import Bootstrap5
 
 from forms import OrderForm
 from storage import DataStorage
 from library import Library
+from library import Cart
 from processing import Processing
 
 app = Flask(__name__)
@@ -87,6 +89,32 @@ def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
+
+
+@app.route('/cart', methods=["GET", "POST"])
+def cart_index():
+    user = request.cookies.get('SERVER_COOKIE')
+    if request.method == 'POST':
+        cart = library.cart
+        cart.clear()
+        if 'cart' in session:
+            session.pop('cart', None)
+
+    return make_response(render_template('cart.html', library=library, user=user))
+
+
+@app.route('/cart/<int:book_id>/add', methods=["POST"])
+def add_to_cart(book_id):
+    cart = library.cart
+    item = library.get_repository('books').find(book_id)
+    cart.add_item(item)
+    session['cart'] = {
+        "count_items": len(cart.items),
+    }
+
+    return {
+        "result": len(cart.items),
+    }
 
 
 if __name__ == '__main__':

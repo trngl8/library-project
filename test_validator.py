@@ -21,8 +21,8 @@ class TestValidator(unittest.TestCase):
         })
 
     def test_validate(self):
-        book1 = Book(1, "Python Crash Course", "Eric Matthes" ,2019, "9781718502703")
-        book2 = Book(2,"Python Hard Way", "Zed Shaw", 1899, "9780134692883")
+        book1 = Book( "Python Crash Course", "Eric Matthes" ,2019, "9781718502703")
+        book2 = Book("Python Hard Way", "Zed Shaw", 1899, "9780134692883")
         self.assertEqual(True, self.validator.validate(book1))
         self.assertAlmostEqual(False, self.validator.validate(book2))
 

@@ -151,6 +151,7 @@ class TestLibrary(unittest.TestCase):
             '3,Head First Python,Paul Barry,2016',
             '4,Startup Hard Development,Roman Anderson,2019'
         ]
+        storage.len.return_value = 5
         library = Library('test', storage)
         list_books = library.get_repository('books').find_all()
         self.assertEqual(4, len(list_books))
@@ -173,6 +174,11 @@ class TestLibrary(unittest.TestCase):
     def test_add_user(self):
         library = self.library
         library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
+
+    def test_storage_add_book(self):
+        library = self.library
+        library.add_book(Book(5, "Python Hard Way", "Zed Shaw", 2013))
+        self.assertEqual(5, library.get_count())
 
 
 if __name__ == "__main__":

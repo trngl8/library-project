@@ -27,12 +27,12 @@ class DataStorage:
             if not os.path.exists(self.path + key + self.ext):
                 with open(self.path + key + self.ext, 'w') as file_object:
                     file_object.write(",".join(value) + '\n')
-        self.data = []
+        self.data = {}
 
     def save_user(self, user):
         with open(self.path + "users.csv", "a") as file_object:
             file_object.write(user.name + ',' + user.email + ',' + user.phone + '\n')
-        self.data.append([user.name, user.email, user.phone])
+        # self.data.append([user.name, user.email, user.phone])
 
     def find_one(self, email) -> dict:
         for item in self.data:
@@ -50,19 +50,32 @@ class DataStorage:
             return []
         return reader
 
-    def get_file_lines(self, filename):
-        with open(self.path + filename + self.ext, 'r') as file_object:
+    def get_lines(self, entity_name):
+        if entity_name in self.data:
+            return self.data[entity_name]['lines']
+        with open(self.path + entity_name + self.ext, 'r') as file_object:
             lines = file_object.read().splitlines()
+        self.data[entity_name] = {
+            'count': len(lines) - 1,
+            'lines': lines,
+        }
         return lines
 
-    def add(self, item):
-        with open(self.path + "books.csv", "a") as file_object:
-            file_object.write(",".join(item.values()) + "\n")
+    def add_line(self, entity_name, item) -> int:
+        if entity_name not in self.data:
+            self.get_lines(entity_name)
+        new_id = self.data[entity_name]['count'] + 1
+        line = str(new_id) + "," + ",".join(item.values()) + "\n"
+        with open(self.path + entity_name + self.ext, "a") as file_object:
+            file_object.write(line)
+        self.data[entity_name]['count'] = new_id
+        self.data[entity_name]['lines'].append(line)
+        return new_id
 
-    def remove(self, item_id):
-        with open(self.path + "books.csv", "r") as file_object:
-            lines = file_object.readlines()
-        with open(self.path + "books.csv", "w") as f:
-            for line in lines:
-                if int(line.strip("\n")) != item_id:
-                    f.write(line)
+    def remove_line(self, entity_name, item_id):
+        if entity_name not in self.data:
+            self.get_lines(entity_name)
+        self.data[entity_name]['count'] -= 1
+        del self.data[entity_name]['lines'][int(item_id)]
+        with open(self.path + entity_name + self.ext, "w") as file_object:
+            file_object.writelines("\n".join(self.data[entity_name]['lines']))

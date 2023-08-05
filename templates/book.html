@@ -50,7 +50,7 @@
               </div>
             </div>
             <a href="{{ url_for('order', book_id=book.id) }}" class="btn btn-outline-primary" title="Borrow">Order</a>
-            <button type="button" id="order_button" onclick="addToCart(this, {{ book.id }})" data-order_url="{{ url_for('add_to_cart', book_id=book.id)}}" class="btn btn-outline-primary" title="Borrow">Add to cart</button>
+            <button type="button" id="order_button" onclick="addToCart(this, {{ book.id }})" data-url="{{ url_for('add_to_cart', book_id=book.id)}}" class="btn btn-outline-primary" title="Borrow">Add to cart</button>
         </div>
     </div>
 

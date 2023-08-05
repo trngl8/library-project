@@ -1,15 +1,39 @@
 {% extends 'blank.html' %}
 
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
+<li class="breadcrumb-item active" aria-current="page">Cart</li>
+{% endblock %}
+
 {% block content %}
 <div class="container p-0">
   <div class="col">
     <h1 class="display-5 mb-5">Cart</h1>
     {% if cart.items|length > 0 %}
-      <div class="list-group">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
         {% for book in cart.items %}
-        <a href="{{ url_for('book', book_id=book.id) }}" class="list-group-item list-group-item-action">{{ book.title }}</a>
+          <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ book.title }}</td>
+            <td><a href="#" onclick="removeFromCart(this, {{ book.id }})" data-url="{{ url_for('remove_from_cart', book_id=book.id) }}" class="btn btn-sm btn-outline-primary">Remove</a></td>
+          </tr>
         {% endfor %}
-      </div>
+        </tbody>
+      </table>
     {% endif %}
     <form method="post">
       <button type="submit" class="btn btn-outline-primary">Clear</button>

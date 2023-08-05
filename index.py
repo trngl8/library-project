@@ -8,7 +8,6 @@ from flask_bootstrap import Bootstrap5
 from forms import OrderForm
 from storage import DataStorage
 from library import Library
-from library import Cart
 from processing import Processing
 
 app = Flask(__name__)
@@ -99,6 +98,11 @@ def cart_index():
         cart.clear()
         if 'cart' in session:
             session.pop('cart', None)
+    if 'cart' in session and 'items' in session['cart']:
+        cart.clear()
+        cart_data = session['cart']
+        for item in cart_data['items']:
+            cart.add_item(item)
     return make_response(render_template('cart.html', library=library, user=user, cart=cart))
 
 
@@ -112,10 +116,27 @@ def add_to_cart(book_id):
     else:
         cart_data = session['cart']
 
-    cart = library.cart
-    item = library.get_repository('books').find(book_id)
-    cart.add_item(item)
-    cart_data['items'].append({'id': item.id, 'title': item.title})
+    book = library.get_repository('books').find(book_id)
+
+    ids = [item['id'] for item in cart_data['items']]
+    if book.id not in ids:
+        cart_data['items'].append({'id': book.id, 'title': book.title})
+        cart_data['count_items'] = len(cart_data['items'])
+        session['cart'] = cart_data
+
+    return {
+        "result": cart_data['count_items'],
+    }
+
+
+@app.route('/cart/<int:book_id>/remove', methods=["POST"])
+def remove_from_cart(book_id):
+    book = library.get_repository('books').find(book_id)
+    cart_data = session['cart']
+    for item in cart_data['items']:
+        if item['id'] == book.id:
+            cart_data['items'].remove(item)
+            break
     cart_data['count_items'] = len(cart_data['items'])
     session['cart'] = cart_data
 

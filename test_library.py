@@ -12,8 +12,8 @@ class TestLibrary(unittest.TestCase):
 
     def setUp(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = [
             '1,Python Crash Course,Eric Matthes,2019',
             '2,Python Hard Way,Zed Shaw,2013',
             '3,Head First Python,Paul Barry,2016',
@@ -30,17 +30,16 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_no_books(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
-        ]
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = []
         target = Library('test', storage)
         result = target.get_count()
         self.assertEqual(result, 0)
 
     def test_library_has_books(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = [
             '1,Python Crash Course,Eric Matthes,2019',
         ]
         target = Library('test', storage)
@@ -61,9 +60,8 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_not_convenient(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
-        ]
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = []
         library = Library('test', storage)
         visitor = Visitor(2)
         result = visitor.available_library(library)
@@ -71,8 +69,8 @@ class TestLibrary(unittest.TestCase):
 
     def test_library_convenient(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = [
             '1,Python Crash Course,Eric Matthes,2019',
             '2,Python Hard Way,Zed Shaw,2013',
         ]
@@ -86,7 +84,7 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(True, result)
 
     def test_book(self):
-        book = Book(1, "Python Crash Course", "Eric Matthes", 2019)
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
         self.assertEqual("Python Crash Course", book.title)
         self.assertEqual("Eric Matthes", book.author)
         self.assertEqual(2019, book.year)
@@ -98,22 +96,15 @@ class TestLibrary(unittest.TestCase):
         storage = Mock()
         import_library = Library('No import', storage)
         self.assertEqual(None, import_library.import_books([]))
-        book1 = Book(1, "Python Crash Course", "Eric Matthes", 2019)
-        book2 = Book(2, "Python Hard Way", "Zed Shaw", 2013)
-        book3 = Book(3, "Head First Python", "Paul Barry", 2016)
+        book1 = Book("Python Crash Course", "Eric Matthes", 2019)
+        book2 = Book("Python Hard Way", "Zed Shaw", 2013)
+        book3 = Book("Head First Python", "Paul Barry", 2016)
         self.assertFalse(book1 == book2)
         self.assertEqual(4, library.get_count())
         self.assertEqual(book1, library.catalog[0])
         self.assertEqual(book2, library.catalog[1])
         self.assertEqual(book3, library.catalog[2])
 
-    def test_not_find_book(self):
-        library = self.library
-        self.assertEqual(library.find_book(5), None)
-
-    def test_find_book(self):
-        library = self.library
-        self.assertEqual(library.find_book(1).title, "Python Crash Course")
 
     def test_find_books(self):
         library = self.library
@@ -144,22 +135,21 @@ class TestLibrary(unittest.TestCase):
 
     def test_find_books_all(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = [
             '1,Python Crash Course,Eric Matthes,2019',
             '2,Python Hard Way,Zed Shaw,2013',
             '3,Head First Python,Paul Barry,2016',
             '4,Startup Hard Development,Roman Anderson,2019'
         ]
-        storage.len.return_value = 5
         library = Library('test', storage)
         list_books = library.get_repository('books').find_all()
         self.assertEqual(4, len(list_books))
 
     def test_find_book_by_id(self):
         storage = Mock()
-        storage.get_file_lines.return_value = [
-            'ID,TITLE,AUTHOR,YEAR',
+        storage.get_header.return_value = 'ID,TITLE,AUTHOR,YEAR'
+        storage.get_lines.return_value = [
             '1,Python Crash Course,Eric Matthes,2019',
             '2,Python Hard Way,Zed Shaw,2013',
             '3,Head First Python,Paul Barry,2016',
@@ -174,11 +164,6 @@ class TestLibrary(unittest.TestCase):
     def test_add_user(self):
         library = self.library
         library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
-
-    def test_storage_add_book(self):
-        library = self.library
-        library.add_book(Book(5, "Python Hard Way", "Zed Shaw", 2013))
-        self.assertEqual(5, library.get_count())
 
 
 if __name__ == "__main__":

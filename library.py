@@ -11,10 +11,9 @@ class Repository:
     def load_items(self):
         self.items = []
         lines = self.storage.get_lines(self.name)
-        col_lines = lines[:]
-
-        columns = [x.lower() for x in col_lines.pop(0).split(',')]
-        for line in col_lines:
+        header = self.storage.get_header(self.name)
+        columns = [x.lower() for x in header.split(',')]
+        for line in lines:
             values = line.split(',')
             self.items.append(dict(zip(columns, values)))
 
@@ -24,16 +23,17 @@ class Repository:
 
         result = []
         for item in self.items:
-            result.append(Book(int(item['id']), item['title'], item['author'], item['year']))
+            result.append(Book(item['title'], item['author'], item['year']))
         return result
 
     def find(self, item_id):
         if 0 == len(self.items):
             self.load_items()
 
+        print(self.items)
         for item in self.items:
             if item_id == int(item['id']):
-                return Book(int(item['id']), item['title'], item['author'], item['year'])
+                return Book(item['title'], item['author'], item['year'])
         raise Exception(f"Item with id {item_id} not found")
 
     def save(self, item):
@@ -83,12 +83,6 @@ class Library:
 
     def remove_book(self, book_id):
         self.storage.remove_line('books', book_id)
-
-    def find_book(self, find_id):
-        for item in self.catalog:
-            if item.id == find_id:
-                return item
-        return None
 
     def import_books(self, list_of_books, skip_lines=1):
         if len(list_of_books) == 0:

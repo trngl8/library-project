@@ -6,7 +6,7 @@ from flask import session
 from flask_bootstrap import Bootstrap5
 
 from forms import OrderForm
-from storage import DataStorage
+from storage import DataStorage, FileLines
 from library import Library
 from library import Cart
 from processing import Processing
@@ -16,7 +16,7 @@ app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
-library = Library("3 Books", DataStorage())
+library = Library("3 Books", DataStorage(FileLines()))
 
 
 @app.route('/', methods=["GET", "POST"])

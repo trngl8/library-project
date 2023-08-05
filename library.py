@@ -30,7 +30,6 @@ class Repository:
         if 0 == len(self.items):
             self.load_items()
 
-        print(self.items)
         for item in self.items:
             if item_id == int(item['id']):
                 return Book(item['title'], item['author'], item['year'])

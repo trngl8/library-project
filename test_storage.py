@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from storage import DataStorage
 
 
-class TestLibrary(unittest.TestCase):
+class TestStorage(unittest.TestCase):
     def setUp(self) -> None:
         self.file_lines = Mock()
         self.file_lines.read_lines.return_value = [

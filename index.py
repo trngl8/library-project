@@ -70,20 +70,20 @@ def profile():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("profile.html", user=user, library=library)
 
-  
+
 @app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user, library=library)
 
-  
+
 @app.route("/logout")
 def logout():
     response = make_response(redirect(url_for('home')))
     response.delete_cookie('SERVER_COOKIE')
     return response
 
-  
+
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
@@ -94,26 +94,33 @@ def confirm(book_id):
 @app.route('/cart', methods=["GET", "POST"])
 def cart_index():
     user = request.cookies.get('SERVER_COOKIE')
+    cart = library.cart
     if request.method == 'POST':
-        cart = library.cart
         cart.clear()
         if 'cart' in session:
             session.pop('cart', None)
-
-    return make_response(render_template('cart.html', library=library, user=user))
+    return make_response(render_template('cart.html', library=library, user=user, cart=cart))
 
 
 @app.route('/cart/<int:book_id>/add', methods=["POST"])
 def add_to_cart(book_id):
+    if 'cart' not in session:
+        cart_data = {
+            "count_items": 0,
+            "items": []
+        }
+    else:
+        cart_data = session['cart']
+
     cart = library.cart
     item = library.get_repository('books').find(book_id)
     cart.add_item(item)
-    session['cart'] = {
-        "count_items": len(cart.items),
-    }
+    cart_data['items'].append({'id': item.id, 'title': item.title})
+    cart_data['count_items'] = len(cart_data['items'])
+    session['cart'] = cart_data
 
     return {
-        "result": len(cart.items),
+        "result": cart_data['count_items'],
     }
 
 

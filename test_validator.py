@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator
+from validator import Validator, Required, Email
 from library import Book
 
 
@@ -25,6 +25,34 @@ class TestValidator(unittest.TestCase):
         book2 = Book(2,"Python Hard Way", "Zed Shaw", 1899, "9780134692883")
         self.assertEqual(True, self.validator.validate(book1))
         self.assertAlmostEqual(False, self.validator.validate(book2))
+
+    def test_validate_email_success(self):
+        validator = Validator()
+        validator.add({'email': [Required(), Email()]})
+        data = {
+            "email": "test@test.com"
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+        self.assertEqual(0, len(validator.errors))
+
+    def test_validate_data_empty(self):
+        validator = Validator()
+        validator.add({'email': [Required(), Email()]})
+        data = {}
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+        self.assertEqual(2, len(validator.errors))
+
+    def test_validate_email_invalid(self):
+        validator = Validator()
+        validator.add({'email': [Required(), Email()]})
+        data = {
+            "email": "no_email"
+        }
+        result = validator.validate(data)
+        self.assertEqual(False,result)
+        self.assertEqual(1, len(validator.errors))
 
 
 if __name__ == "__main__":

@@ -23,7 +23,9 @@ class Repository:
 
         result = []
         for item in self.items:
-            result.append(Book(item['title'], item['author'], item['year']))
+            book = Book(item['title'], item['author'], item['year'])
+            book.id = item['id']
+            result.append(book)
         return result
 
     def find(self, item_id):
@@ -32,7 +34,9 @@ class Repository:
 
         for item in self.items:
             if item_id == int(item['id']):
-                return Book(item['title'], item['author'], item['year'])
+                book = Book(item['title'], item['author'], item['year'])
+                book.id = item['id']
+                return book
         raise Exception(f"Item with id {item_id} not found")
 
     def save(self, item):

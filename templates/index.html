@@ -70,10 +70,10 @@
           <a class="nav-link" href="{{ url_for('index') }}">Index</a>
         </li>
         <li>
-          <a href="{{ url_for('cart_index') }}" class="btn {% if session['cart'] %}btn-outline-danger{% else %}btn-outline-secondary{% endif %} position-relative mx-2" id="cart_top">
+          <a href="{{ url_for('cart_index') }}" class="btn {% if session['cart'] and session['cart']['count_items'] > 0 %}btn-outline-danger{% else %}btn-outline-secondary{% endif %} position-relative mx-2" id="cart_top">
             <i class="bi bi-cart"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger {% if session['cart'] %}{% else %}d-none{% endif %}" id="cart_top_count">
-              <span id="cart_top_count_items">{% if session['cart'] %}{{ session['cart']['count_items'] }}{% endif %}</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger {% if session['cart'] and session['cart']['count_items'] >0 %}{% else %}d-none{% endif %}" id="cart_top_count">
+              <span id="cart_top_count_items">{% if session['cart'] and session['cart']['count_items'] > 0 %}{{ session['cart']['count_items'] }}{% endif %}</span>
               <span class="visually-hidden">items in the cart</span>
             </span>
           </a>

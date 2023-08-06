@@ -1,7 +1,4 @@
 function addToCart(element, book_id) {
-    const cart = document.getElementById("cart_top")
-    const cart_count = document.getElementById("cart_top_count")
-    const cart_count_items = document.getElementById("cart_top_count_items")
     const url = element.dataset.url
 
     let data = new FormData()
@@ -14,10 +11,7 @@ function addToCart(element, book_id) {
         })
     .then(response => response.json())
     .then(
-        result => cart_count_items.innerHTML = result.result,
-        cart.classList.remove("btn-outline-secondary"),
-        cart.classList.add("btn-outline-danger"),
-        cart_count.classList.remove("d-none"),
+        result => updateCartElements(result, "update")
     )
     .catch(
         error => console.log(error)
@@ -25,9 +19,6 @@ function addToCart(element, book_id) {
 }
 
 function removeFromCart(element, book_id) {
-    const cart = document.getElementById("cart_top")
-    const cart_count = document.getElementById("cart_top_count")
-    const cart_count_items = document.getElementById("cart_top_count_items")
     const url = element.dataset.url
 
     let data = new FormData()
@@ -40,13 +31,33 @@ function removeFromCart(element, book_id) {
         })
     .then(response => response.json())
     .then(
-        result => cart_count_items.innerHTML = result.result,
+        result => updateCartElements(result, "remove"),
         element.parentElement.parentElement.remove(),
-        cart.classList.remove("btn-outline-secondary"),
-        cart.classList.add("btn-outline-danger"),
-        cart_count.classList.remove("d-none"), // TODO: check if cart is empty
     )
     .catch(
         error => console.log(error)
     );
+}
+
+function updateCartElements(result, action="remove") {
+    const cart = document.getElementById("cart_top")
+    const cart_count = document.getElementById("cart_top_count")
+    const cart_count_items = document.getElementById("cart_top_count_items")
+
+    cart_count_items.innerHTML = result.result;
+
+    if (action == "remove") {
+        cart.classList.remove("btn-outline-secondary"),
+        cart.classList.add("btn-outline-danger"),
+        cart_count.classList.remove("d-none")
+        if (result.result == 0) {
+            cart.classList.remove("btn-outline-danger"),
+            cart.classList.add("btn-outline-secondary"),
+            cart_count.classList.add("d-none")
+        }
+    } else if (action == "update") {
+        cart.classList.remove("btn-outline-secondary"),
+        cart.classList.add("btn-outline-danger"),
+        cart_count.classList.remove("d-none")
+    };
 }

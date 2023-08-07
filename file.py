@@ -16,11 +16,14 @@ class FileImport:
         file.save(os.path.join(self.path, file_name))
         with open(os.path.join("var/import/" + file_name)) as file:
             file_containment = file.readlines()
-            print(file_containment)
             return file_containment
         
-    def write_new_file(self, file_name, result):
-        with open(os.path.join("var/import/" + file_name), 'w') as file:
+    def write_new_file(self, file_name, result, flag=True):
+        if flag == True:
+            path = "var/import/"
+        else:
+            path = "var/data/"
+        with open(os.path.join(path + file_name), 'w') as file:
             file.write(result[0])
             for i in result[1:]:
                 if i == result[-1]:
@@ -48,4 +51,5 @@ class FileImport:
                 result.append(book)
             flag = False
         self.write_new_file(file_name, result)
+        self.write_new_file("books.csv", result, flag=False)
         return len(result) - 1

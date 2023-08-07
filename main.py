@@ -1,4 +1,4 @@
-from library import Library
+from library import Library, Book
 from library import User
 from storage import DataStorage
 
@@ -41,6 +41,20 @@ def add_user(library: Library):
     return f"User {name} added"
 
 
+def add_book(library: Library):
+    title = input("Title :> ")
+    author = input("Author :> ")
+    year = input("Year :> ")
+    result = library.add_book(Book(title, author, year))
+    return f"Book added with ID {result}"
+
+
+def remove_book(library: Library):
+    book_id = input("Enter book ID :> ")
+    library.remove_book(book_id)
+    return f"Book with ID {book_id} removed"
+
+
 def get_choice_function(actions, param=None):
     return actions.get(param, lambda val: val)
 
@@ -55,6 +69,8 @@ menu_actions = {
     "Find a user": find_user,
     "Import books": import_books,
     "Add user": add_user,
+    "Add book": add_book,
+    "Remove book": remove_book,
 }
 
 menu = list(menu_actions.keys())

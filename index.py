@@ -8,7 +8,7 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
 from forms import OrderForm
-from storage import DataStorage
+from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
 from file import FileImport
@@ -23,7 +23,7 @@ app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
-library = Library("3 Books", DataStorage())
+library = Library("3 Books", DataStorage(FileLines()))
 
 
 def allowed_file(filename):

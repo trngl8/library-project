@@ -3,11 +3,6 @@ from library import Book
 import os
 
 
-def process_lines(lines) -> int:
-    # TODO: implement saving lines to storage
-    return len(lines) - 1
-
-
 class FileImport:
     def __init__(self, path) -> None:
         self.path = path

@@ -1,21 +1,34 @@
 import re
 
+
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask import session
 from flask_bootstrap import Bootstrap5
+from werkzeug.utils import secure_filename
 
 from forms import OrderForm
 from storage import DataStorage
 from library import Library
 from processing import Processing
+from file import FileImport
+
+
+UPLOAD_FOLDER = 'var/import/'
+ALLOWED_EXTENSIONS = {'csv', 'tsv'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
 library = Library("3 Books", DataStorage())
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -32,8 +45,22 @@ def home():
     return render_template('enter.html', library=library)
 
 
-@app.route('/index')
+@app.route('/index', methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            import_service = FileImport(app.config['UPLOAD_FOLDER'])
+            amount = import_service.process_file(file, filename)
+            flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
+            return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))

@@ -57,8 +57,8 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             import_service = FileImport(app.config['UPLOAD_FOLDER'])
-            import_service.process_file(file, filename)
-            flash("Your file was imported successfully", category='success')
+            amount = import_service.process_file(file, filename)
+            flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()

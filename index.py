@@ -8,7 +8,6 @@ from flask_bootstrap import Bootstrap5
 from forms import OrderForm
 from storage import DataStorage
 from library import Library
-from library import Cart
 from processing import Processing
 
 app = Flask(__name__)
@@ -70,20 +69,20 @@ def profile():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("profile.html", user=user, library=library)
 
-  
+
 @app.route('/settings')
 def settings():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user, library=library)
 
-  
+
 @app.route("/logout")
 def logout():
     response = make_response(redirect(url_for('home')))
     response.delete_cookie('SERVER_COOKIE')
     return response
 
-  
+
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
     user = request.cookies.get('SERVER_COOKIE')
@@ -94,26 +93,55 @@ def confirm(book_id):
 @app.route('/cart', methods=["GET", "POST"])
 def cart_index():
     user = request.cookies.get('SERVER_COOKIE')
+    cart = library.cart
     if request.method == 'POST':
-        cart = library.cart
         cart.clear()
         if 'cart' in session:
             session.pop('cart', None)
-
-    return make_response(render_template('cart.html', library=library, user=user))
+    if 'cart' in session and 'items' in session['cart']:
+        cart.clear()
+        cart_data = session['cart']
+        for item in cart_data['items']:
+            cart.add_item(item)
+    return make_response(render_template('cart.html', library=library, user=user, cart=cart))
 
 
 @app.route('/cart/<int:book_id>/add', methods=["POST"])
 def add_to_cart(book_id):
-    cart = library.cart
-    item = library.get_repository('books').find(book_id)
-    cart.add_item(item)
-    session['cart'] = {
-        "count_items": len(cart.items),
-    }
+    if 'cart' not in session:
+        cart_data = {
+            "count_items": 0,
+            "items": []
+        }
+    else:
+        cart_data = session['cart']
+
+    book = library.get_repository('books').find(book_id)
+
+    ids = [item['id'] for item in cart_data['items']]
+    if book.id not in ids:
+        cart_data['items'].append({'id': book.id, 'title': book.title})
+        cart_data['count_items'] = len(cart_data['items'])
+        session['cart'] = cart_data
 
     return {
-        "result": len(cart.items),
+        "result": cart_data['count_items'],
+    }
+
+
+@app.route('/cart/<int:book_id>/remove', methods=["POST"])
+def remove_from_cart(book_id):
+    book = library.get_repository('books').find(book_id)
+    cart_data = session['cart']
+    for item in cart_data['items']:
+        if item['id'] == book.id:
+            cart_data['items'].remove(item)
+            break
+    cart_data['count_items'] = len(cart_data['items'])
+    session['cart'] = cart_data
+
+    return {
+        "result": cart_data['count_items'],
     }
 
 

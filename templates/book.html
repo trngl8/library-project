@@ -2,31 +2,7 @@
 
 {% block scripts %}
   {{ super() }}
-  <script>
-function addToCart(el) {
-  const book_url = {{ url_for("add_to_cart", book_id=book.id)|tojson}}
-  const cart = document.getElementById("cart_top")
-  const cart_count = document.getElementById("cart_top_count")
-  const cart_count_items = document.getElementById("cart_top_count_items")
-  let data = new FormData()
-  data.append("book_id", {{ book.id }})
-  data.append("quantity", 1)
-  fetch(book_url, {
-    "method": "POST",
-    "body": data,
-  })
-    .then(response => response.json())
-    .then(
-        result => cart_count_items.innerHTML = result.result,
-        cart.classList.remove("btn-outline-secondary"),
-        cart.classList.add("btn-outline-danger"),
-        cart_count.classList.remove("d-none"),
-        )
-    .catch(
-      error => console.log(error)
-  );
-}
-  </script>
+  <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -74,7 +50,7 @@ function addToCart(el) {
               </div>
             </div>
             <a href="{{ url_for('order', book_id=book.id) }}" class="btn btn-outline-primary" title="Borrow">Order</a>
-            <button type="button" onclick="addToCart(this)" class="btn btn-outline-primary" title="Borrow">Add to cart</button>
+            <button type="button" id="order_button" onclick="addToCart(this, {{ book.id }})" data-url="{{ url_for('add_to_cart', book_id=book.id)}}" class="btn btn-outline-primary" title="Borrow">Add to cart</button>
         </div>
     </div>
 

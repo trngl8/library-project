@@ -28,7 +28,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_email_success(self):
         validator = Validator()
-        validator.add_rule({'email': [Required(), Email()]})
+        validator.add({'email': [Required(), Email()]})
         data = {
             "email": "test@test.com"
         }
@@ -38,7 +38,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_data_empty(self):
         validator = Validator()
-        validator.add_rule({'email': [Required(), Email()]})
+        validator.add({'email': [Required(), Email()]})
         data = {}
         result = validator.validate(data)
         self.assertEqual(False, result)
@@ -46,7 +46,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_email_invalid(self):
         validator = Validator()
-        validator.add_rule({'email': [Required(), Email()]})
+        validator.add({'email': [Required(), Email()]})
         data = {
             "email": "no_email"
         }

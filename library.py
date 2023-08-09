@@ -156,7 +156,7 @@ class User(Visitor):
 
 
 class Book:
-    def __init__(self, title, author, year, ISBN=None):
+    def __init__(self, title, author, year, ISBN=None, price=100):
         self.id = None
         self.isbn = ISBN
         self.title = title
@@ -164,6 +164,7 @@ class Book:
         self.year = year
         self.available = False
         self.count = 0
+        self.price = price
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:

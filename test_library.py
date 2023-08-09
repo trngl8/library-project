@@ -1,5 +1,5 @@
 import unittest
-from library import Library, Book, User, Visitor
+from library import Library, Book, User, Visitor, Cart
 from unittest.mock import Mock
 
 
@@ -164,6 +164,15 @@ class TestLibrary(unittest.TestCase):
     def test_add_user(self):
         library = self.library
         library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
+
+    def test_cart(self):
+        cart = Cart()
+        cart.add_item(Book("Python Crash Course", "Eric Matthes", 2019))
+        cart.add_item(Book("Python Hard Way", "Zed Shaw", 2013))
+        cart.add_item(Book("Head First Python", "Paul Barry", 2016))
+        self.assertAlmostEqual(300, cart.get_total())
+        cart.clear()
+        self.assertAlmostEqual(0, cart.get_total())
 
 
 if __name__ == "__main__":

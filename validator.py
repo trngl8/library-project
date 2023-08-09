@@ -8,7 +8,8 @@ class Validator():
         self.errors = []
 
     def add(self, rules: dict):
-        self.rules = rules
+        for key in rules.keys():
+            self.rules[key] = rules[key]
 
     def add_rule(self, rule : dict):
         self.rules[list(rule.keys())[0]] = rule[list(rule.keys())[0]]

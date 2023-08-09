@@ -1,9 +1,10 @@
 # Library Project
 
-### Requirements
+### Requirements:
 - git
 - Python 3
 - pip 
+- venv
 
 ### How to install and run:
 

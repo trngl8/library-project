@@ -48,7 +48,8 @@ class TestValidator(unittest.TestCase):
         validator.add({'email': [Required(), Email()]})
         data = {
             "name": "Test",
-            "email": "test@triangle.software"
+            "email": "test@triangle.software",
+            "admin_email": "admin@triangle.software"
         }
         result = validator.validate(data)
         self.assertEqual(True, result)

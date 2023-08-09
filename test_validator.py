@@ -46,6 +46,7 @@ class TestValidator(unittest.TestCase):
         validator = Validator()
         validator.add({'name': [Required()]})
         validator.add({'email': [Required(), Email()]})
+        validator.add({'admin_email': [Email()]})
         data = {
             "name": "Test",
             "email": "test@triangle.software",

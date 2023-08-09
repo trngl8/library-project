@@ -36,6 +36,24 @@ class TestValidator(unittest.TestCase):
         self.assertEqual(True, result)
         self.assertEqual(0, len(validator.errors))
 
+        data = {
+            "email": "test@triangle.software"
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+
+    def test_validate_complex_data(self):
+        validator = Validator()
+        validator.add({'name': [Required()]})
+        validator.add({'email': [Required(), Email()]})
+        data = {
+            "name": "Test",
+            "email": "test@triangle.software"
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+        self.assertEqual(0, len(validator.errors))
+
     def test_validate_data_empty(self):
         validator = Validator()
         validator.add({'email': [Required(), Email()]})

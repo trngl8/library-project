@@ -143,7 +143,7 @@
       </form>
     {% endif %}
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-2">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-2 mb-4">
     {% for book in books %}
       <div class="col">
         <div class="card h-100">
@@ -158,6 +158,11 @@
       </div>
     {% endfor %}
     </div>
+
+    {% if user == 'admin' %}
+      <a href="{{ url_for('import_file') }}" class="btn btn-outline-primary">Import books</a>
+    {% endif %}
+
     {% endblock %}
 
   </div>

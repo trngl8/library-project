@@ -172,5 +172,25 @@ def remove_from_cart(book_id):
     }
 
 
+@app.route('/import', methods=["GET", "POST"])
+def import_file():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            import_service = FileImport(app.config['UPLOAD_FOLDER'])
+            amount = import_service.process_file(file, filename)
+            flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
+            return redirect(url_for('index'))
+    user = request.cookies.get('SERVER_COOKIE')
+    return render_template('import.html', library=library, user=user)
+
+
 if __name__ == '__main__':
     app.run()

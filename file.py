@@ -13,6 +13,8 @@ class FileImport:
         return lines
 
     def save_file(self, file, file_name):
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
         file.save(os.path.join(self.path, file_name))
         with open(os.path.join("var/import/" + file_name)) as file:
             file_containment = file.readlines()
@@ -37,9 +39,10 @@ class FileImport:
         result.append(file_containment[0])
         flag = False
         validator = Validator()
-        for line in file_containment[1:]:
+        for num, line in enumerate(file_containment[1:]):
             line = line.replace('\n', '').split(",")
-            book = Book(int(line[0]), line[1], line[2], int(line[3]))
+            book = Book(line[1], line[2], int(line[3]))
+            book.id = num + 1
             if validator.validate(book=book):
                 for j in result:
                     try:

@@ -75,8 +75,8 @@ class DataStorage:
         return reader
 
     def get_lines(self, entity_name):
-        if entity_name in self.data:
-            return self.data[entity_name]
+        # if entity_name in self.data:
+        #     return self.data[entity_name]
         lines = self.lines.read_lines(entity_name + self.ext)
         self.headers[entity_name] = lines.pop(0)
         self.counters[entity_name] = len(lines)

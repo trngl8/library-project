@@ -125,6 +125,8 @@ def cart_index():
         cart.clear()
         if 'cart' in session:
             session.pop('cart', None)
+        flash("Cart cleared", category="success")
+        return redirect(url_for('cart_index'))
     if 'cart' in session and 'items' in session['cart']:
         cart.clear()
         cart_data = session['cart']
@@ -159,7 +161,14 @@ def add_to_cart(book_id):
 @app.route('/cart/<int:book_id>/remove', methods=["POST"])
 def remove_from_cart(book_id):
     book = library.get_repository('books').find(book_id)
-    cart_data = session['cart']
+    if 'cart' not in session:
+        cart_data = {
+            "count_items": 0,
+            "items": []
+        }
+    else:
+        cart_data = session['cart']
+
     for item in cart_data['items']:
         if item['id'] == book.id:
             cart_data['items'].remove(item)

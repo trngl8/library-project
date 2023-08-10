@@ -1,4 +1,5 @@
 import unittest
+import io
 from index import app
 
 
@@ -16,6 +17,12 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 
+    def test_home_set_username_invalid(self):
+        response = self.app.post('/', data=dict(username='#st$%^'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
+        self.assertEqual(response.mimetype, 'text/html')
+
     def test_home_set_username(self):
         response = self.app.post('/', data=dict(username='test'))
         self.assertEqual(response.status_code, 302)
@@ -29,8 +36,26 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 
-    def test_index_import(self):
-        response = self.app.post('/index')
+    def test_index_import_no_file(self):
+        data = {}
+        response = self.app.post(
+            '/index',
+            data=data,
+            content_type='multipart/form-data'
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
+        self.assertEqual(response.mimetype, 'text/html')
+
+    def test_index_import_empty_filename(self):
+        data = {
+            'file': (io.BytesIO(b"""empty"""), '')
+        }
+        response = self.app.post(
+            '/index',
+            data=data,
+            content_type='multipart/form-data'
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')

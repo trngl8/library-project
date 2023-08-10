@@ -1,4 +1,6 @@
 import re
+import dotenv
+import os
 
 
 from flask import Flask, request, make_response, redirect, url_for, flash
@@ -17,8 +19,12 @@ from file import FileImport
 UPLOAD_FOLDER = 'var/import/'
 ALLOWED_EXTENSIONS = {'csv', 'tsv'}
 
+dotenv.load_dotenv()
+dotenv.load_dotenv('.env.local', override=True)
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ADMIN_PERMISSION'] = os.getenv("ADMINISTRATOR_EMAIL")
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)

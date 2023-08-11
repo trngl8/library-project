@@ -74,9 +74,8 @@ def index():
 
 @app.route('/books/<int:book_id>')
 def book(book_id):
-    user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
-    resp = make_response(render_template('book.html', book=item, user=user, library=library))
+    resp = make_response(render_template('book.html', book=item, library=library))
     return resp
 
 

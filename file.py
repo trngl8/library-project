@@ -16,11 +16,11 @@ class FileImport:
         if not os.path.exists(self.path):
             os.makedirs(self.path)
         file.save(os.path.join(self.path, file_name))
-        with open(os.path.join("var/import/" + file_name)) as file:
+        with open(os.path.join("var/import/" + file_name), 'r') as file:
             file_containment = file.readlines()
             return file_containment
         
-    def write_new_file(self, file_name, result, flag=True):
+    def write_new_file(self, file_name, result, library,  flag=True):
         if flag == True:
             path = "var/import/"
         else:
@@ -28,12 +28,9 @@ class FileImport:
         with open(os.path.join(path + file_name), 'w') as file:
             file.write(result[0])
             for i in result[1:]:
-                if i == result[-1]:
-                    file.write(str(i.id) + "," + i.title + ',' + i.author + ',' + str(i.year))
-                else:
-                    file.write(str(i.id) + "," + i.title + ',' + i.author + ',' + str(i.year) + '\n')
+                library.storage.add_line("books", {"title" : i.title, "author": i.author, "year" : str(i.year)})
 
-    def process_file(self, file, file_name):
+    def process_file(self, file, file_name, library):
         file_containment = self.save_file(file, file_name)
         result = []
         result.append(file_containment[0])
@@ -53,6 +50,5 @@ class FileImport:
             if not flag:
                 result.append(book)
             flag = False
-        self.write_new_file(file_name, result)
-        self.write_new_file("books.csv", result, flag=False)
+        self.write_new_file(file_name, result, library=library, flag=False)
         return len(result) - 1

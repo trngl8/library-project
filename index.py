@@ -44,9 +44,8 @@ def home():
         if not re.match(r"[A-Za-z0-9_-]+", username):
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
-        resp = redirect(url_for('index'))
-        resp.set_cookie("SERVER_COOKIE", username)
-        return resp
+        session['username'] = username
+        return redirect(url_for('index'))
 
     return render_template('enter.html', library=library)
 

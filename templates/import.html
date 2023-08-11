@@ -1,0 +1,25 @@
+{% extends 'blank.html' %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
+<li class="breadcrumb-item active" aria-current="page">Import</li>
+{% endblock %}
+
+{% block content %}
+<div class="container p-0">
+  <div class="col">
+    <h1 class="display-5 mb-5">Import file</h1>
+    <form method="post" enctype="multipart/form-data">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <input type=file name=file class="form-control" />
+        </div>
+        <div class="col-auto">
+          <input type=submit class="btn btn-outline-primary" value=Upload />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

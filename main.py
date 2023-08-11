@@ -1,6 +1,6 @@
 from library import Library, Book
 from library import User
-from storage import DataStorage
+from storage import DataStorage, FileLines
 
 
 def print_item(index, value):
@@ -75,7 +75,7 @@ menu_actions = {
 
 menu = list(menu_actions.keys())
 menu_active = True
-main_library = Library('3 Books', DataStorage())
+main_library = Library('3 Books', DataStorage(FileLines()))
 
 while menu_active:
     print("#" * 40)

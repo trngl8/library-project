@@ -109,3 +109,8 @@ class DataStorage:
         if entity_name not in self.counters:
             self.get_lines(entity_name)
         return self.counters[entity_name]
+
+    def write_lines(self, entity_name, lines):
+        self.lines.write_lines(entity_name + self.ext, lines)
+        self.data[entity_name] = lines
+        self.counters[entity_name] = len(lines)

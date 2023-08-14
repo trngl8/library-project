@@ -29,8 +29,13 @@ class Repository:
             self.items_data[item_id] = (dict(zip(columns, values)))
 
     def add_item(self, item):
-        item_id = next(reversed(self.items_data)) + 1
+        self.load_items_data()
+        if 0 == len(self.items_data):
+            item_id = 1
+        else:
+            item_id = next(reversed(self.items_data)) + 1
         self.items_data[item_id] = item
+        self.storage.add_line(self.name, item)
         return item_id
 
     def get_item(self, item_id):
@@ -43,7 +48,11 @@ class Repository:
         self.items_data[item_id] = item
 
     def save(self):
-        self.storage.write_lines(self.name, self.items_data)
+        lines = []
+        for item_id, item in self.items_data.items():
+            line = str(item_id) + "," + ",".join(item.values())
+            lines.append(line)
+        self.storage.write_lines(self.name, lines)
 
 
 class BooksRepository(Repository):

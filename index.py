@@ -66,7 +66,6 @@ def index():
             amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
-    user = request.cookies.get('SERVER_COOKIE')
     books = library.get_repository('books').find_all()
     resp = make_response(render_template('index.html', books=books, user=user, library=library))
     return resp
@@ -81,7 +80,6 @@ def book(book_id):
 
 @app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
 def order(book_id):
-    user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
     form = OrderForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -97,33 +95,28 @@ def order(book_id):
 
 @app.route('/profile')
 def profile():
-    user = request.cookies.get('SERVER_COOKIE')
     return render_template("profile.html", user=user, library=library)
 
 
 @app.route('/settings')
 def settings():
-    user = request.cookies.get('SERVER_COOKIE')
     return render_template("settings.html", user=user, library=library)
 
 
 @app.route("/logout")
 def logout():
     response = make_response(redirect(url_for('home')))
-    response.delete_cookie('SERVER_COOKIE')
     return response
 
 
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
-    user = request.cookies.get('SERVER_COOKIE')
     item = library.get_repository('books').find(book_id)
     return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
 
 
 @app.route('/cart', methods=["GET", "POST"])
 def cart_index():
-    user = request.cookies.get('SERVER_COOKIE')
     cart = library.cart
     if request.method == 'POST':
         cart.clear()

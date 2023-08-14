@@ -23,7 +23,7 @@ class FileLines:
         with open(self.path + filename, "w") as file_object:
             file_object.writelines("\n".join(lines))
 
-    def write_line(self, filename, line):
+    def append_line(self, filename, line):
         with open(self.path + filename, "a") as file_object:
             file_object.write(line + "\n")
 
@@ -88,7 +88,7 @@ class DataStorage:
             self.get_lines(entity_name)
         new_id = self.counters[entity_name] + 1
         line = str(new_id) + "," + ",".join(item.values())
-        self.lines.write_line(entity_name + self.ext, line)
+        self.lines.append_line(entity_name + self.ext, line)
         self.counters[entity_name] = new_id
         self.data[entity_name].append(line)
         return new_id

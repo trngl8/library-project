@@ -70,6 +70,14 @@ class BooksRepository(Repository):
         raise Exception(f"Item with id {item_id} not found")
 
 
+class UsersRepository(Repository):
+    pass
+
+
+class OrdersRepository(Repository):
+    pass
+
+
 class Library:
     def __init__(self, name, storage: DataStorage):
         self.name = name
@@ -79,6 +87,8 @@ class Library:
         self.cart = Cart()
         self.repositories = {
             'books': BooksRepository('books', storage),
+            'users': UsersRepository('users', storage),
+            'orders': OrdersRepository('users', storage)
         }
 
     def get_count(self):

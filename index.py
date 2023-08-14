@@ -67,7 +67,7 @@ def index():
             flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
     books = library.get_repository('books').find_all()
-    resp = make_response(render_template('index.html', books=books, user=user, library=library))
+    resp = make_response(render_template('index.html', books=books, library=library))
     return resp
 
 
@@ -89,18 +89,18 @@ def order(book_id):
         else:
             flash("Processing failed", category="error")
         return redirect(url_for('confirm', book_id=book_id))
-    resp = make_response(render_template('book_order.html', book=item, form=form, user=user, library=library))
+    resp = make_response(render_template('book_order.html', book=item, form=form, library=library))
     return resp
 
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html", user=user, library=library)
+    return render_template("profile.html", library=library)
 
 
 @app.route('/settings')
 def settings():
-    return render_template("settings.html", user=user, library=library)
+    return render_template("settings.html", library=library)
 
 
 @app.route("/logout")
@@ -112,7 +112,7 @@ def logout():
 @app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
 def confirm(book_id):
     item = library.get_repository('books').find(book_id)
-    return make_response(render_template('order_confirm.html', library=library, book=item, user=user))
+    return make_response(render_template('order_confirm.html', library=library, book=item))
 
 
 @app.route('/cart', methods=["GET", "POST"])
@@ -129,7 +129,7 @@ def cart_index():
         cart_data = session['cart']
         for item in cart_data['items']:
             cart.add_item(item)
-    return make_response(render_template('cart.html', library=library, user=user, cart=cart))
+    return make_response(render_template('cart.html', library=library, cart=cart))
 
 
 @app.route('/cart/<int:book_id>/add', methods=["POST"])

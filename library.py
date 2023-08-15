@@ -7,6 +7,7 @@ class Repository:
         self.name = name
         self.storage = storage
         self.items = []
+        self.items_data = {}
 
     def load_items(self):
         self.items = []
@@ -17,28 +18,41 @@ class Repository:
             values = line.split(',')
             self.items.append(dict(zip(columns, values)))
 
-    def save(self, item):
-        if 0 == len(self.items):
-            self.load_items()
+    def load_items_data(self):
+        self.items_data = {}
+        lines = self.storage.get_lines(self.name)
+        header = self.storage.get_header(self.name)
+        columns = [x.lower() for x in header.split(',')]
+        for line in lines:
+            values = line.split(',')
+            item_id = int(values[0])
+            self.items_data[item_id] = (dict(zip(columns, values)))
 
-        for item in self.items:
-            if item.id == item.id:
-                raise Exception(f"Item with id {item.id} already exists")
-
-        self.items.append(item)
+    def add_item(self, item):
+        self.load_items_data()
+        if 0 == len(self.items_data):
+            item_id = 1
+        else:
+            item_id = next(reversed(self.items_data)) + 1
+        self.items_data[item_id] = item
         self.storage.add_line(self.name, item)
+        return item_id
 
-    def remove(self, item_id):
-        if 0 == len(self.items):
-            self.load_items()
+    def get_item(self, item_id):
+        return self.items_data[item_id]
 
-        for item in self.items:
-            if item.id == item_id:
-                self.items.remove(item)
-                self.storage.remove_line(self.name, item_id)
-                return
+    def remove_item(self, item_id):
+        del self.items_data[item_id]
 
-        raise Exception(f"Item with id {item_id} not found")
+    def update_item(self, item_id, item):
+        self.items_data[item_id] = item
+
+    def save(self):
+        lines = []
+        for item_id, item in self.items_data.items():
+            line = str(item_id) + "," + ",".join(item.values())
+            lines.append(line)
+        self.storage.write_lines(self.name, lines)
 
 
 class BooksRepository(Repository):
@@ -65,6 +79,14 @@ class BooksRepository(Repository):
         raise Exception(f"Item with id {item_id} not found")
 
 
+class UsersRepository(Repository):
+    pass
+
+
+class OrdersRepository(Repository):
+    pass
+
+
 class Library:
     def __init__(self, name, storage: DataStorage):
         self.name = name
@@ -74,6 +96,8 @@ class Library:
         self.cart = Cart()
         self.repositories = {
             'books': BooksRepository('books', storage),
+            'users': UsersRepository('users', storage),
+            'orders': OrdersRepository('users', storage)
         }
 
     def get_count(self):

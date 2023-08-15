@@ -105,7 +105,6 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(book2, library.catalog[1])
         self.assertEqual(book3, library.catalog[2])
 
-
     def test_find_books(self):
         library = self.library
 
@@ -173,6 +172,44 @@ class TestLibrary(unittest.TestCase):
         self.assertAlmostEqual(300, cart.get_total())
         cart.clear()
         self.assertAlmostEqual(0, cart.get_total())
+
+    def test_books_repository(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        self.assertEqual(4, len(repo.items_data))
+
+    def test_add_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        result = repo.add_item({
+            'title': 'Test',
+            'author': 'Test',
+            'year': '2020'
+        })
+        self.assertEqual(5, result)
+
+    def test_get_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        result = repo.get_item(1)
+        self.assertEqual('Python Crash Course', result['title'])
+
+    def test_remove_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        repo.remove_item(1)
+        self.assertEqual(3, len(repo.items_data))
+
+    def test_update_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        repo.update_item(1, {
+            'title': 'Test',
+            'author': 'Test',
+            'year': '2020'
+        })
+        result = repo.get_item(1)
+        self.assertEqual('Test', result['title'])
 
 
 if __name__ == "__main__":

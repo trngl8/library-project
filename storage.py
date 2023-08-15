@@ -8,23 +8,22 @@ class FileLines:
         if not os.path.exists(self.path):
             os.makedirs(self.path)
 
-    def write_headers(self, headers, ext=".csv"):
+    def write_headers(self, headers, ext=".csv", delimiter=","):
         for key, value in headers.items():
             if not os.path.exists(self.path + key + ext):
-                with open(self.path + key + ext, 'w') as file_object:
-                    file_object.write(",".join(value) + '\n')
+                self.write_lines(key + ext, [delimiter.join(value)])
 
-    def read_lines(self, filename) -> list:
+    def read_lines(self, filename: str) -> list:
         with open(self.path + filename, 'r') as file_object:
             lines = file_object.read().splitlines()
         return lines
 
-    def write_lines(self, filename, lines):
-        with open(self.path + filename, "w") as file_object:
+    def write_lines(self, filename: str, lines: list):
+        with open(self.path + filename, 'w') as file_object:
             file_object.writelines("\n".join(lines))
 
-    def write_line(self, filename, line):
-        with open(self.path + filename, "a") as file_object:
+    def append_line(self, filename: str, line: str):
+        with open(self.path + filename, 'a') as file_object:
             file_object.write(line + "\n")
 
 
@@ -45,10 +44,11 @@ class DataStorage:
                 "ID", "BOOK_ID", "ORDER_ID", "PRICE"
             ]
         }
+        self.delimiter = ","
         self.ext = '.csv'
         self.lines = file_lines
         self.path = file_lines.path
-        self.lines.write_headers(struct, self.ext)
+        self.lines.write_headers(struct, self.ext, self.delimiter)
         self.data = {}
         self.counters = {}
         self.headers = {}
@@ -88,7 +88,7 @@ class DataStorage:
             self.get_lines(entity_name)
         new_id = self.counters[entity_name] + 1
         line = str(new_id) + "," + ",".join(item.values())
-        self.lines.write_line(entity_name + self.ext, line)
+        self.lines.append_line(entity_name + self.ext, line)
         self.counters[entity_name] = new_id
         self.data[entity_name].append(line)
         return new_id
@@ -109,3 +109,8 @@ class DataStorage:
         if entity_name not in self.counters:
             self.get_lines(entity_name)
         return self.counters[entity_name]
+
+    def write_lines(self, entity_name, lines):
+        self.lines.write_lines(entity_name + self.ext, lines)
+        self.data[entity_name] = lines
+        self.counters[entity_name] = len(lines)

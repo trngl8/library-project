@@ -26,19 +26,7 @@ def find_user():
 
 
 def import_books(library: Library):
-    files = []
-    for file in os.listdir("var/import"):
-        entry_path = os.path.join("var/import", file)
-        if os.path.isfile(entry_path):
-            files.append(entry_path)
-    for index, value in enumerate(files):
-        print_item(index, value.split('/')[-1])
-    new_file = files[int(input('Choose the file from following :> '))-1]
-    with open(new_file, 'r') as file:
-        lines = file.readlines()
-    with open("var/data/books.csv", "w") as file_object:
-            file_object.writelines(lines)
-    return f"{len(lines)-1} files have been imported"
+    return f"{library.storage.lines.console_import()-1} files have been imported"
 
 def add_user(library: Library):
     name = input("Name :> ")

@@ -7,6 +7,14 @@ class FileImport:
     def __init__(self, path) -> None:
         self.path = path
 
+    def get_dir_files(self, dirname):
+        files = []
+        for file in os.listdir(dirname):
+            entry_path = os.path.join(dirname, file)
+            if os.path.isfile(entry_path):
+                files.append(entry_path)
+        return files
+
     def get_file_lines(self, filename):
         with open(self.path + filename, 'r') as file_object:
             lines = file_object.read().splitlines()

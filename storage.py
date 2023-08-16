@@ -26,21 +26,6 @@ class FileLines:
         with open(self.path + filename, 'a') as file_object:
             file_object.write(line + "\n")
 
-    def console_import(self):
-        files = []
-        for file in os.listdir("var/import"):
-            entry_path = os.path.join("var/import", file)
-            if os.path.isfile(entry_path):
-                files.append(entry_path)
-        for index, value in enumerate(files):
-            print(f"[{index + 1}]. {value}")
-        new_file = files[int(input('Choose the file from following :> '))-1]
-        with open(new_file, 'r') as file:
-            lines = file.readlines()
-        with open("var/data/books.csv", "w") as file_object:
-                file_object.writelines(lines)
-        return len(lines)
-
 
 class DataStorage:
 

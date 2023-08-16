@@ -1,6 +1,7 @@
 from library import Library, Book
 from library import User
 from storage import DataStorage, FileLines
+from file import FileImport
 import os
 
 
@@ -26,7 +27,14 @@ def find_user():
 
 
 def import_books(library: Library):
-    return f"{library.storage.lines.console_import()-1} files have been imported"
+    files = FileImport("/var/import").get_dir_files('var/import')
+    for index, file in enumerate(files):
+        print_item(index, file)
+    new_file = files[int(input('Choose the file from following :> '))-1]
+    lines = FileLines('/var/import/').read_lines(new_file.split('/')[-1])
+    FileLines().write_lines("books.csv", lines)
+    library.import_books(lines)
+    return f"{len(lines)-1} books have been imported"
 
 def add_user(library: Library):
     name = input("Name :> ")

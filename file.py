@@ -60,3 +60,9 @@ class FileImport:
             flag = False
         self.write_new_file(file_name, result, library=library, flag=False)
         return len(result) - 1
+
+    def import_file(self, file_name):
+        # TODO: read file, get lines,
+        # TODO: convert lines to validation structure, validate lines
+        # TODO: save validated lines to storage, return count of saved items
+        return len(file_name)

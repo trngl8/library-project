@@ -2,7 +2,6 @@ from library import Library, Book
 from library import User
 from storage import DataStorage, FileLines
 from file import FileImport
-import os
 
 
 def print_item(index, value):
@@ -35,6 +34,7 @@ def import_books(library: Library):
     FileLines().write_lines("books.csv", lines)
     library.import_books(lines)
     return f"{len(lines)-1} books have been imported"
+
 
 def add_user(library: Library):
     name = input("Name :> ")

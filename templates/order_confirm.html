@@ -7,6 +7,12 @@
 <li class="breadcrumb-item active" aria-current="page">Order confirm</li>
 {% endblock %}
 
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/order.js') }}"></script>
+{% endblock %}
+
+
 {% block modal %}
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -48,7 +54,7 @@
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="refreshOrder(this, {{ book.id }})" data-url="{{ url_for('confirm_order', order_id=book.id) }}">
           Confirm
         </button>
       </div>

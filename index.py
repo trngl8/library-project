@@ -93,6 +93,12 @@ def order(book_id):
     return resp
 
 
+@app.route('/orders/<int:order_id>/confirm', methods=["POST"])
+def confirm_order(order_id):
+    return {
+        "status": "success"
+    }
+
 @app.route('/profile')
 def profile():
     return render_template("profile.html", library=library)

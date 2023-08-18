@@ -2,19 +2,23 @@ from storage import DataStorage
 
 
 class RepositoryInterface:
-    def find_all(self):
+    def find_all(self) -> list:
         pass
 
-    def get_item(self, item_id):
+    def find_by(self, criteria) -> list:
+        # TODO: check structure for reading
         pass
 
-    def add_item(self, item):
+    def get_item(self, item_id) -> dict:
         pass
 
-    def remove_item(self, item_id):
+    def add_item(self, item: dict) -> int:
         pass
 
-    def update_item(self, item_id, data):
+    def remove_item(self, item_id: dict):
+        pass
+
+    def update_item(self, item_id, data: dict) -> dict:
         pass
 
 
@@ -169,7 +173,7 @@ class Library:
 
         return filtered
 
-    def get_repository(self, name):
+    def get_repository(self, name) -> RepositoryInterface:
         return self.repositories.get(name)
 
 

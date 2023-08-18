@@ -82,7 +82,7 @@
 
       {% if user %}
           <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person"></i> {{ user }}
+              <i class="bi bi-person"></i> {{ session['username'] }}
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
               <li><a href="{{url_for('profile')}}" class="dropdown-item" type="button">Profile</a></li>

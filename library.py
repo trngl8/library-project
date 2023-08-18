@@ -1,7 +1,24 @@
 from storage import DataStorage
 
 
-class Repository:
+class RepositoryInterface:
+    def find_all(self):
+        pass
+
+    def get_item(self, item_id):
+        pass
+
+    def add_item(self, item):
+        pass
+
+    def remove_item(self, item_id):
+        pass
+
+    def update_item(self, item_id, data):
+        pass
+
+
+class Repository(RepositoryInterface):
 
     def __init__(self, name, storage: DataStorage):
         self.name = name

@@ -9,3 +9,9 @@ class OrderForm(Form):
     address = StringField('Address', [validators.Length(min=6, max=35)])
     period = SelectField('Period', choices=[('2', '2 weeks'), ('4', '4 weeks'), ('16', '16 weeks')])
     accept = BooleanField('I accept agreement', [validators.DataRequired()])
+
+
+class BookEditForm(Form):
+    title = StringField('Title', [validators.Length(min=4, max=25)])
+    author = StringField('Author', [validators.Length(min=4, max=25)])
+    year = StringField('Year', [validators.InputRequired()])

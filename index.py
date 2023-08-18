@@ -9,7 +9,7 @@ from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
-from forms import OrderForm
+from forms import OrderForm, BookEditForm
 from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
@@ -90,6 +90,22 @@ def order(book_id):
             flash("Processing failed", category="error")
         return redirect(url_for('confirm', book_id=book_id))
     resp = make_response(render_template('book_order.html', book=item, form=form, library=library))
+    return resp
+
+
+@app.route('/books/<int:book_id>/edit', methods=["GET", "POST"])
+def book_edit(book_id):
+    item = library.get_repository('books').find(book_id)
+    form = BookEditForm(request.form, obj=item)
+    if request.method == 'POST' and form.validate():
+        result = library.get_repository('books').update_item(book_id, {
+            'title': form.title.data,
+            'author': form.author.data,
+            'year': form.year.data
+        })
+        flash('Updated success', category='success')
+        return redirect(url_for('book', book_id=book_id))
+    resp = make_response(render_template('book_edit.html', book=item, form=form, library=library))
     return resp
 
 

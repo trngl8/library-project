@@ -112,8 +112,6 @@
 
     <div class="container mt-4">
 
-    {% block content %}
-
     {% with messages = get_flashed_messages() %}
 
       {% if messages %}
@@ -125,6 +123,7 @@
       {% endif %}
     {% endwith %}
 
+    {% block content %}
 
     {% if books|length == 0 %}
       <div class="alert alert-warning" role="alert">

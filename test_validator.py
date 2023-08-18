@@ -44,7 +44,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_complex_data(self):
         validator = Validator()
-        validator.add({'name': [Required(), Length(min=3, max=50)]})
+        validator.add({'name': [Required(), Length(min=3, max=50, message="Wrong Length")]})
         validator.add({'email': [Required(), Email()]})
         validator.add({'admin_email': [Email()]})
         data = {

@@ -5,20 +5,20 @@ class RepositoryInterface:
     def find_all(self) -> list:
         pass
 
-    def find_by(self, criteria) -> list:
+    def find_by(self, criteria: dict) -> list:
         # TODO: check structure for reading
         pass
 
-    def get_item(self, item_id) -> dict:
+    def get_item(self, item_id: int) -> dict:
         pass
 
     def add_item(self, item: dict) -> int:
         pass
 
-    def remove_item(self, item_id: dict):
+    def remove_item(self, item_id: int):
         pass
 
-    def update_item(self, item_id, data: dict) -> dict:
+    def update_item(self, item_id: int, data: dict) -> dict:
         pass
 
 

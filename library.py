@@ -6,19 +6,18 @@ class RepositoryInterface:
         pass
 
     def find_by(self, criteria: dict) -> list:
-        # TODO: check structure for reading
         pass
 
-    def get_item(self, item_id: int) -> dict:
+    def get(self, item_id: int) -> dict:
         pass
 
-    def add_item(self, item: dict) -> int:
+    def add(self, item: dict) -> int:
         pass
 
-    def remove_item(self, item_id: int):
+    def remove(self, item_id: int) -> None:
         pass
 
-    def update_item(self, item_id: int, data: dict) -> dict:
+    def update(self, item_id: int, data: dict) -> dict:
         pass
 
 

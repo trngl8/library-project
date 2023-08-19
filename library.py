@@ -1,27 +1,34 @@
+from abc import ABC, abstractmethod
 from storage import DataStorage
 
 
-class RepositoryInterface:
+class BaseRepository(ABC):
+    @abstractmethod
     def find_all(self) -> list:
         pass
 
+    @abstractmethod
     def find_by(self, criteria: dict) -> list:
         pass
 
+    @abstractmethod
     def get(self, item_id: int) -> dict:
         pass
 
+    @abstractmethod
     def add(self, item: dict) -> int:
         pass
 
+    @abstractmethod
     def remove(self, item_id: int) -> None:
         pass
 
+    @abstractmethod
     def update(self, item_id: int, data: dict) -> dict:
         pass
 
 
-class Repository(RepositoryInterface):
+class Repository(BaseRepository):
 
     def __init__(self, name, storage: DataStorage):
         self.name = name
@@ -172,7 +179,7 @@ class Library:
 
         return filtered
 
-    def get_repository(self, name) -> RepositoryInterface:
+    def get_repository(self, name) -> BaseRepository:
         return self.repositories.get(name)
 
 

@@ -34,6 +34,10 @@ class Repository:
             item_id = 1
         else:
             item_id = next(reversed(self.items_data)) + 1
+        for key, value in self.items_data.items():
+            hash_key = value['title'] + value['author'] + value['year']
+            if hash_key == item['title'] + item['author'] + item['year']:
+                raise Exception(f"Item {item} already exists")
         self.items_data[item_id] = item
         self.storage.add_line(self.name, item)
         return item_id

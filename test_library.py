@@ -188,6 +188,16 @@ class TestLibrary(unittest.TestCase):
         })
         self.assertEqual(5, result)
 
+    def test_add_item_duplicate(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        with self.assertRaises(Exception):
+            repo.add_item({
+                'title': 'Python Crash Course',
+                'author': 'Eric Matthes',
+                'year': '2019'
+            })
+
     def test_get_item(self):
         repo = self.library.get_repository('books')
         repo.load_items_data()

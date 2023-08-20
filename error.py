@@ -1,0 +1,2 @@
+class DatabaseUndefinedError(Exception):
+    pass

@@ -6,24 +6,4 @@
         <h1 class="display-5 mb-5">Your profile</h1>
     </div>
 </div>
-{% with messages = get_flashed_messages() %}
-
-{% if messages %}
-  {% for message in messages %}
-      <div class="alert alert-danger" role="alert">
-      {{ message }}
-      </div>
-  {% endfor %}
-{% endif %}
-{% endwith %}
-<div class="container p-0">
-    <form class="row g-2" action="{{ url_for('home') }}" method="post">
-        <div class="col mb-3">
-            <input type="text" class="form-control form-control-lg" placeholder="Change name" aria-label="Name" aria-describedby="search-addon" name="username" />
-        </div>
-        <div class="col-auto mb-3">
-            <button class="btn btn-lg px-5 btn-outline-primary" type="submit">Enter</button>
-        </div>
-    </form>
-</div>
 {% endblock %}

@@ -14,6 +14,7 @@ from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
 from file import FileImport
+from error import DatabaseError
 
 
 UPLOAD_FOLDER = 'var/import/'
@@ -98,15 +99,18 @@ def book_edit(book_id):
     item = library.get_repository('books').find(book_id)
     form = BookEditForm(request.form, obj=item)
     if request.method == 'POST' and form.validate():
-        result = library.get_repository('books').update_item(book_id, {
-            'title': form.title.data,
-            'author': form.author.data,
-            'year': form.year.data
-        })
+        try:
+            result = library.get_repository('books').update(book_id, {
+                'title': form.title.data,
+                'author': form.author.data,
+                'year': form.year.data
+            })
+        except DatabaseError:
+            flash(f"Cannot update item {book_id}", category='error')
+            return redirect(url_for('book', book_id=book_id))
         flash('Updated success', category='success')
         return redirect(url_for('book', book_id=book_id))
-    resp = make_response(render_template('book_edit.html', book=item, form=form, library=library))
-    return resp
+    return make_response(render_template('book_edit.html', book=item, form=form, library=library))
 
 
 @app.route('/books/<int:book_id>/remove', methods=["GET", "POST"])

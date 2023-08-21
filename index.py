@@ -93,12 +93,6 @@ def order(book_id):
     return resp
 
 
-@app.route('/orders/<int:order_id>/confirm', methods=["POST"])
-def confirm_order(order_id):
-    return {
-        "status": "success"
-    }
-
 @app.route('/profile')
 def profile():
     return render_template("profile.html", library=library)
@@ -202,6 +196,14 @@ def import_file():
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     return render_template('import.html', library=library, user=user)
+
+
+@app.route('/orders/<int:order_id>/confirm', methods=["POST"])
+def confirm_order(order_id):
+    return {
+        "id": order_id,
+        "status": "success"
+    }
 
 
 if __name__ == '__main__':

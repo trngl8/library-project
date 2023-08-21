@@ -123,8 +123,16 @@ def book_remove(book_id):
     return redirect(url_for('index'))
 
 
-@app.route('/profile')
+@app.route('/profile', methods=["GET", "POST"])
 def profile():
+    if request.method == 'POST':
+        username = request.form["username"]
+        if not re.match(r"[A-Za-z0-9_-]+", username):
+            flash("Your name is not valid", category="error")
+            return redirect(url_for("home"))
+        flash("Your name was successfully changed")
+        session['username'] = username
+        return redirect(url_for('index'))
     return render_template("profile.html", library=library)
 
 

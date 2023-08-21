@@ -44,7 +44,7 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_complex_data(self):
         validator = Validator()
-        validator.add({'name': [Required(), Length(min=3, max=50)]})
+        validator.add({'name': [Required(), Length(min=3, max=50, message="Wrong Length")]})
         validator.add({'email': [Required(), Email()]})
         validator.add({'admin_email': [Email()]})
         data = {
@@ -58,21 +58,24 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_data_empty(self):
         validator = Validator()
-        validator.add({'email': [Required(), Email()]})
+        validator.add({'email': [Required(message="Field is required"), Email(message="Enter a valid email")]})
         data = {}
         result = validator.validate(data)
         self.assertEqual(False, result)
-        self.assertEqual(2, len(validator.errors))
+        self.assertEqual(2, len(validator.errors.get('email')))
+        self.assertEqual('Field is required', validator.errors.get('email').pop(0))
+        self.assertEqual('Enter a valid email', validator.errors.get('email').pop(0))
 
     def test_validate_email_invalid(self):
         validator = Validator()
-        validator.add({'email': [Required(), Email()]})
+        validator.add({'email': [Required(message="Field is required"), Email(message="Enter a valid email")]})
         data = {
             "email": "no_email"
         }
         result = validator.validate(data)
         self.assertEqual(False,result)
-        self.assertEqual(1, len(validator.errors))
+        self.assertEqual(1, len(validator.errors.get('email')))
+        self.assertEqual('Enter a valid email', validator.errors.get('email').pop(0))
 
 
 if __name__ == "__main__":

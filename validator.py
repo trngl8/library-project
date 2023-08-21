@@ -5,7 +5,7 @@ from library import Book
 class Validator():
     def __init__(self):
         self.rules = {}
-        self.errors = []
+        self.errors = {}
 
     def add(self, rules: dict):
         for key in rules.keys():
@@ -29,26 +29,37 @@ class Validator():
             return self.validate_book(object)
         else:
             if len(object) == 0:
-                checker = []
                 for rule in self.rules:
+                    self.errors[rule] = []
                     for i in self.rules[rule]:
-                        if i not in checker:
-                            checker.append(i)
-                self.errors = ["Validation error"]* len(checker)
+                        self.errors[rule].append(i.message)
                 return False
             for key in object:
+                self.errors[key] = []
                 object_to_check = object[key]
                 rules_to_check = self.rules[key]
                 for i in rules_to_check:
                     if not i.validate(object_to_check):
-                        self.errors.append("Validation error")
-            if len(self.errors) != 0:
+                        self.errors.get(key).append(i.message)
+            checker = 0
+            keys_to_remove = []
+            for i in self.errors:
+                if len(self.errors[i]) == 0:
+                    keys_to_remove.append(i)
+            for key in keys_to_remove:
+                del self.errors[key]
+            for key in self.errors:
+                checker += len(self.errors[key])
+            if checker != 0:
                 return False
             return True
 
 
 
 class Email:
+    def __init__(self, message="Validation error"):
+        self.message = message
+
     def validate(self, string):
         if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', string):
             return True
@@ -57,6 +68,9 @@ class Email:
     
 
 class Required:
+    def __init__(self, message="Validation error"):
+        self.message = message
+
     def validate(self, string):
         if string is None or string == '':
             return False
@@ -64,9 +78,10 @@ class Required:
 
 
 class Length:
-    def __init__(self, min, max):
+    def __init__(self, min, max, message="Validation error"):
         self.min = min
         self.max = max
+        self.message = message
     
     def validate(self, string):
         if self.min <= len(string) <= self.max:

@@ -92,7 +92,7 @@ class Repository(BaseRepository):
     def find_by(self, criteria: dict) -> list:
         raise DatabaseUndefinedError
 
-    def get(self, item_id: int) -> dict:
+    def find(self, item_id: int) -> dict:
         raise DatabaseUndefinedError
 
     def add(self, item: dict) -> int:

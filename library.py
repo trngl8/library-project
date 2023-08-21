@@ -13,7 +13,7 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
-    def get(self, item_id: int) -> dict:
+    def find(self, item_id: int) -> dict:
         pass
 
     @abstractmethod

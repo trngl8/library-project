@@ -1,2 +1,6 @@
-class DatabaseUndefinedError(Exception):
+class DatabaseError(Exception):
+    pass
+
+
+class DatabaseUndefinedError(DatabaseError):
     pass

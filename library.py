@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from storage import DataStorage
-from error import DatabaseUndefinedError
+from error import DatabaseError
 
 
 class BaseRepository(ABC):
@@ -87,22 +87,22 @@ class Repository(BaseRepository):
         self.storage.write_lines(self.name, lines)
 
     def find_all(self) -> list:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
     def find_by(self, criteria: dict) -> list:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
     def find(self, item_id: int) -> dict:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
     def add(self, item: dict) -> int:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
     def remove(self, item_id: int) -> None:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
     def update(self, item_id: int, data: dict) -> dict:
-        raise DatabaseUndefinedError
+        raise DatabaseError
 
 
 class BooksRepository(Repository):

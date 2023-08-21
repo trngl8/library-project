@@ -1,7 +1,35 @@
+from abc import ABC, abstractmethod
 from storage import DataStorage
+from error import DatabaseError
 
 
-class Repository:
+class BaseRepository(ABC):
+    @abstractmethod
+    def find_all(self) -> list:
+        pass
+
+    @abstractmethod
+    def find_by(self, criteria: dict) -> list:
+        pass
+
+    @abstractmethod
+    def find(self, item_id: int) -> dict:
+        pass
+
+    @abstractmethod
+    def add(self, item: dict) -> int:
+        pass
+
+    @abstractmethod
+    def remove(self, item_id: int) -> None:
+        pass
+
+    @abstractmethod
+    def update(self, item_id: int, data: dict) -> dict:
+        pass
+
+
+class Repository(BaseRepository):
 
     def __init__(self, name, storage: DataStorage):
         self.name = name
@@ -57,6 +85,24 @@ class Repository:
             line = str(item_id) + "," + ",".join(item.values())
             lines.append(line)
         self.storage.write_lines(self.name, lines)
+
+    def find_all(self) -> list:
+        raise DatabaseError
+
+    def find_by(self, criteria: dict) -> list:
+        raise DatabaseError
+
+    def find(self, item_id: int) -> dict:
+        raise DatabaseError
+
+    def add(self, item: dict) -> int:
+        raise DatabaseError
+
+    def remove(self, item_id: int) -> None:
+        raise DatabaseError
+
+    def update(self, item_id: int, data: dict) -> dict:
+        raise DatabaseError
 
 
 class BooksRepository(Repository):
@@ -152,7 +198,7 @@ class Library:
 
         return filtered
 
-    def get_repository(self, name):
+    def get_repository(self, name) -> BaseRepository:
         return self.repositories.get(name)
 
 

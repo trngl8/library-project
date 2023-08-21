@@ -15,3 +15,7 @@ class BookEditForm(Form):
     title = StringField('Title', [validators.Length(min=4, max=25)])
     author = StringField('Author', [validators.Length(min=4, max=25)])
     year = StringField('Year', [validators.InputRequired()])
+
+
+class BookRemoveForm(Form):
+    pass

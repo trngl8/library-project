@@ -9,7 +9,7 @@ from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
-from forms import OrderForm, BookEditForm
+from forms import OrderForm, BookEditForm, BookRemoveForm
 from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
@@ -107,6 +107,20 @@ def book_edit(book_id):
         return redirect(url_for('book', book_id=book_id))
     resp = make_response(render_template('book_edit.html', book=item, form=form, library=library))
     return resp
+
+
+@app.route('/books/<int:book_id>/remove', methods=["GET", "POST"])
+def book_remove(book_id):
+    item = library.get_repository('books').find(book_id)
+    form = BookRemoveForm(request.form, obj=item)
+    if request.method == 'POST' and form.validate():
+        try:
+            library.get_repository('books').remove(book_id)
+        except Exception:
+            flash(f"Cannot remove item {book_id}", category='error')
+            return redirect(url_for('book', book_id=book_id))
+    flash('Removed success', category='success')
+    return redirect(url_for('index'))
 
 
 @app.route('/profile')

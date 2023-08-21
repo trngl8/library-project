@@ -1,3 +1,15 @@
+function updateOrderElements(result) {
+    const confirmButton = document.getElementById("confirm_button")
+    const spinnerLoader = document.getElementById("spinner_loader")
+    if (result.status == "success") {
+        confirmButton.classList.remove("btn-primary"),
+        confirmButton.classList.add("btn-success")
+        confirmButton.innerHTML = "Confirmed"
+        confirmButton.href = "#"
+        spinnerLoader.classList.add("d-none")
+    }
+}
+
 function refreshOrder(element, order_id) {
     const url = element.dataset.url
 
@@ -10,7 +22,7 @@ function refreshOrder(element, order_id) {
         })
     .then(response => response.json())
     .then(
-        result => element.innerHTML = result.status
+        result => updateOrderElements(result)
     )
     .catch(
         error => console.log(error)

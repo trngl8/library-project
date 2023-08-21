@@ -49,12 +49,12 @@
       <div class="col-md-12 text-center">
         <h1 class="display-5 mb-5">Confirm your order</h1>
         <div class="mb-5">
-          <div class="spinner-border" role="status">
+          <div class="spinner-border" role="status" id="spinner_loader">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="refreshOrder(this, {{ book.id }})" data-url="{{ url_for('confirm_order', order_id=book.id) }}">
+        <button type="button" class="btn btn-lg btn-primary" id="confirm_button" onclick="refreshOrder(this, {{ book.id }})" data-url="{{ url_for('confirm_order', order_id=book.id) }}">
           Confirm
         </button>
       </div>

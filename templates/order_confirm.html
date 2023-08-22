@@ -35,12 +35,23 @@
 {% block content %}
     <div class="container p-0">
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-primary" role="alert">
-            {{ message }}
-            </div>
+      {%with messages = get_flashed_messages(with_categories=true)%}
+
+      {% if messages %}
+        {% for category, message in messages %}
+        {%if category =='error' %}
+        <div class="alert alert-danger" role = 'alert'>
+          {{message}}
+        </div>
+        {%elif category =='success' %}
+        <div class="alert alert-success" role = 'alert'>
+          {{message}}
+        </div>
+        {%elif category =='warning' %}
+        <div class="alert alert-warning" role = 'alert'>
+          {{message}}
+        </div>
+        {% endif %}
         {% endfor %}
       {% endif %}
     {% endwith %}

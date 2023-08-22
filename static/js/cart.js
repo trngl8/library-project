@@ -11,7 +11,8 @@ function addToCart(element, book_id) {
         })
     .then(response => response.json())
     .then(
-        result => updateCartElements(result, "update")
+        result => updateCartElements(result, "update"),
+        element.setAttribute("disabled", "disabled"),
     )
     .catch(
         error => console.log(error)

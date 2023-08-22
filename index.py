@@ -55,11 +55,11 @@ def home():
 def index():
     if request.method == "POST":
         if 'file' not in request.files:
-            flash('No file part')
+            flash('No file part', category="error")
             return redirect(request.url)
         file = request.files['file']
         if file.filename == '':
-            flash('No selected file')
+            flash('No selected file', category="error")
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -86,7 +86,7 @@ def order(book_id):
     if request.method == 'POST' and form.validate():
         result = Processing().create_order(form)
         if result:
-            flash('Thanks for order')
+            flash('Thanks for order', category="success")
         else:
             flash("Processing failed", category="error")
         return redirect(url_for('confirm', book_id=book_id))
@@ -220,17 +220,17 @@ def remove_from_cart(book_id):
 def import_file():
     if request.method == "POST":
         if 'file' not in request.files:
-            flash('No file part')
+            flash('No file part', category="error")
             return redirect(request.url)
         file = request.files['file']
         if file.filename == '':
-            flash('No selected file')
+            flash('No selected file', category="error")
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             import_service = FileImport(app.config['UPLOAD_FOLDER'])
             amount = import_service.process_file(file, filename)
-            flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
+            flash(f"Your file was imported successfully. {amount} unique books imported", category='warning')
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     return render_template('import.html', library=library, user=user)

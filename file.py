@@ -40,7 +40,7 @@ class FileImport:
             line = line.replace('\n', '').split(",")
             book = Book(line[1], line[2], int(line[3]))
             book.id = num + 1
-            if validator.validate(book=book):
+            if validator.validate(object=book):
                 for j in result:
                     try:
                         if j == book:

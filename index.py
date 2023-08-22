@@ -9,7 +9,7 @@ from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
-from forms import OrderForm, BookEditForm, BookRemoveForm
+from forms import OrderForm, BookEditForm, BookRemoveForm, NewNameForm
 from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
@@ -130,11 +130,12 @@ def profile():
 
 @app.route('/settings', methods=["GET", "POST"])
 def settings():
-    if request.method == 'POST':
-        username = request.form["username"]
+    form = NewNameForm(request.form)
+    if request.method == 'POST' and form.validate():
+        username = form.newname
         if not re.match(r"[A-Za-z0-9_-]+", username):
             flash("Your name is not valid", category="error")
-            return redirect(url_for("home"))
+            return redirect(url_for("settings"))
         flash("Your name was successfully changed")
         session['username'] = username
         return redirect(url_for('index'))

@@ -36,8 +36,12 @@ def add_user(library: Library):
     name = input("Name :> ")
     email = input("Email :> ")
     phone = input("Phone :> ")
-    user = User(name, email, phone)
-    library.add_user(user)
+    repo = library.get_repository('users')
+    repo.add({
+        'name': name,
+        'email': email,
+        'phone': phone
+    })
     return f"User {name} added"
 
 

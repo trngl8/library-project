@@ -1,5 +1,6 @@
 import unittest
 from library import Library, Book, User, Visitor, Cart
+from storage import DataStorage
 from unittest.mock import Mock
 
 
@@ -220,6 +221,29 @@ class TestLibrary(unittest.TestCase):
         })
         result = repo.get_item(1)
         self.assertEqual('Test', result['title'])
+
+    def test_add_user_repository(self):
+        file_lines = Mock()
+        file_lines.read_lines.return_value = [
+            'ID,NAME,EMAIL,PHONE',
+            '1,test,test@localhost,123456789',
+            '2,test2,test2@localhost,123456780',
+        ]
+        library = Library('test', DataStorage(file_lines))
+        repo = library.get_repository('users')
+
+        result = repo.add({
+            'name': 'Test3',
+            'email': 'test3@localhost',
+            'phone': '123456789',
+        })
+        first = repo.find(1)
+        last = repo.find(2)
+        item = repo.find(result)
+
+        self.assertEqual('test@localhost', first['email'])
+        self.assertEqual('test2@localhost', last['email'])
+        self.assertEqual('test3@localhost', item['email'])
 
 
 if __name__ == "__main__":

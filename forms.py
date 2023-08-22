@@ -17,5 +17,9 @@ class BookEditForm(Form):
     year = StringField('Year', [validators.InputRequired()])
 
 
+class NewNameForm(Form):
+    newname = StringField("New name", [validators.Length(min=3, max = 20)])
+
+
 class BookRemoveForm(Form):
     pass

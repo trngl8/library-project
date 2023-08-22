@@ -9,7 +9,7 @@ from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
-from forms import OrderForm, BookEditForm, BookRemoveForm
+from forms import OrderForm, BookEditForm, BookRemoveForm, NewNameForm
 from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
@@ -132,9 +132,13 @@ def profile():
     return render_template("profile.html", library=library)
 
 
-@app.route('/settings')
+@app.route('/settings', methods=["GET", "POST"])
 def settings():
-    return render_template("settings.html", library=library)
+    form = NewNameForm(request.form)
+    if request.method == 'POST' and form.validate():
+        flash("Your name was successfully changed", category="success")
+        session['username'] = form.newname.data
+    return render_template("settings.html", library=library, form=form)
 
 
 @app.route("/logout")

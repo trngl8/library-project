@@ -8,13 +8,13 @@
 </div>
 <div class="container p-0">
     {% from "_formhelpers_bootstrap.html" import render_field %}
-    <form class="row g-2 align-items-center" action="{{ url_for('settings') }}" method="post">
-        <div class="col mb-3">
+    <form action="{{ url_for('settings') }}" method="post">
+        <div class="row">
+            <div class="col mb-2">
             {{ render_field(form.newname) }}
+            </div>
         </div>
-        <div class="col-auto mb-3">
-            <button class="btn btn-lg px-5 btn-outline-primary" type="submit">Submit</button>
-        </div>
+        <button class="btn btn-lg btn-outline-primary" type="submit">Save</button>
     </form>
 </div>
 {% endblock %}

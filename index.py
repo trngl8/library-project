@@ -131,13 +131,9 @@ def profile():
 @app.route('/settings', methods=["GET", "POST"])
 def settings():
     form = NewNameForm(request.form)
-    if request.method == 'POST':
-        if not form.validate():
-            flash("Your name is not valid", category="error")
-            return redirect(url_for("settings"))
-        username = form.newname.data
+    if request.method == 'POST' and form.validate():
         flash("Your name was successfully changed", category="success")
-        session['username'] = username
+        session['username'] = form.newname.data
     return render_template("settings.html", library=library, form=form)
 
 

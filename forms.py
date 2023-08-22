@@ -18,7 +18,7 @@ class BookEditForm(Form):
 
 
 class NewNameForm(Form):
-    newname = StringField("New name", [validators.Length(min=1, max = 20)])
+    newname = StringField("New name", [validators.Length(min=0, max = 20)])
 
 
 class BookRemoveForm(Form):

@@ -237,11 +237,13 @@ class TestLibrary(unittest.TestCase):
             'email': 'test3@localhost',
             'phone': '123456789',
         })
+        first = repo.find(1)
         last = repo.find(2)
         item = repo.find(result)
 
-        self.assertEqual('test3@localhost', item['email'])
+        self.assertEqual('test@localhost', first['email'])
         self.assertEqual('test2@localhost', last['email'])
+        self.assertEqual('test3@localhost', item['email'])
 
 
 if __name__ == "__main__":

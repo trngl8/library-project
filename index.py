@@ -49,6 +49,7 @@ def home():
         session['username'] = username
         try:
             library.get_repository('users').add({
+                'email': username,
                 'name': username,
                 'date': datetime.date,
                 'ip_address': request.remote_addr,

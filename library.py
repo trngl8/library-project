@@ -131,13 +131,17 @@ class BooksRepository(Repository):
 
 class UsersRepository(Repository):
     def add(self, item: dict) -> int:
-        if 0 == len(self.items):
-            self.load_items()
-
-        for user in self.items:
+        for user in self.items_data.values():
             if user['email'] == item['email']:
                 raise DatabaseError(f"User with email {item['email']} already exists")
-        return self.storage.add_line(self.name, item)
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
+
+    def find(self, item_id: int) -> dict:
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        super().find(item_id)
 
 
 class OrdersRepository(Repository):

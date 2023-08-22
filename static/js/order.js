@@ -5,7 +5,6 @@ function updateOrderElements(result) {
         confirmButton.classList.remove("btn-primary"),
         confirmButton.classList.add("btn-success")
         confirmButton.innerHTML = "Confirmed"
-        confirmButton.href = "#"
         spinnerLoader.classList.add("d-none")
     }
 }

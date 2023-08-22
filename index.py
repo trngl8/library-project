@@ -1,6 +1,7 @@
 import re
 import dotenv
 import os
+import datetime
 
 
 from flask import Flask, request, make_response, redirect, url_for, flash
@@ -46,6 +47,16 @@ def home():
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
         session['username'] = username
+        try:
+            library.get_repository('users').add({
+                'email': username,
+                'name': username,
+                'date': datetime.date,
+                'ip_address': request.remote_addr,
+                'user_agent': request.user_agent
+            })
+        except DatabaseError:
+            flash("Can not add user", category="error")
         return redirect(url_for('index'))
 
     return render_template('enter.html', library=library)

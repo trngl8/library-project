@@ -134,7 +134,7 @@ class UsersRepository(Repository):
         if 0 == len(self.items_data):
             self.load_items_data()
         for user in self.items_data.values():
-            if user['email'] == item['email']:
+            if 'email' in user and user['email'] == item['email']:
                 raise DatabaseError(f"User with email {item['email']} already exists")
         item_id = self.storage.add_line(self.name, item)
         self.items_data[item_id] = item

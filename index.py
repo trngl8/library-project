@@ -1,6 +1,7 @@
 import re
 import dotenv
 import os
+import datetime
 
 
 from flask import Flask, request, make_response, redirect, url_for, flash
@@ -49,9 +50,9 @@ def home():
         try:
             library.get_repository('users').add({
                 'name': username,
-                'date': date,
-                'ip_address': ip_address,
-                'user_agent': user_agent
+                'date': datetime.date,
+                'ip_address': request.remote_addr,
+                'user_agent': request.user_agent
             })
         except DatabaseError:
             flash("Can not add user", category="error")

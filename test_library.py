@@ -221,6 +221,18 @@ class TestLibrary(unittest.TestCase):
         result = repo.get_item(1)
         self.assertEqual('Test', result['title'])
 
+    def test_add_user_repository(self):
+        repo = self.library.get_repository('users')
+
+        result = repo.add({
+            'name': 'Test',
+            'email': 'test@localhost',
+            'phone': '123456789',
+        })
+        item = repo.find(result)
+
+        self.assertEqual('test@localhost', item['email'])
+
 
 if __name__ == "__main__":
     unittest.main()

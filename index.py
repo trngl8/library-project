@@ -46,6 +46,15 @@ def home():
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
         session['username'] = username
+        try:
+            library.get_repository('users').add({
+                'name': username,
+                'date': date,
+                'ip_address': ip_address,
+                'user_agent': user_agent
+            })
+        except DatabaseError:
+            flash("Can not add user", category="error")
         return redirect(url_for('index'))
 
     return render_template('enter.html', library=library)

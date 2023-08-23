@@ -245,6 +245,13 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual('test2@localhost', last['email'])
         self.assertEqual('test3@localhost', item['email'])
 
+    def test_dimensions(self):
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        book.set_dimensions(10, 20, 30)
+        self.assertEqual(10, book.width)
+        self.assertEqual(20, book.height)
+        self.assertEqual(30, book.length)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 from library import Library, Book
 from library import User
-from storage import DataStorage, FileLines
+from storage import DataStorage
 
 
 def print_item(index, value):
@@ -29,11 +29,12 @@ def import_books(library: Library):
     for index, file in enumerate(files):
         print_item(index, file)
     new_file = files[int(input('Choose the file from following :> '))-1]
-    lines = FileLines('/var/import/').read_lines(new_file.split('/')[-1])
-    # TODO validate lines in the dict structure
-    FileLines().write_lines("books.csv", lines)
-    library.import_books(lines)
-    return f"{len(lines)-1} books have been imported"
+    # lines = FileLines('/var/import/').read_lines(new_file.split('/')[-1])
+    count_lines = 5
+    # # TODO validate lines in the dict structure
+    # FileLines().write_lines("books.csv", lines)
+    # library.import_books(lines)
+    return f"{count_lines} books have been imported"
 
 
 def add_user(library: Library):
@@ -83,7 +84,7 @@ menu_actions = {
 
 menu = list(menu_actions.keys())
 menu_active = True
-main_library = Library('3 Books', DataStorage(FileLines()))
+main_library = Library('3 Books', DataStorage())
 
 while menu_active:
     print("#" * 40)

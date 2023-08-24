@@ -1,8 +1,6 @@
 from library import Library, Book
 from library import User
 from storage import DataStorage, FileLines
-from file import FileImport
-
 
 def print_item(index, value):
     print(f"[{index + 1}]. {value}")
@@ -26,7 +24,7 @@ def find_user():
 
 
 def import_books(library: Library):
-    files = FileImport("/var/import").get_dir_files('var/import')
+    files =['books_test.csv']
     for index, file in enumerate(files):
         print_item(index, file)
     new_file = files[int(input('Choose the file from following :> '))-1]

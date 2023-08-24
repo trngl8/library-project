@@ -2,6 +2,7 @@ from library import Library, Book
 from library import User
 from storage import DataStorage, FileLines
 
+
 def print_item(index, value):
     print(f"[{index + 1}]. {value}")
 

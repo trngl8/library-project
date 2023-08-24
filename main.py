@@ -26,12 +26,12 @@ def find_user():
 
 
 def import_books(library: Library):
-    files =['books_test.csv']
+    importer = FileImport('/var/import/')
+    files = importer.get_dir_files('var/import')
     for index, file in enumerate(files):
         print_item(index, file)
-    new_file = files[int(input('Choose the file from following :> '))]
-    process_file = FileImport('/var/import/')
-    result = process_file.import_file(new_file)
+    new_file = files[int(input('Choose the file from following :> '))-1]
+    result = importer.import_file(new_file)
     return f"{result} books have been imported"
 
 

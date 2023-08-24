@@ -1,6 +1,7 @@
 from library import Library, Book
 from library import User
-from storage import DataStorage
+from storage import DataStorage, FileLines
+from file import FileImport
 
 
 def print_item(index, value):
@@ -28,13 +29,10 @@ def import_books(library: Library):
     files =['books_test.csv']
     for index, file in enumerate(files):
         print_item(index, file)
-    new_file = files[int(input('Choose the file from following :> '))-1]
-    # lines = FileLines('/var/import/').read_lines(new_file.split('/')[-1])
-    count_lines = 5
-    # # TODO validate lines in the dict structure
-    # FileLines().write_lines("books.csv", lines)
-    # library.import_books(lines)
-    return f"{count_lines} books have been imported"
+    new_file = files[int(input('Choose the file from following :> '))]
+    process_file = FileImport('/var/import/')
+    result = process_file.import_file(new_file)
+    return f"{result} books have been imported"
 
 
 def add_user(library: Library):

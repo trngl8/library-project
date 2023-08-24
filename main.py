@@ -82,7 +82,7 @@ menu_actions = {
 
 menu = list(menu_actions.keys())
 menu_active = True
-main_library = Library('3 Books', DataStorage())
+main_library = Library('3 Books', DataStorage(FileLines()))
 
 while menu_active:
     print("#" * 40)

@@ -3,7 +3,7 @@
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
-<li class="breadcrumb-item"><a href="{{ url_for('cart') }}">Cart</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('cart_index') }}">Cart</a></li>
 <li class="breadcrumb-item active" aria-current="page">Order</li>
 {% endblock %}
 
@@ -17,10 +17,10 @@
       <div class="col-md-5 col-lg-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">Your order</span>
-          <span class="badge bg-primary rounded-pill">1</span>
+          <span class="badge bg-primary rounded-pill">{{ cart.items|length }}</span>
         </h4>
         <ul class="list-group mb-3">
-          {% for book in order.items %}
+          {% for book in cart.items %}
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
               <h6 class="my-0">{{ book.title }}</h6>
@@ -32,14 +32,14 @@
 
           <li class="list-group-item d-flex justify-content-between">
             <span>Total</span>
-            <strong>1</strong>
+            <strong>{{ cart.items|length }}</strong>
           </li>
         </ul>
       </div>
       <div class="col-md-7 col-lg-8">
         <h4 class="mb-3">Billing information</h4>
         {% from "_formhelpers_bootstrap.html" import render_field %}
-        <form action="{{ url_for('order', book_id=book.id) }}" method="post" class="needs-validation" novalidate >
+        <form method="post" class="needs-validation" novalidate>
           <div class="row g-3">
             <div class="col-sm-6">
               {{ render_field(form.firstname) }}

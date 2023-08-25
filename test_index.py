@@ -67,13 +67,6 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 
-    def test_book_order_route(self):
-        response = self.app.get('/books/1/borrow')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'3 Books', response.data)
-        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
-        self.assertEqual(response.mimetype, 'text/html')
-
     def test_book_order_confirm_route(self):
         response = self.app.get('/order/1/confirm')
         self.assertEqual(response.status_code, 200)
@@ -108,9 +101,16 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 
+    def test_cart_submit_route(self):
+        response = self.app.post('/cart', data={'order': 'order'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'3 Books', response.data)
+        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
+        self.assertEqual(response.mimetype, 'text/html')
+
     def test_cart_clear_route(self):
         response = self.app.post('/cart')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 

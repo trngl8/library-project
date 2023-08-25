@@ -8,3 +8,9 @@ class TestFileImport(unittest.TestCase):
         importer.process_file("books.csv", "books.csv", "library")
         self.assertEqual(4, len(importer.get_file_lines("books.csv")))
 
+<<<<<<< HEAD
+=======
+
+if __name__ == '__main__':
+    unittest.main()
+>>>>>>> 87f3643 (fixed import)

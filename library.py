@@ -174,7 +174,8 @@ class Library:
         self.repositories = {
             'books': BooksRepository('books', storage),
             'users': UsersRepository('users', storage),
-            'orders': OrdersRepository('orders', storage)
+            'orders': OrdersRepository('orders', storage),
+            'books_orders': OrdersRepository('books_orders', storage)
         }
 
     def get_count(self):

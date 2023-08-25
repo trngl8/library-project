@@ -254,11 +254,19 @@ class Book:
         self.available = False
         self.count = 0
         self.price = price
+        self._width = None
+        self._height = None
+        self._length = None
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
+
+    def set_dimensions(self, width, height, length):
+        self._width = width
+        self._height = height
+        self._length = length
 
 
 class Cart:

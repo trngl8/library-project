@@ -248,9 +248,9 @@ class TestLibrary(unittest.TestCase):
     def test_dimensions(self):
         book = Book("Python Crash Course", "Eric Matthes", 2019)
         book.set_dimensions(10, 20, 30)
-        self.assertEqual(10, book.width)
-        self.assertEqual(20, book.height)
-        self.assertEqual(30, book.length)
+        self.assertEqual(10, book._width)
+        self.assertEqual(20, book._height)
+        self.assertEqual(30, book._length)
 
 
 if __name__ == "__main__":

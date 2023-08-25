@@ -245,7 +245,7 @@ class User(Visitor):
 
 
 class Book:
-    def __init__(self, title, author, year, length, width, height, ISBN=None, price=100):
+    def __init__(self, title, author, year, ISBN=None, price=100):
         self.id = None
         self.isbn = ISBN
         self.title = title
@@ -254,14 +254,19 @@ class Book:
         self.available = False
         self.count = 0
         self.price = price
-        self.width = width
-        self.height = height
-        self.length = length
+        self._width = None
+        self._height = None
+        self._length = None
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
+
+    def set_dimensions(self, width, height, length):
+        self._width = width
+        self._height = height
+        self._length = length
 
 
 class Cart:

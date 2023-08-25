@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length
+from validator import Validator, Required, Email, Length, Phone, Isbn
 from library import Book
 
 
@@ -76,6 +76,22 @@ class TestValidator(unittest.TestCase):
         self.assertEqual(False,result)
         self.assertEqual(1, len(validator.errors.get('email')))
         self.assertEqual('Enter a valid email', validator.errors.get('email').pop(0))
+
+    def test_validate_phone_isbn(self):
+        validator = Validator()
+        validator.add({"phone" : [Phone(message="Wrong Phone"), Required(message="Field is required")]})
+        validator.add({"isbn" : [Isbn(message="Wrong Isbn")]})
+        data = {
+            "phone" : "+1 (123) 456-7890",
+            "isbn" : "9781718502703"
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+        new_data ={
+            "phone" : "12345"
+        }
+        self.assertEqual(validator.validate(new_data), False)
+        self.assertEqual(1, len(validator.errors.get('phone')))
 
 
 if __name__ == "__main__":

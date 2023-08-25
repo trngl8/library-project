@@ -55,16 +55,19 @@ class Validator():
             return True
 
 
-
-class Email:
-    def __init__(self, message="Validation error"):
+class Expression:
+    def __init__(self, message="Validation error") -> None:
         self.message = message
+
+
+class Email(Expression):
+    def __init__(self, message="Validation error"):
+        super().__init__(message)
 
     def validate(self, string):
         if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', string):
             return True
-        else:
-            return False
+        return False
     
 
 class Required:
@@ -87,3 +90,24 @@ class Length:
         if self.min <= len(string) <= self.max:
             return True
         return False
+    
+
+class Phone(Expression):
+    def __init__(self, message="Validation error"):
+        super().__init__(message)
+    
+    def validate(self, phone):
+        if re.match(r'^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$', phone):
+            return True
+        return False
+    
+
+class Isbn(Expression):
+    def __init__(self, message="Validation error"):
+        super().__init__(message)
+
+    def validate(self, isbn):
+        if re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", isbn):
+            return True
+        return False
+    

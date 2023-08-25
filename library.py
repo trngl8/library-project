@@ -149,7 +149,19 @@ class UsersRepository(Repository):
 
 
 class OrdersRepository(Repository):
-    pass
+    def add(self, item: dict) -> int:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
+
+    def find(self, item_id: int) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        super().find(item_id)
 
 
 class Library:
@@ -162,7 +174,8 @@ class Library:
         self.repositories = {
             'books': BooksRepository('books', storage),
             'users': UsersRepository('users', storage),
-            'orders': OrdersRepository('users', storage)
+            'orders': OrdersRepository('orders', storage),
+            'books_orders': OrdersRepository('books_orders', storage)
         }
 
     def get_count(self):

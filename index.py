@@ -3,7 +3,6 @@ import dotenv
 import os
 from datetime import date
 
-
 from flask import Flask, request, make_response, redirect, url_for, flash
 from flask import render_template
 from flask import session
@@ -16,7 +15,6 @@ from library import Library
 from processing import Processing
 from file import FileImport
 from error import DatabaseError
-
 
 UPLOAD_FOLDER = 'var/import/'
 ALLOWED_EXTENSIONS = {'csv', 'tsv'}
@@ -36,7 +34,7 @@ library = Library("3 Books", DataStorage(FileLines()))
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -87,21 +85,6 @@ def index():
 def book(book_id):
     item = library.get_repository('books').find(book_id)
     resp = make_response(render_template('book.html', book=item, library=library))
-    return resp
-
-
-@app.route('/books/<int:book_id>/borrow', methods=["GET", "POST"])
-def order(book_id):
-    item = library.get_repository('books').find(book_id)
-    form = OrderForm(request.form)
-    if request.method == 'POST' and form.validate():
-        result = Processing().create_order(form)
-        if result:
-            flash('Thanks for order', category="success")
-        else:
-            flash("Processing failed", category="error")
-        return redirect(url_for('confirm', book_id=book_id))
-    resp = make_response(render_template('book_order.html', book=item, form=form, library=library))
     return resp
 
 
@@ -158,27 +141,73 @@ def logout():
     return response
 
 
-@app.route('/order/<int:book_id>/confirm', methods=["GET", "POST"])
-def confirm(book_id):
-    item = library.get_repository('books').find(book_id)
-    return make_response(render_template('order_confirm.html', library=library, book=item))
-
-
 @app.route('/cart', methods=["GET", "POST"])
 def cart_index():
     cart = library.cart
-    if request.method == 'POST':
-        cart.clear()
-        if 'cart' in session:
-            session.pop('cart', None)
-        flash("Cart cleared", category="success")
-        return redirect(url_for('cart_index'))
+
     if 'cart' in session and 'items' in session['cart']:
         cart.clear()
         cart_data = session['cart']
         for item in cart_data['items']:
             cart.add_item(item)
+
+    if request.method == 'POST':
+        if request.form.get('clear'):
+            cart.clear()
+            if 'cart' in session:
+                session.pop('cart', None)
+            flash("Cart cleared", category="success")
+            return redirect(url_for('cart_index'))
+        else:
+            if 'cart' in session:
+                # TODO: write cart into session or (and) into database
+                cart_data = session['cart']
+                for item in cart_data['items']:
+                    cart.add_item(item)
+                return redirect(url_for('cart_order'))
     return make_response(render_template('cart.html', library=library, cart=cart))
+
+
+@app.route('/cart/order', methods=["GET", "POST"])
+def cart_order():
+    cart = library.cart
+    if 'cart' in session and 'items' in session['cart']:
+        cart.clear()
+        cart_data = session['cart']
+        for item in cart_data['items']:
+            cart.add_item(item)
+
+    form = OrderForm(request.form)
+    if request.method == 'POST' and form.validate():
+        order_id = library.get_repository('orders').add({
+            'firstname': form.firstname.data,
+            'lastname': form.lastname.data,
+            'email': form.email.data,
+            'phone': form.phone.data,
+            'address': form.address.data,
+            'period': form.period.data
+        })
+        for item in library.cart.items:
+            library.get_repository('books_orders').add({
+                'book_id': str(item['id']),
+                'order_id': str(order_id),
+            })
+        result = Processing().send_order(form)
+        if result:
+            cart.clear()
+            if 'cart' in session:
+                session.pop('cart', None)
+            flash('Thanks for order', category="success")
+        else:
+            flash("Processing failed", category="error")
+        return redirect(url_for('order_confirm', order_id=order_id))
+    return render_template('cart_order.html', form=form, library=library, cart=cart)
+
+
+@app.route('/order/<int:order_id>/confirm', methods=["GET", "POST"])
+def order_confirm(order_id):
+    order_item = library.get_repository('orders').find(order_id)
+    return make_response(render_template('order_confirm.html', library=library, order=order_item))
 
 
 @app.route('/cart/<int:book_id>/add', methods=["POST"])

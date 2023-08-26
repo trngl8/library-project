@@ -87,7 +87,8 @@ class Repository(BaseRepository):
         self.storage.write_lines(self.name, lines)
 
     def find_all(self) -> list:
-        raise DatabaseError
+        self.load_items()
+        return self.items
 
     def find_by(self, criteria: dict) -> list:
         raise DatabaseError
@@ -106,16 +107,16 @@ class Repository(BaseRepository):
 
 
 class BooksRepository(Repository):
-    def find_all(self) -> list:
-        if 0 == len(self.items):
-            self.load_items()
-
-        result = []
-        for item in self.items:
-            book = Book(item['title'], item['author'], item['year'])
-            book.id = item['id']
-            result.append(book)
-        return result
+    # def find_all(self) -> list:
+    #     if 0 == len(self.items):
+    #         self.load_items()
+    #
+    #     result = []
+    #     for item in self.items:
+    #         book = Book(item['title'], item['author'], item['year'])
+    #         book.id = item['id']
+    #         result.append(book)
+    #     return result
 
     def find(self, item_id):
         if 0 == len(self.items):

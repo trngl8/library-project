@@ -76,7 +76,14 @@ def index():
             amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
+    cart = session.get('cart', {'count_items': 0, 'items': []})
     books = library.get_repository('books').find_all()
+    for book_item in books:
+        book_item['in_cart'] = False
+        for item in cart['items']:
+            if book_item['id'] == item['id']:
+                book_item['in_cart'] = True
+                break
     resp = make_response(render_template('index.html', books=books, library=library))
     return resp
 

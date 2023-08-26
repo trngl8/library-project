@@ -107,27 +107,12 @@ class Repository(BaseRepository):
 
 
 class BooksRepository(Repository):
-    # def find_all(self) -> list:
-    #     if 0 == len(self.items):
-    #         self.load_items()
-    #
-    #     result = []
-    #     for item in self.items:
-    #         book = Book(item['title'], item['author'], item['year'])
-    #         book.id = item['id']
-    #         result.append(book)
-    #     return result
-
-    def find(self, item_id):
-        if 0 == len(self.items):
-            self.load_items()
-
-        for item in self.items:
-            if item_id == int(item['id']):
-                book = Book(item['title'], item['author'], item['year'])
-                book.id = item['id']
-                return book
-        raise Exception(f"Item with id {item_id} not found")
+    def find(self, item_id: int) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        super().find(item_id)
 
 
 class UsersRepository(Repository):

@@ -4,7 +4,17 @@ from library import Book
 
 
 class TestValidator(unittest.TestCase):
-    def setUp(self):
+
+    def test_validate_empty_rules(self):
+        self.validator = Validator()
+        self.assertEqual(True, self.validator.validate({}))
+
+    def test_validate_empty_rules_book(self):
+        self.validator = Validator()
+        book = Book("Python Crash Course", "Eric Matthes", 2019, "9781718502703")
+        self.assertEqual(True, self.validator.validate(book))
+
+    def test_validate_book(self):
         self.validator = Validator()
         self.validator.add_rule({
             "ISBN": {
@@ -20,7 +30,6 @@ class TestValidator(unittest.TestCase):
             },
         })
 
-    def test_validate(self):
         book1 = Book("Python Crash Course", "Eric Matthes" ,2019, "9781718502703")
         book2 = Book("Python Hard Way", "Zed Shaw", 1899, "9780134692883")
         self.assertEqual(True, self.validator.validate(book1))
@@ -92,6 +101,35 @@ class TestValidator(unittest.TestCase):
         }
         self.assertEqual(validator.validate(new_data), False)
         self.assertEqual(1, len(validator.errors.get('phone')))
+
+    def test_validate_invalid(self):
+        validator = Validator()
+        validator.add({"code": [Isbn()]})
+        validator.add({"phone": [Length(min=3, max=13)]})
+        data = {
+            "code": "111",
+            "phone": "+"
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+        self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
+        self.assertEqual('Wrong ISBN', validator.errors.get('code').pop(0))
+
+    def test_validate_empty(self):
+        validator = Validator()
+        validator.add({"phone": [Required(), Phone()]})
+        validator.add({"name": [Required()]})
+        data = {
+            "name": None,
+            "phone": "",
+            "address": "test"
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+        self.assertEqual(2, len(validator.errors.get('phone')))
+        self.assertEqual('Field is required', validator.errors.get('phone').pop(0))
+        self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
+        self.assertEqual('Field is required', validator.errors.get('name').pop(0))
 
 
 if __name__ == "__main__":

@@ -76,22 +76,34 @@ def index():
             amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
+    cart = session.get('cart', {'count_items': 0, 'items': []})
     books = library.get_repository('books').find_all()
+    for book_item in books:
+        book_item['in_cart'] = False
+        for item in cart['items']:
+            if book_item['id'] == item['id']:
+                book_item['in_cart'] = True
+                break
     resp = make_response(render_template('index.html', books=books, library=library))
     return resp
 
 
 @app.route('/books/<int:book_id>')
 def book(book_id):
-    item = library.get_repository('books').find(book_id)
-    resp = make_response(render_template('book.html', book=item, library=library))
-    return resp
+    book_item = library.get_repository('books').find(book_id)
+    cart = session.get('cart', {'count_items': 0, 'items': []})
+    book_item['in_cart'] = False
+    for item in cart['items']:
+        if book_item['id'] == item['id']:
+            book_item['in_cart'] = True
+            break
+    return make_response(render_template('book.html', book=book_item, library=library))
 
 
 @app.route('/books/<int:book_id>/edit', methods=["GET", "POST"])
 def book_edit(book_id):
     item = library.get_repository('books').find(book_id)
-    form = BookEditForm(request.form, obj=item)
+    form = BookEditForm(request.form, data=item)
     if request.method == 'POST' and form.validate():
         try:
             result = library.get_repository('books').update(book_id, {
@@ -223,8 +235,8 @@ def add_to_cart(book_id):
     book = library.get_repository('books').find(book_id)
 
     ids = [item['id'] for item in cart_data['items']]
-    if book.id not in ids:
-        cart_data['items'].append({'id': book.id, 'title': book.title})
+    if book['id'] not in ids:
+        cart_data['items'].append({'id': book['id'], 'title': book['title']})
         cart_data['count_items'] = len(cart_data['items'])
         session['cart'] = cart_data
 
@@ -245,7 +257,7 @@ def remove_from_cart(book_id):
         cart_data = session['cart']
 
     for item in cart_data['items']:
-        if item['id'] == book.id:
+        if item['id'] == book['id']:
             cart_data['items'].remove(item)
             break
     cart_data['count_items'] = len(cart_data['items'])

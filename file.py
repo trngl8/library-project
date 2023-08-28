@@ -71,8 +71,4 @@ class FileImport:
             if validator.validate(Book(line[1], line[2], line[3])):
                 counter += 1
                 library.storage.add_line('books', {'title' : line[1], 'author' : line[2], "year" : line[3]})
-
-        # TODO: read file, get lines,
-        # TODO: convert lines to validation structure, validate lines
-        # TODO: save validated lines to storage, return count of saved items
         return counter

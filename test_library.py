@@ -157,7 +157,7 @@ class TestLibrary(unittest.TestCase):
         ]
         library = Library('test', storage)
         book = library.get_repository('books').find(2)
-        self.assertEqual('Python Hard Way', book.title)
+        self.assertEqual('Python Hard Way', book['title'])
         with self.assertRaises(Exception):
             library.get_repository('books').find(9)
 

@@ -1,5 +1,5 @@
 from validator import Validator
-from library import Book
+from library import Book, Library
 import os
 
 
@@ -61,8 +61,18 @@ class FileImport:
         self.write_new_file(file_name, result, library=library, flag=False)
         return len(result) - 1
 
-    def import_file(self, file_name):
+    def import_file(self, file_name, library : Library):
+        with open(self.path + file_name, "r") as file:
+            lines = file.readlines()
+        counter = 0
+        validator = Validator()
+        for line in lines[1:]:
+            line = line.replace('\n', '').split(',')
+            if validator.validate(Book(line[1], line[2], line[3])):
+                counter += 1
+                library.storage.add_line('books', {'title' : line[1], 'author' : line[2], "year" : line[3]})
+
         # TODO: read file, get lines,
         # TODO: convert lines to validation structure, validate lines
         # TODO: save validated lines to storage, return count of saved items
-        return len(file_name)
+        return counter

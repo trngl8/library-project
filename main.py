@@ -1,6 +1,8 @@
-from library import Library, Book
+from library import Library
 from library import User
 from storage import DataStorage, FileLines
+from validator import Validator, Required, Length
+from error import DatabaseError
 
 
 def print_item(index, value):
@@ -46,11 +48,24 @@ def add_user(library: Library):
 
 
 def add_book(library: Library):
-    title = input("Title :> ")
-    author = input("Author :> ")
-    year = input("Year :> ")
-    result = library.add_book(Book(title, author, year))
-    return f"Book added with ID {result}"
+    book_item = {
+        'title': input("Title :> "),
+        'author': input("Author :> "),
+        'year': input("Year :> ")
+    }
+    validator = Validator()
+    validator.add({
+        'title': [Required()],
+        'author': [Required()],
+        'year': [Required(), Length(4, 4)]
+    })
+    if not validator.validate(book_item):
+        return f"Invalid data {validator.errors}"
+    try:
+        result = library.get_repository('books').add(book_item)
+        return f"Book added with ID {result}"
+    except DatabaseError as e:
+        return f"Database error: {e.message}"
 
 
 def remove_book(library: Library):

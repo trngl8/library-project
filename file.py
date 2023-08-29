@@ -1,11 +1,19 @@
 from validator import Validator
-from library import Book
+from library import Book, Library
 import os
 
 
 class FileImport:
     def __init__(self, path) -> None:
         self.path = path
+
+    def get_dir_files(self, dirname):
+        files = []
+        for file in os.listdir(dirname):
+            entry_path = os.path.join(dirname, file)
+            if os.path.isfile(entry_path):
+                files.append(entry_path)
+        return files
 
     def get_file_lines(self, filename):
         with open(self.path + filename, 'r') as file_object:
@@ -52,3 +60,15 @@ class FileImport:
             flag = False
         self.write_new_file(file_name, result, library=library, flag=False)
         return len(result) - 1
+
+    def import_file(self, file_name, library : Library):
+        with open(self.path + file_name, "r") as file:
+            lines = file.readlines()
+        counter = 0
+        validator = Validator()
+        for line in lines[1:]:
+            line = line.replace('\n', '').split(',')
+            if validator.validate(Book(line[1], line[2], line[3])):
+                counter += 1
+                library.storage.add_line('books', {'title' : line[1], 'author' : line[2], "year" : line[3]})
+        return counter

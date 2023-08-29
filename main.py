@@ -1,6 +1,7 @@
 from library import Library
 from library import User
 from storage import DataStorage, FileLines
+from file import FileImport
 from validator import Validator, Required, Length
 from error import DatabaseError
 
@@ -27,11 +28,12 @@ def find_user():
 
 
 def import_books(library: Library):
-    filename = input("Enter filename :> ")
-    list_of_books = library.storage.read_from_csv_catalog(filename)
-    number_of_imported_books = len(list_of_books)
-    library.import_books(list_of_books)
-    return f"Imported {number_of_imported_books} books"
+    importer = FileImport('var/import/')
+    for i in importer.get_dir_files('var/import/'):
+        print(i.split('/')[-1])
+    new_file = input('Enter one of filenames from above: ')
+    result = importer.import_file(new_file, library)
+    return f"{result} books have been imported"
 
 
 def add_user(library: Library):

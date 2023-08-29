@@ -193,13 +193,12 @@ class Library:
 
     def add_book(self, book):
         self.catalog.append(book)
-        item = {
+        line = {
             'title': book.title,
             'author': book.author,
             'year': book.year
         }
-        # TODO: check valid item
-        book_id = self.storage.add_line('books', item)
+        book_id = self.storage.add_line('books', line)
         return book_id
 
     def remove_book(self, book_id):

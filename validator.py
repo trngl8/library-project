@@ -25,6 +25,8 @@ class Validator():
         return False
 
     def validate(self, object):
+        if len(self.rules) == 0:
+            return True
         if isinstance(object, Book):
             return self.validate_book(object)
         else:
@@ -35,6 +37,8 @@ class Validator():
                         self.errors[rule].append(i.message)
                 return False
             for key in object:
+                if key not in self.rules:
+                    return False
                 self.errors[key] = []
                 object_to_check = object[key]
                 rules_to_check = self.rules[key]
@@ -61,7 +65,7 @@ class Expression:
 
 
 class Email(Expression):
-    def __init__(self, message="Validation error"):
+    def __init__(self, message="Wrong email"):
         super().__init__(message)
 
     def validate(self, string):
@@ -71,7 +75,7 @@ class Email(Expression):
     
 
 class Required:
-    def __init__(self, message="Validation error"):
+    def __init__(self, message="Field is required"):
         self.message = message
 
     def validate(self, string):
@@ -81,7 +85,7 @@ class Required:
 
 
 class Length:
-    def __init__(self, min, max, message="Validation error"):
+    def __init__(self, min, max, message="Wrong length"):
         self.min = min
         self.max = max
         self.message = message
@@ -93,7 +97,7 @@ class Length:
     
 
 class Phone(Expression):
-    def __init__(self, message="Validation error"):
+    def __init__(self, message="Wrong phone"):
         super().__init__(message)
     
     def validate(self, phone):
@@ -103,7 +107,7 @@ class Phone(Expression):
     
 
 class Isbn(Expression):
-    def __init__(self, message="Validation error"):
+    def __init__(self, message="Wrong ISBN"):
         super().__init__(message)
 
     def validate(self, isbn):

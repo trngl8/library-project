@@ -40,7 +40,7 @@ class TestStorage(unittest.TestCase):
             '2,Python Hard Way,Zed Shaw,2013',
             '3,Head First Python,Paul Barry,2016',
             '4,Startup Hard Development,Roman Anderson,2019',
-            '5,Test,Test,2020',
+            '5,Test,Test,2020'
         ], storage.get_lines('books'))
 
     def test_remove_line(self):

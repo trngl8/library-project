@@ -114,6 +114,16 @@ class BooksRepository(Repository):
             return self.items_data[item_id]
         super().find(item_id)
 
+    def add(self, item: dict) -> int:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        for book in self.items_data.values():
+            if 'title' in book and 'author' in book and 'year' in book and book['title'] == item['title'] and book['author'] == item['author'] and book['year'] == item['year']:
+                raise DatabaseError(f"Book already exists")
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
+
 
 class UsersRepository(Repository):
     def add(self, item: dict) -> int:
@@ -256,6 +266,7 @@ class Book:
         self._width = None
         self._height = None
         self._length = None
+        self.visible = False
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:

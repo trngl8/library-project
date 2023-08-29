@@ -112,7 +112,7 @@ class TestValidator(unittest.TestCase):
         }
         result = validator.validate(data)
         self.assertEqual(False, result)
-        self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
+        self.assertEqual('Wrong length', validator.errors.get('phone').pop(0))
         self.assertEqual('Wrong ISBN', validator.errors.get('code').pop(0))
 
     def test_validate_empty(self):

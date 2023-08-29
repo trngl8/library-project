@@ -60,7 +60,7 @@ def home():
         return redirect(url_for('index'))
 
     if session.get('username'):
-        return redirect(url_for('index'))
+        return index()
 
     return render_template('enter.html', library=library)
 
@@ -157,6 +157,7 @@ def settings():
 
 @app.route("/logout")
 def logout():
+    session.pop('username', None)
     response = make_response(redirect(url_for('home')))
     return response
 

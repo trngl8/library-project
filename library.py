@@ -266,6 +266,7 @@ class Book:
         self._width = None
         self._height = None
         self._length = None
+        self.visible = False
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:

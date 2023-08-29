@@ -254,6 +254,7 @@ class Book:
         self.available = False
         self.count = 0
         self.price = price
+        self.visible = False
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:

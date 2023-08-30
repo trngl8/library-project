@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length, Phone, Isbn
+from validator import Validator, Required, Email, Length, Phone, Isbn, Year
 from library import Book
 
 
@@ -133,18 +133,18 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_year_valid(self):
         validator = Validator()
-        validator.add({"year": [Required(), Year(min=1950, max=2050)]})
+        validator.add({"year": [Required(), Year()]})
         data = {
-            "year": "2023",
+            "year": 2023,
         }
         result = validator.validate(data)
         self.assertEqual(True, result)
 
     def test_validate_year_invalid(self):
         validator = Validator()
-        validator.add({"year": [Required(), Year(min=1950, max=2050)]})
+        validator.add({"year": [Required(), Year()]})
         data = {
-            "year": "2199",
+            "year": 2199,
         }
         result = validator.validate(data)
         self.assertEqual(False, result)

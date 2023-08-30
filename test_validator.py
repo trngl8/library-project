@@ -131,6 +131,24 @@ class TestValidator(unittest.TestCase):
         self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
         self.assertEqual('Field is required', validator.errors.get('name').pop(0))
 
+    def test_validate_year_valid(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year(min=1950, max=2050)]})
+        data = {
+            "year": "2023",
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+
+    def test_validate_year_invalid(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year(min=1950, max=2050)]})
+        data = {
+            "year": "2199",
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+
 
 if __name__ == "__main__":
     unittest.main()

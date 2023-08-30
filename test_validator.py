@@ -134,8 +134,10 @@ class TestValidator(unittest.TestCase):
     def test_validate_year_valid(self):
         validator = Validator()
         validator.add({"year": [Required(), Year()]})
+        validator.add({"year_more": [Required(), Year(min=1970, max=2023)]})
         data = {
-            "year": 2023,
+            "year": 1970,
+            "year_more": "1970",
         }
         result = validator.validate(data)
         self.assertEqual(True, result)
@@ -143,11 +145,17 @@ class TestValidator(unittest.TestCase):
     def test_validate_year_invalid(self):
         validator = Validator()
         validator.add({"year": [Required(), Year()]})
+        validator.add({"year_more": [Required(), Year(min=1970, max=2050, message="Should be between 1970 and 2050")]})
         data = {
             "year": 2199,
+            "year_more": "2199",
         }
         result = validator.validate(data)
         self.assertEqual(False, result)
+        self.assertEqual(1, len(validator.errors.get('year_more')))
+        self.assertEqual(1, len(validator.errors.get('year')))
+        self.assertEqual('Invalid year', validator.errors.get('year').pop(0))
+        self.assertEqual('Should be between 1970 and 2050', validator.errors.get('year_more').pop(0))
 
 
 if __name__ == "__main__":

@@ -155,7 +155,7 @@ class OrdersRepository(Repository):
     def find(self, item_id: int) -> dict:
         if 0 == len(self.items_data):
             self.load_items_data()
-        if item_id in self.items_data:
+        if item_id in self.items_data.keys():
             return self.items_data[item_id]
         super().find(item_id)
 

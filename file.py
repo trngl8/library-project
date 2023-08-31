@@ -69,3 +69,9 @@ class FileImport:
                 counter += 1
                 library.storage.add_line('books', book)
         return counter
+
+    def read_data(self, filename: str) -> list:
+        lines = FileLines("/var/import/").read_lines(filename)
+        return lines[1:]
+
+

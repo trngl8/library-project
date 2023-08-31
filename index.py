@@ -222,7 +222,11 @@ def cart_order():
 
 @app.route('/order/<int:order_id>/confirm', methods=["GET", "POST"])
 def order_confirm(order_id):
-    order_item = library.get_repository('orders').find(order_id)
+    try:
+        order_item = library.get_repository('orders').find(order_id)
+    except DatabaseError:
+        flash(f"Cannot find order {order_id}", category='error')
+        return redirect(url_for('cart_index'))
     return make_response(render_template('order_confirm.html', library=library, order=order_item))
 
 

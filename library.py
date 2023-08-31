@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from storage import DataStorage
-from error import DatabaseError
+from error import DatabaseError, UniqueError
 
 
 class BaseRepository(ABC):
@@ -119,7 +119,7 @@ class BooksRepository(Repository):
             self.load_items_data()
         for book in self.items_data.values():
             if 'title' in book and 'author' in book and 'year' in book and book['title'] == item['title'] and book['author'] == item['author'] and book['year'] == item['year']:
-                raise DatabaseError(f"Book already exists")
+                raise UniqueError(f"Book already exists")
         item_id = self.storage.add_line(self.name, item)
         self.items_data[item_id] = item
         return item_id
@@ -131,7 +131,7 @@ class UsersRepository(Repository):
             self.load_items_data()
         for user in self.items_data.values():
             if 'email' in user and user['email'] == item['email']:
-                raise DatabaseError(f"User with email {item['email']} already exists")
+                raise UniqueError(f"User with email {item['email']} already exists")
         item_id = self.storage.add_line(self.name, item)
         self.items_data[item_id] = item
         return item_id

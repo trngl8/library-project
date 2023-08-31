@@ -289,7 +289,7 @@ def import_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             import_service = FileImport(app.config['UPLOAD_FOLDER'])
-            amount = import_service.process_file(file, filename)
+            amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='warning')
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')

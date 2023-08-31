@@ -5,3 +5,7 @@ class DatabaseError(Exception):
 
 class DatabaseUndefinedError(DatabaseError):
     pass
+
+
+class UniqueError(DatabaseError):
+    pass

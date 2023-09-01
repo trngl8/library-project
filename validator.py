@@ -59,19 +59,31 @@ class Validator():
 
 
 class Expression:
-    def __init__(self, message="Validation error") -> None:
+    def __init__(self, expression: str, message="Expression error") -> None:
+        self.expression = expression
         self.message = message
+
+    def validate(self, string):
+        if re.match(self.expression, string):
+            return True
+        return False
 
 
 class Email(Expression):
     def __init__(self, message="Wrong email"):
-        super().__init__(message)
+        super().__init__(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message)
 
-    def validate(self, string):
-        if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', string):
-            return True
-        return False
-    
+
+class Phone(Expression):
+    def __init__(self, message="Wrong phone"):
+        super().__init__(r'^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$', message)
+
+
+class Isbn(Expression):
+    def __init__(self, message="Wrong ISBN"):
+        super().__init__(
+            r'^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$', message)
+
 
 class Required:
     def __init__(self, message="Field is required"):
@@ -94,26 +106,6 @@ class Length:
             return True
         return False
     
-
-class Phone(Expression):
-    def __init__(self, message="Wrong phone"):
-        super().__init__(message)
-    
-    def validate(self, phone):
-        if re.match(r'^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$', phone):
-            return True
-        return False
-    
-
-class Isbn(Expression):
-    def __init__(self, message="Wrong ISBN"):
-        super().__init__(message)
-
-    def validate(self, isbn):
-        if re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", isbn):
-            return True
-        return False
-
 
 class Year:
     def __init__(self, min=1950, max=2050, message="Invalid year") -> None:

@@ -116,12 +116,16 @@ class Isbn(Expression):
         return False
 
 
-class Year(Expression):
-    def __init__(self, message="Invalid year"):
-        super().__init__(message)
+class Year:
+    def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
+        self.min = min
+        self.max = max
+        self.message = message
 
     def validate(self, year):
-        if 1950 <= year <= 2050:
-            return True
-        return False
+        try:
+            year = int(year)
+        except ValueError:
+            return False
+        return self.min <= year <= self.max
 

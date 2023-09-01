@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length, Phone, Isbn
+from validator import Validator, Required, Email, Length, Phone, Isbn, Year
 from library import Book
 
 
@@ -130,6 +130,41 @@ class TestValidator(unittest.TestCase):
         self.assertEqual('Field is required', validator.errors.get('phone').pop(0))
         self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
         self.assertEqual('Field is required', validator.errors.get('name').pop(0))
+
+    def test_validate_year_valid(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year()]})
+        validator.add({"year_more": [Required(), Year(min=1970, max=2023)]})
+        data = {
+            "year": 1970,
+            "year_more": "1970",
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+
+    def test_validate_year_invalid(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year()]})
+        validator.add({"year_more": [Required(), Year(min=1970, max=2050, message="Should be between 1970 and 2050")]})
+        data = {
+            "year": 2199,
+            "year_more": "2199",
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+        self.assertEqual(1, len(validator.errors.get('year_more')))
+        self.assertEqual(1, len(validator.errors.get('year')))
+        self.assertEqual('Invalid year', validator.errors.get('year').pop(0))
+        self.assertEqual('Should be between 1970 and 2050', validator.errors.get('year_more').pop(0))
+
+    def test_value_error(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year()]})
+        data = {
+            "year": "",
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
 
 
 if __name__ == "__main__":

@@ -114,4 +114,18 @@ class Isbn(Expression):
         if re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", isbn):
             return True
         return False
-    
+
+
+class Year:
+    def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
+        self.min = min
+        self.max = max
+        self.message = message
+
+    def validate(self, year):
+        try:
+            year = int(year)
+        except ValueError:
+            return False
+        return self.min <= year <= self.max
+

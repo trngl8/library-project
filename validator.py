@@ -96,28 +96,32 @@ class Isbn(Expression):
             r'^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$', message)
 
 
-class Length:
-    def __init__(self, min, max, message="Wrong length"):
+class Number:
+    def __init__(self, min=0, max=0, message="Wrong number"):
         self.min = min
         self.max = max
         self.message = message
+
+    def validate(self, value: int):
+        return self.min <= value <= self.max
+
+
+class Length(Number):
+    def __init__(self, min, max, message="Wrong length"):
+        super().__init__(min, max, message)
     
     def validate(self, string):
-        if self.min <= len(string) <= self.max:
-            return True
-        return False
+        value = len(string)
+        return super().validate(value)
     
 
-class Year:
+class Year(Number):
     def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
-        self.min = min
-        self.max = max
-        self.message = message
+        super().__init__(min, max, message)
 
     def validate(self, year):
         try:
             year = int(year)
         except ValueError:
             return False
-        return self.min <= year <= self.max
-
+        return super().validate(year)

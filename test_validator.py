@@ -157,6 +157,15 @@ class TestValidator(unittest.TestCase):
         self.assertEqual('Invalid year', validator.errors.get('year').pop(0))
         self.assertEqual('Should be between 1970 and 2050', validator.errors.get('year_more').pop(0))
 
+    def test_value_error(self):
+        validator = Validator()
+        validator.add({"year": [Required(), Year()]})
+        data = {
+            "year": "",
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+
 
 if __name__ == "__main__":
     unittest.main()

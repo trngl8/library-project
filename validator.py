@@ -58,15 +58,26 @@ class Validator():
             return True
 
 
-class Expression:
-    def __init__(self, expression: str, message="Expression error") -> None:
-        self.expression = expression
+class Required:
+    def __init__(self, rule='', message="Field is required"):
+        self.rule = rule
         self.message = message
 
     def validate(self, string):
-        if re.match(self.expression, string):
-            return True
-        return False
+        if string is None or string == self.rule:
+            return False
+        return True
+
+
+class Expression(Required):
+    def __init__(self, expression: str, message="Expression error") -> None:
+        super().__init__('', message)
+        self.expression = expression
+
+    def validate(self, string):
+        if not super().validate(string):
+            return False
+        return re.match(self.expression, string)
 
 
 class Email(Expression):
@@ -83,16 +94,6 @@ class Isbn(Expression):
     def __init__(self, message="Wrong ISBN"):
         super().__init__(
             r'^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$', message)
-
-
-class Required:
-    def __init__(self, message="Field is required"):
-        self.message = message
-
-    def validate(self, string):
-        if string is None or string == '':
-            return False
-        return True
 
 
 class Length:

@@ -16,13 +16,13 @@ class TestValidator(unittest.TestCase):
 
     def test_validate_book(self):
         self.validator = Validator()
-        self.validator.add_rule({
+        self.validator.add({
             "ISBN": {
                 "type": str,
                 "regexp": r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$"
             },
         })
-        self.validator.add_rule({
+        self.validator.add({
             "year": {
                 "type": int,
                 "min": 1900,
@@ -119,6 +119,7 @@ class TestValidator(unittest.TestCase):
         validator = Validator()
         validator.add({"phone": [Required(), Phone()]})
         validator.add({"name": [Required()]})
+        validator.add({"test": [Required()]})
         data = {
             "name": None,
             "phone": "",
@@ -130,6 +131,8 @@ class TestValidator(unittest.TestCase):
         self.assertEqual('Field is required', validator.errors.get('phone').pop(0))
         self.assertEqual('Wrong phone', validator.errors.get('phone').pop(0))
         self.assertEqual('Field is required', validator.errors.get('name').pop(0))
+        self.assertEqual(1, len(validator.errors.get('test')))
+        self.assertEqual('Field is required', validator.errors.get('test').pop(0))
 
     def test_validate_year_valid(self):
         validator = Validator()

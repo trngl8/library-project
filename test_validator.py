@@ -147,7 +147,7 @@ class TestValidator(unittest.TestCase):
         validator.add({"year": [Required(), Year()]})
         validator.add({"year_more": [Required(), Year(min=1970, max=2050, message="Should be between 1970 and 2050")]})
         data = {
-            "year": 2199,
+            "year": 2299,
             "year_more": "2199",
         }
         result = validator.validate(data)

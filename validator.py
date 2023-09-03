@@ -128,7 +128,7 @@ class Length(Number):
     
 
 class Year(Number):
-    def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
+    def __init__(self, min=1950, max=2199, message="Invalid year") -> None:
         super().__init__(min, max, message)
 
     def validate(self, year) -> bool:

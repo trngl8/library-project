@@ -109,7 +109,7 @@ class Isbn(Expression):
 
 
 class Number:
-    def __init__(self, min=0, max=0, message="Wrong number"):
+    def __init__(self, min=0, max=1, message="Wrong number"):
         self.min = min
         self.max = max
         self.message = message
@@ -122,7 +122,7 @@ class Length(Number):
     def __init__(self, min, max, message="Wrong length"):
         super().__init__(min, max, message)
     
-    def validate(self, string) -> bool:
+    def validate(self, string: str) -> bool:
         value = len(string)
         return super().validate(value)
     

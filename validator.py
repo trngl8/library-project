@@ -60,7 +60,7 @@ class Validator():
 
 
 class ValidatorRule(ABC):
-    def __init__(self, message=""):
+    def __init__(self, message="Invalid value"):
         self.message = message
 
     @abstractmethod
@@ -114,7 +114,7 @@ class Number:
         self.max = max
         self.message = message
 
-    def validate(self, value: int):
+    def validate(self, value: int) -> bool:
         return self.min <= value <= self.max
 
 
@@ -122,7 +122,7 @@ class Length(Number):
     def __init__(self, min, max, message="Wrong length"):
         super().__init__(min, max, message)
     
-    def validate(self, string):
+    def validate(self, string) -> bool:
         value = len(string)
         return super().validate(value)
     
@@ -131,7 +131,7 @@ class Year(Number):
     def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
         super().__init__(min, max, message)
 
-    def validate(self, year):
+    def validate(self, year) -> bool:
         try:
             year = int(year)
         except ValueError:

@@ -1,4 +1,5 @@
 import re
+from abc import ABC, abstractmethod
 
 
 class Validator():
@@ -58,15 +59,26 @@ class Validator():
             return True
 
 
-class Required:
-    def __init__(self, rule='', message="Field is required"):
-        self.rule = rule
+class ValidatorRule(ABC):
+    def __init__(self, message=""):
         self.message = message
 
-    def validate(self, string):
-        if string is None or string == self.rule:
+    @abstractmethod
+    def validate(self, value) -> bool:
+        if value is None:
             return False
         return True
+
+
+class Required(ValidatorRule):
+    def __init__(self, pattern='', message="Field is required"):
+        super().__init__(message)
+        self.pattern = pattern
+
+    def validate(self, value) -> bool:
+        if value == self.pattern:
+            return False
+        return super().validate(value)
 
 
 class Expression(Required):

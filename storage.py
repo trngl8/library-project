@@ -1,30 +1,5 @@
-import os
+from file import FileLines
 import csv
-
-
-class FileLines:
-    def __init__(self, files_dir="/var/data/"):
-        self.path = os.path.dirname(__file__) + files_dir
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
-
-    def write_headers(self, headers, ext=".csv", delimiter=","):
-        for key, value in headers.items():
-            if not os.path.exists(self.path + key + ext):
-                self.write_lines(key + ext, [delimiter.join(value)])
-
-    def read_lines(self, filename: str) -> list:
-        with open(self.path + filename, 'r') as file_object:
-            lines = file_object.read().splitlines()
-        return lines
-
-    def write_lines(self, filename: str, lines: list):
-        with open(self.path + filename, 'w') as file_object:
-            file_object.writelines("\n".join(lines))
-
-    def append_line(self, filename: str, line: str):
-        with open(self.path + filename, 'a') as file_object:
-            file_object.write(line + "\n")
 
 
 class DataStorage:

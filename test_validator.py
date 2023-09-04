@@ -166,6 +166,17 @@ class TestValidator(unittest.TestCase):
         result = validator.validate(data)
         self.assertEqual(False, result)
 
+    def test_validator_choice(self):
+        validator = Validator()
+        validator.add({"choice": [Required(), Choice(["yes", "no"])]})
+        validator.add({"alternative_choice": [Required(), Choice([True, False])]})
+        data = {
+            "choice": "yes",
+            "alternative_choice": True
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+
 
 if __name__ == "__main__":
     unittest.main()

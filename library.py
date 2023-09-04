@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from storage import DataStorage
 from error import DatabaseError, UniqueError
+from validator import Validator, Required, Length, Year, Phone, Email
 
 
 class BaseRepository(ABC):
@@ -200,6 +201,15 @@ class Library:
             self.add_book(Book(item[1], item[2], item[3]))
 
     def add_user(self, user):
+        validator = Validator()
+        validator.add({
+            'name': [Required()],
+            'email': [Required(), Email()],
+            'phone': [Required(), Length(3, 13)]
+        })
+        repo = self.get_repository('users')
+        repo.add(user)
+        user = User(user['name'], user['email'], user['phone'])
         self.storage.save_user(user)
         self.users.append(user)
 

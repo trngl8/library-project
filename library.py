@@ -200,6 +200,13 @@ class Library:
             self.add_book(Book(item[1], item[2], item[3]))
 
     def add_user(self, user):
+        repo = self.get_repository('users')
+        repo.add({
+            'name': user['name'],
+            'email': user['email'],
+            'phone': ['phone']
+        })
+        user = User(user['name'], user['email'], user['phone'])
         self.storage.save_user(user)
         self.users.append(user)
 

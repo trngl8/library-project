@@ -129,3 +129,14 @@ class Year:
             return False
         return self.min <= year <= self.max
 
+
+class Choice:
+    def __init__(self, choices: tuple):
+        self.choices = choices
+
+    def validate(self, value) -> bool:
+        return value
+
+
+
+

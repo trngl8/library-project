@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length, Phone, Isbn, Year
+from validator import Validator, Required, Email, Length, Phone, Isbn, Year, Choice
 from library import Book
 
 

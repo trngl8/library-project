@@ -5,7 +5,7 @@
 <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('cart_index') }}">Cart</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('cart_order') }}">Order</a></li>
-<li class="breadcrumb-item active" aria-current="page">Order {{ order['id'] }} confirm</li>
+<li class="breadcrumb-item active" aria-current="page">Order {{ order_id }} confirm</li>
 {% endblock %}
 
 {% block scripts %}
@@ -23,7 +23,7 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          <button type="button" class="btn btn-lg btn-primary" id="confirm_button" onclick="refreshOrder(this, {{ order['id'] }})" data-url="{{ url_for('confirm_order', order_id=order['id']) }}">
+          <button type="button" class="btn btn-lg btn-primary" id="confirm_button" onclick="refreshOrder(this, {{ order_id }})" data-url="{{ url_for('confirm_order', order_id=order_id) }}">
             Confirm
           </button>
         </div>

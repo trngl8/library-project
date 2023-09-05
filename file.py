@@ -1,6 +1,30 @@
 from validator import Validator
-from library import Book, Library
 import os
+
+
+class FileLines:
+    def __init__(self, files_dir="/var/data/"):
+        self.path = os.path.dirname(__file__) + files_dir
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
+
+    def write_headers(self, headers, ext=".csv", delimiter=","):
+        for key, value in headers.items():
+            if not os.path.exists(self.path + key + ext):
+                self.write_lines(key + ext, [delimiter.join(value)])
+
+    def read_lines(self, filename: str) -> list:
+        with open(self.path + filename, 'r') as file_object:
+            lines = file_object.read().splitlines()
+        return lines
+
+    def write_lines(self, filename: str, lines: list):
+        with open(self.path + filename, 'w') as file_object:
+            file_object.writelines("\n".join(lines))
+
+    def append_line(self, filename: str, line: str):
+        with open(self.path + filename, 'a') as file_object:
+            file_object.write(line + "\n")
 
 
 class FileImport:
@@ -46,7 +70,7 @@ class FileImport:
         validator = Validator()
         for num, line in enumerate(file_containment[1:]):
             line = line.replace('\n', '').split(",")
-            book = Book(line[1], line[2], int(line[3]))
+            book = {'title' : line[1], 'author' : line[2], "year" : line[3]}
             book.id = num + 1
             if validator.validate(object=book):
                 for j in result:
@@ -61,14 +85,15 @@ class FileImport:
         self.write_new_file(file_name, result, library=library, flag=False)
         return len(result) - 1
 
-    def import_file(self, file_name, library : Library):
+    def import_file(self, file_name, library):
         with open(self.path + file_name, "r") as file:
             lines = file.readlines()
         counter = 0
         validator = Validator()
         for line in lines[1:]:
             line = line.replace('\n', '').split(',')
-            if validator.validate(Book(line[1], line[2], line[3])):
+            book = {'title' : line[1], 'author' : line[2], "year" : line[3]}
+            if validator.validate(book):
                 counter += 1
-                library.storage.add_line('books', {'title' : line[1], 'author' : line[2], "year" : line[3]})
+                library.storage.add_line('books', book)
         return counter

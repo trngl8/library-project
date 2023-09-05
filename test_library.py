@@ -163,7 +163,7 @@ class TestLibrary(unittest.TestCase):
 
     def test_add_user(self):
         library = self.library
-        library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
+        library.add_user({'name': 'Artem', 'email': 'artemkrayevskiy@gmail.com', 'phone': '0676708881'})
 
     def test_cart(self):
         cart = Cart()

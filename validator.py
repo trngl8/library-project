@@ -1,5 +1,5 @@
 import re
-from library import Book
+from abc import ABC, abstractmethod
 
 
 class Validator():
@@ -14,9 +14,7 @@ class Validator():
     def add_rule(self, rule : dict):
         self.rules[list(rule.keys())[0]] = rule[list(rule.keys())[0]]
 
-    def validate_book(self, book: Book):
-        if len(self.rules) == 0:
-            return True
+    def validate_book(self, book):
         if isinstance(book.isbn, self.rules["ISBN"]["type"]) and re.match(self.rules["ISBN"]["regexp"],
                                                                             book.isbn) and \
                 isinstance(book.year, self.rules["year"]["type"]) and self.rules["year"]["min"] < book.year < \
@@ -27,7 +25,7 @@ class Validator():
     def validate(self, object):
         if len(self.rules) == 0:
             return True
-        if isinstance(object, Book):
+        if not isinstance(object, dict):
             return self.validate_book(object)
         else:
             if len(object) == 0:
@@ -59,75 +57,84 @@ class Validator():
             return True
 
 
-class Expression:
-    def __init__(self, message="Validation error") -> None:
+class ValidatorRule(ABC):
+    def __init__(self, message="Invalid value"):
         self.message = message
 
-
-class Email(Expression):
-    def __init__(self, message="Wrong email"):
-        super().__init__(message)
-
-    def validate(self, string):
-        if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', string):
-            return True
-        return False
-    
-
-class Required:
-    def __init__(self, message="Field is required"):
-        self.message = message
-
-    def validate(self, string):
-        if string is None or string == '':
+    @abstractmethod
+    def validate(self, value) -> bool:
+        if value is None:
             return False
         return True
 
 
-class Length:
-    def __init__(self, min, max, message="Wrong length"):
-        self.min = min
-        self.max = max
-        self.message = message
-    
+class Required(ValidatorRule):
+    def __init__(self, pattern='', message="Field is required"):
+        super().__init__(message)
+        self.pattern = pattern
+
+    def validate(self, value) -> bool:
+        if value == self.pattern:
+            return False
+        return super().validate(value)
+
+
+class Expression(Required):
+    def __init__(self, expression: str, message="Expression error") -> None:
+        super().__init__('', message)
+        self.expression = expression
+
     def validate(self, string):
-        if self.min <= len(string) <= self.max:
-            return True
-        return False
-    
+        if not super().validate(string):
+            return False
+        return re.match(self.expression, string)
+
+
+class Email(Expression):
+    def __init__(self, message="Wrong email"):
+        super().__init__(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message)
+
 
 class Phone(Expression):
     def __init__(self, message="Wrong phone"):
-        super().__init__(message)
-    
-    def validate(self, phone):
-        if re.match(r'^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$', phone):
-            return True
-        return False
-    
+        super().__init__(r'^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$', message)
+
 
 class Isbn(Expression):
     def __init__(self, message="Wrong ISBN"):
-        super().__init__(message)
-
-    def validate(self, isbn):
-        if re.match(r"^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$", isbn):
-            return True
-        return False
+        super().__init__(
+            r'^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$', message)
 
 
-class Year:
-    def __init__(self, min=1950, max=2050, message="Invalid year") -> None:
+class Number:
+    def __init__(self, min=0, max=1, message="Wrong number"):
         self.min = min
         self.max = max
         self.message = message
 
-    def validate(self, year):
+    def validate(self, value: int) -> bool:
+        return self.min <= value <= self.max
+
+
+class Length(Number):
+    def __init__(self, min, max, message="Wrong length"):
+        super().__init__(min, max, message)
+    
+    def validate(self, string: str) -> bool:
+        value = len(string)
+        return super().validate(value)
+    
+
+class Year(Number):
+    def __init__(self, min=1950, max=2199, message="Invalid year") -> None:
+        super().__init__(min, max, message)
+
+    def validate(self, year) -> bool:
         try:
             year = int(year)
         except ValueError:
             return False
-        return self.min <= year <= self.max
+        return super().validate(year)
 
 
 class Choice:
@@ -136,7 +143,3 @@ class Choice:
 
     def validate(self, value) -> bool:
         return value
-
-
-
-

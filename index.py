@@ -227,7 +227,7 @@ def order_confirm(order_id):
     except DatabaseError:
         flash(f"Cannot find order {order_id}", category='error')
         return redirect(url_for('cart_index'))
-    return make_response(render_template('order_confirm.html', library=library, order=order_item))
+    return make_response(render_template('order_confirm.html', library=library, order=order_item, order_id=order_id))
 
 
 @app.route('/cart/<int:book_id>/add', methods=["POST"])

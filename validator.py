@@ -137,8 +137,9 @@ class Year(Number):
         return super().validate(year)
 
 
-class Choice:
+class Choice(ValidatorRule):
     def __init__(self, choices: tuple):
+        super().__init__()
         self.choices = choices
 
     def validate(self, value) -> bool:

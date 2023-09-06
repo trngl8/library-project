@@ -143,4 +143,4 @@ class Choice(ValidatorRule):
         self.choices = choices
 
     def validate(self, value) -> bool:
-        return value
+        return value in self.choices

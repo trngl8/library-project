@@ -52,6 +52,7 @@
                 <form class="row g-2" action="{{ url_for('home') }}" method="post">
                     <div class="col mb-3">
                         <input type="email" class="form-control form-control-lg" placeholder="Your email" aria-label="Email" name="email" />
+                        <input type="hidden" name="username" value="{{ config.ADMIN_PERMISSION }}" />
                     </div>
                     <div class="col-auto mb-3">
                         <button class="btn btn-lg px-5 btn-outline-primary" type="submit">Subscribe</button>

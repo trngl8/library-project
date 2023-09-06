@@ -135,3 +135,12 @@ class Year(Number):
         except ValueError:
             return False
         return super().validate(year)
+
+
+class Choice(ValidatorRule):
+    def __init__(self, choices: tuple):
+        super().__init__()
+        self.choices = choices
+
+    def validate(self, value) -> bool:
+        return value in self.choices

@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length, Phone, Isbn, Year
+from validator import Validator, Required, Email, Length, Phone, Isbn, Year, Choice
 from library import Book
 
 
@@ -162,6 +162,26 @@ class TestValidator(unittest.TestCase):
         validator.add({"year": [Required(), Year()]})
         data = {
             "year": "",
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+
+    def test_validator_choice(self):
+        validator = Validator()
+        validator.add({"choice": [Required(), Choice(("yes", "no",))]})
+        validator.add({"alternative_choice": [Required(), Choice((True, False,))]})
+        data = {
+            "choice": "yes",
+            "alternative_choice": True
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
+
+    def test_validator_choice_invalid(self):
+        validator = Validator()
+        validator.add({"more": [Required(), Choice(("known", "another",))]})
+        data = {
+            "more": "unknown"
         }
         result = validator.validate(data)
         self.assertEqual(False, result)

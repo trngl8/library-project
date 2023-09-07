@@ -24,6 +24,7 @@ dotenv.load_dotenv('.env.local', override=True)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAIN_DOMAIN'] =  os.getenv("MAIN_DOMAIN")
 app.config['ADMIN_PERMISSION'] = os.getenv("ADMINISTRATOR_EMAIL")
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 

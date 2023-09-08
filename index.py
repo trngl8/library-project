@@ -24,7 +24,7 @@ dotenv.load_dotenv('.env.local', override=True)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAIN_DOMAIN'] =  os.getenv("MAIN_DOMAIN")
+app.config['MAIN_DOMAIN'] = os.getenv("MAIN_DOMAIN")
 app.config['ADMIN_PERMISSION'] = os.getenv("ADMINISTRATOR_EMAIL")
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
@@ -297,6 +297,24 @@ def import_file():
             return redirect(url_for('index'))
     user = request.cookies.get('SERVER_COOKIE')
     return render_template('import.html', library=library, user=user)
+
+
+@app.route('/book/new', methods=["GET", "POST"])
+def add_book():
+    form = BookEditForm(request.form)
+    if request.method == 'POST' and form.validate():
+        try:
+            result = library.get_repository('books').add({
+                'title': form.title.data,
+                'author': form.author.data,
+                'year': form.year.data
+            })
+        except DatabaseError:
+            flash(f"Cannot add item", category='error')
+            return redirect(url_for('index'))
+        flash(f'Added success, new ID: {result}', category='success')
+        return redirect(url_for('index'))
+    return render_template('book_new.html', form=form, library=library)
 
 
 @app.route('/orders/<int:order_id>/confirm', methods=["POST"])

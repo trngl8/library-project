@@ -43,7 +43,7 @@ def home():
     if request.method == 'POST':
         username = request.form["username"]
         email = request.form["email"]
-        if not re.match(r"[A-Za-z0-9_-]+", username):
+        if not re.match(r"[A-Za-z0-9_.-]+", username):
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
         session['username'] = username

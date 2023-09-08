@@ -24,6 +24,7 @@ dotenv.load_dotenv('.env.local', override=True)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAIN_DOMAIN'] =  os.getenv("MAIN_DOMAIN")
 app.config['ADMIN_PERMISSION'] = os.getenv("ADMINISTRATOR_EMAIL")
 app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
@@ -41,13 +42,15 @@ def allowed_file(filename):
 def home():
     if request.method == 'POST':
         username = request.form["username"]
+        email = request.form["email"]
         if not re.match(r"[A-Za-z0-9_-]+", username):
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
         session['username'] = username
+        session['email'] = email
         try:
             library.get_repository('users').add({
-                'email': username,
+                'email': email,
                 'name': username,
                 'date': date.today().strftime("%Y-%m-%d"),
                 'ip_address': request.remote_addr,

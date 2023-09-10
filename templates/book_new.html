@@ -11,7 +11,7 @@
   <div>
     <h1 class="display-5 mb-5">New book</h1>
     {% from "_formhelpers_bootstrap.html" import render_field %}
-      <form action="{{ url_for('book_edit', book_id=book.id) }}" method="post" class="needs-validation" novalidate>
+      <form action="{{ url_for('book_new') }}" method="post" class="needs-validation" novalidate>
         <div class="row">
           <div class="col-md-12">
             {{ render_field(form.title) }}

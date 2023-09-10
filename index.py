@@ -300,7 +300,7 @@ def import_file():
 
 
 @app.route('/book/new', methods=["GET", "POST"])
-def add_book():
+def book_new():
     form = BookEditForm(request.form)
     if request.method == 'POST' and form.validate():
         try:

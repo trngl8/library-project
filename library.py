@@ -304,3 +304,15 @@ class Cart:
 
     def clear(self):
         self.items = []
+
+
+class Order:
+    def __init__(self, user, books: list):
+        self.user = user
+        self.books = books
+        self.price = 0
+        self._status = 'new'
+        self._id = None
+
+    def get_status(self):
+        return self._status

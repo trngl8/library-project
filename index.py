@@ -110,12 +110,21 @@ def book(book_id):
 def book_edit(book_id):
     item = library.get_repository('books').find(book_id)
     form = BookEditForm(request.form, data=item)
+    form.color.choices = [
+        ('red', 'Red'),
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('yellow', 'Yellow'),
+        ('white', 'White'),
+        ('black', 'Black'),
+    ]
     if request.method == 'POST' and form.validate():
         try:
             result = library.get_repository('books').update(book_id, {
                 'title': form.title.data,
                 'author': form.author.data,
-                'year': form.year.data
+                'year': form.year.data,
+                'color': form.color.data
             })
         except DatabaseError:
             flash(f"Cannot update item {book_id}", category='error')

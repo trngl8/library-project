@@ -48,6 +48,9 @@
           <ul class="dropdown-menu dropdown-menu-end">
               <li><a href="{{url_for('profile')}}" class="dropdown-item" type="button">Profile</a></li>
               <li><a href="{{url_for('settings')}}" class="dropdown-item" type="button">Settings</a></li>
+              {% if  session.email == config['ADMIN_PERMISSION'] %}
+              <li><a href="{{ url_for('admin_dashboard') }}" class="dropdown-item" type="button">Admin dashboard</a>
+              {% endif %}
               <li><hr class="dropdown-divider"></li>
               <li><a href="{{url_for('logout')}}" class="dropdown-item" type="button">Exit</a></li>
           </ul>
@@ -133,7 +136,7 @@
     {% endfor %}
     </div>
 
-    {% if user == config['ADMIN_PERMISSION'] %}
+    {% if  session.email == config['ADMIN_PERMISSION'] %}
       <a href="{{ url_for('import_file') }}" class="btn btn-outline-primary">Import books</a>
     {% endif %}
 

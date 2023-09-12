@@ -307,5 +307,10 @@ def confirm_order(order_id):
     }
 
 
+@app.route('/admin/dashboard', methods=["GET"])
+def admin_dashboard():
+    return render_template('admin_dashboard.html', library=library)
+
+
 if __name__ == '__main__':
     app.run()

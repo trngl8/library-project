@@ -126,6 +126,12 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.mimetype, 'application/json')
 
+    def test_admin_dashboard(self):
+        response = self.app.get('/admin/dashboard')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
+        self.assertEqual(response.mimetype, 'text/html')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -156,6 +156,7 @@ def settings():
 @app.route("/logout")
 def logout():
     session.pop('username', None)
+    session.pop('email', None)
     response = make_response(redirect(url_for('home')))
     return response
 
@@ -309,11 +310,11 @@ def confirm_order(order_id):
 
 @app.route('/admin/dashboard', methods=["GET"])
 def admin_dashboard():
-    # TODO: show user in the template
     if 'email' not in session:
         return abort(404)
     if session.get('email') != app.config['ADMIN_PERMISSION']:
-        return redirect(url_for('home'))
+        # TODO: add flash message
+        return redirect(url_for('login'))
     return render_template('admin_dashboard.html', library=library)
 
 

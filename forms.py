@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, EmailField, SelectField, validators
+from wtforms import Form, BooleanField, StringField, EmailField, SelectField, SelectFieldBase, validators
 
 
 class OrderForm(Form):
@@ -15,6 +15,7 @@ class BookEditForm(Form):
     title = StringField('Title', [validators.Length(min=4, max=25)])
     author = StringField('Author', [validators.Length(min=4, max=25)])
     year = StringField('Year', [validators.InputRequired()])
+    color = SelectFieldBase('Year')
 
 
 class NewNameForm(Form):

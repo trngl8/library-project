@@ -138,7 +138,7 @@
 
     {% if  session.email == config['ADMIN_PERMISSION'] %}
       <a href="{{ url_for('import_file') }}" class="btn btn-outline-primary">Import books</a>
-      <a href="{{ url_for('add_book') }}" class="btn btn-outline-secondary">Add book</a>
+      <a href="{{ url_for('book_new') }}" class="btn btn-outline-secondary">Add book</a>
     {% endif %}
 
     {% endblock %}

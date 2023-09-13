@@ -4,7 +4,7 @@ import os
 from datetime import date
 
 from flask import Flask, request, make_response, redirect, url_for, flash
-from flask import render_template
+from flask import render_template, abort
 from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
@@ -309,6 +309,11 @@ def confirm_order(order_id):
 
 @app.route('/admin/dashboard', methods=["GET"])
 def admin_dashboard():
+    # TODO: show user in the template
+    if 'email' not in session:
+        return abort(404)
+    if session.get('email') != app.config['ADMIN_PERMISSION']:
+        return redirect(url_for('home'))
     return render_template('admin_dashboard.html', library=library)
 
 

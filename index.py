@@ -4,7 +4,7 @@ import os
 from datetime import date
 
 from flask import Flask, request, make_response, redirect, url_for, flash
-from flask import render_template
+from flask import render_template, abort
 from flask import session
 from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
@@ -60,7 +60,7 @@ def home():
             flash("Can not add user", category="error")
         return redirect(url_for('index'))
 
-    if session.get('username'):
+    if session.get('email'):
         return index()
 
     return render_template('enter.html', library=library)
@@ -165,6 +165,7 @@ def settings():
 @app.route("/logout")
 def logout():
     session.pop('username', None)
+    session.pop('email', None)
     response = make_response(redirect(url_for('home')))
     return response
 
@@ -333,6 +334,16 @@ def confirm_order(order_id):
         "id": order_id,
         "status": "success"
     }
+
+
+@app.route('/admin/dashboard', methods=["GET"])
+def admin_dashboard():
+    if 'email' not in session:
+        return abort(404)
+    if session.get('email') != app.config['ADMIN_PERMISSION']:
+        # TODO: add flash message
+        return redirect(url_for('login'))
+    return render_template('admin_dashboard.html', library=library)
 
 
 if __name__ == '__main__':

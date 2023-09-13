@@ -28,6 +28,10 @@
         vertical-align: -.125em;
         fill: currentColor;
       }
+
+      .icon {
+        fill: currentColor;
+      }
     </style>
 </head>
 <body>
@@ -48,6 +52,9 @@
   </symbol>
   <symbol id="grid" viewBox="0 0 16 16">
     <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+  </symbol>
+  <symbol id="person" viewBox="0 0 16 16">
+    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
   </symbol>
   <symbol id="logo" viewBox="0 0 512 512">
     <title>{{ library.name }}</title>
@@ -128,7 +135,7 @@
   <div class="d-flex flex-column" style="width: 100%;">
     <nav class="navbar navbar-expand-xl navbar-dark bg-dark" aria-label="Sixth navbar example">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample06" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbars" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -152,15 +159,21 @@
             </ul>
           </li>
         </ul>
-        <form role="search">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-        </form>
+
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown-profile" aria-expanded="false">
+          <svg class="bi pe-none" width="16" height="16"><use xlink:href="#person"/></svg> {{ session.email }}
+        </button>
+         <ul class="dropdown-menu dropdown-menu-end">
+           <li><a href="{{url_for('profile')}}" class="dropdown-item" type="button">Profile</a></li>
+           <li><a href="{{url_for('settings')}}" class="dropdown-item" type="button">Settings</a></li>
+           <li><a href="{{url_for('logout')}}" class="dropdown-item" type="button">Exit</a></li>
+          </ul>
       </div>
     </div>
   </nav>
   <div class="pt-4 ps-4">
     <h2>Admin dashboard</h2>
-    <p>Here you can manage your library.</p>
+    <p>You are entered as {{ session.email }}</p>
   </div>
 
   </div>

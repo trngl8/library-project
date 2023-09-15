@@ -340,9 +340,10 @@ def confirm_order(order_id):
 def admin_dashboard():
     if 'email' not in session:
         return abort(404)
-    if session.get('email') != app.config['ADMIN_PERMISSION']:
-        # TODO: add flash message
+    if not session.get('email') == app.config['ADMIN_PERMISSION']:
+        flash("You don't have permission to access this page", category="error")
         return redirect(url_for('login'))
+    # TODO define charts
     return render_template('admin_dashboard.html', library=library)
 
 

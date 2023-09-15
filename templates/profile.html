@@ -1,9 +1,20 @@
 {% extends 'blank.html' %}
 
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
+<li class="breadcrumb-item active" aria-current="page">Profile</li>
+{% endblock %}
+
 {% block content %}
 <div class="container p-0">
     <div class="col">
         <h1 class="display-5 mb-5">Your profile</h1>
+        <ul>
+            <li>{{ profile.username }}</li>
+            <li>{{ profile.email }}</li>
+        </ul>
+        <a href="{{ url_for('settings') }}" class="btn btn-outline-primary">Edit</a>
     </div>
 </div>
 {% endblock %}

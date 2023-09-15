@@ -150,7 +150,11 @@ def book_remove(book_id):
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html", library=library)
+    profile_data = {
+        'username': session.get('username'),
+        'email': session.get('email'),
+    }
+    return render_template("profile.html", profile=profile_data, library=library)
 
 
 @app.route('/settings', methods=["GET", "POST"])

@@ -49,15 +49,19 @@ def home():
         session['username'] = username
         session['email'] = email
         try:
-            library.get_repository('users').add({
-                'email': email,
-                'name': username,
-                'date': date.today().strftime("%Y-%m-%d"),
-                'ip_address': request.remote_addr,
-                'user_agent': request.user_agent.string
+            user = library.get_repository('users').find_by({
+                'email': email
             })
+            if not user:
+                library.get_repository('users').add({
+                    'email': email,
+                    'name': username,
+                    'date': date.today().strftime("%Y-%m-%d"),
+                    'ip_address': request.remote_addr,
+                    'user_agent': request.user_agent.string
+                })
         except DatabaseError:
-            flash("Can not add user", category="error")
+            flash("Database error", category="error")
         return redirect(url_for('index'))
 
     if session.get('email'):

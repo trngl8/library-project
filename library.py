@@ -144,6 +144,14 @@ class UsersRepository(Repository):
             return self.items_data[item_id]
         super().find(item_id)
 
+    def find_by(self, criteria: dict) -> list:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        for user in self.items_data.values():
+            if 'email' in criteria and user['email'] == criteria['email']:
+                return user
+        raise DatabaseError
+
 
 class OrdersRepository(Repository):
     def add(self, item: dict) -> int:

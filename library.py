@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from storage import DataStorage
-from error import DatabaseError, UniqueError
+from error import DatabaseError, UniqueError, EntityNotFound
 from validator import Validator, Required, Length, Year, Phone, Email
 
 
@@ -10,7 +10,7 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by(self, criteria: dict) -> list:
+    def find_by(self, criteria: dict) -> dict:
         pass
 
     @abstractmethod
@@ -144,13 +144,13 @@ class UsersRepository(Repository):
             return self.items_data[item_id]
         super().find(item_id)
 
-    def find_by(self, criteria: dict) -> list:
+    def find_by(self, criteria: dict) -> dict:
         if 0 == len(self.items_data):
             self.load_items_data()
         for user in self.items_data.values():
             if 'email' in criteria and user['email'] == criteria['email']:
                 return user
-        raise DatabaseError
+        raise EntityNotFound(f"User with {criteria['email']} not found")
 
 
 class OrdersRepository(Repository):

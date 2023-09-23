@@ -14,7 +14,7 @@ from storage import DataStorage, FileLines
 from library import Library
 from processing import Processing
 from file import FileImport
-from error import DatabaseError
+from error import DatabaseError, EntityNotFound
 
 UPLOAD_FOLDER = 'var/import/'
 ALLOWED_EXTENSIONS = {'csv', 'tsv'}
@@ -46,22 +46,20 @@ def home():
         if not re.match(r"[A-Za-z0-9_.-]+", username):
             flash("Your name is not valid", category="error")
             return redirect(url_for("home"))
-        session['username'] = username
-        session['email'] = email
         try:
-            user = library.get_repository('users').find_by({
+            library.get_repository('users').find_by({
                 'email': email
             })
-            if not user:
-                library.get_repository('users').add({
-                    'email': email,
-                    'name': username,
-                    'date': date.today().strftime("%Y-%m-%d"),
-                    'ip_address': request.remote_addr,
-                    'user_agent': request.user_agent.string
-                })
-        except DatabaseError:
-            flash("Database error", category="error")
+        except EntityNotFound:
+            library.get_repository('users').add({
+                'email': email,
+                'name': username,
+                'date': date.today().strftime("%Y-%m-%d"),
+                'ip_address': request.remote_addr,
+                'user_agent': request.user_agent.string
+            })
+        session['username'] = email
+        session['email'] = email
         return redirect(url_for('index'))
 
     if session.get('email'):

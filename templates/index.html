@@ -75,6 +75,17 @@
     </div>
 
     <div class="container mt-4">
+      <form class="row" action="{{ url_for('search') }}" method="post">
+        <div class="col mb-3">
+          <input type="text" class="form-control form-control-lg" placeholder="type something to find..." aria-label="query" aria-describedby="search-addon" name="query" value="{{ query }}" />
+        </div>
+        <div class="col-auto mb-3">
+          <button class="btn btn-lg px-5 btn-outline-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="container mt-4">
 
       {%with messages = get_flashed_messages(with_categories=true)%}
 

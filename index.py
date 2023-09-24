@@ -312,7 +312,6 @@ def import_file():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template('import.html', library=library, user=user)
 
-
 @app.route('/book/new', methods=["GET", "POST"])
 def book_new():
     form = BookEditForm(request.form)
@@ -349,6 +348,15 @@ def admin_dashboard():
         return redirect(url_for('login'))
     # TODO define charts
     return render_template('admin_dashboard.html', library=library)
+
+
+@app.route('/search', methods=["POST"])
+def search():
+    if request.method == "POST":
+        query = request.form['query']
+        books = library.find_books(title=query)
+        return render_template('search_results.html', library=library, books=books, query=query)
+    return render_template('search.html', library=library)
 
 
 if __name__ == '__main__':

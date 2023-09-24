@@ -350,13 +350,13 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', library=library)
 
 
-@app.route('/search', methods=["POST"])
+@app.route('/search', methods=["GET", "POST"])
 def search():
     if request.method == "POST":
         query = request.form['query']
         books = library.find_books(title=query)
         return render_template('search_results.html', library=library, books=books, query=query)
-    return render_template('search.html', library=library)
+    return render_template('index.html', library=library)
 
 
 if __name__ == '__main__':

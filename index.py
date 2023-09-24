@@ -312,6 +312,7 @@ def import_file():
     user = request.cookies.get('SERVER_COOKIE')
     return render_template('import.html', library=library, user=user)
 
+
 @app.route('/book/new', methods=["GET", "POST"])
 def book_new():
     form = BookEditForm(request.form)

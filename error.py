@@ -9,3 +9,7 @@ class DatabaseUndefinedError(DatabaseError):
 
 class UniqueError(DatabaseError):
     pass
+
+
+class EntityNotFound(DatabaseError):
+    pass

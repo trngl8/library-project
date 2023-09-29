@@ -11,9 +11,6 @@ class Validator():
         for key in rules.keys():
             self.rules[key] = rules[key]
 
-    def add_rule(self, rule : dict):
-        self.rules[list(rule.keys())[0]] = rule[list(rule.keys())[0]]
-
     def validate_book(self, book):
         if isinstance(book.isbn, self.rules["ISBN"]["type"]) and re.match(self.rules["ISBN"]["regexp"],
                                                                             book.isbn) and \
@@ -27,34 +24,17 @@ class Validator():
             return True
         if not isinstance(object, dict):
             return self.validate_book(object)
-        else:
-            if len(object) == 0:
-                for rule in self.rules:
-                    self.errors[rule] = []
-                    for i in self.rules[rule]:
-                        self.errors[rule].append(i.message)
-                return False
-            for key in object:
-                if key not in self.rules:
-                    return False
-                self.errors[key] = []
-                object_to_check = object[key]
-                rules_to_check = self.rules[key]
-                for i in rules_to_check:
-                    if not i.validate(object_to_check):
-                        self.errors.get(key).append(i.message)
-            checker = 0
-            keys_to_remove = []
-            for i in self.errors:
-                if len(self.errors[i]) == 0:
-                    keys_to_remove.append(i)
-            for key in keys_to_remove:
-                del self.errors[key]
-            for key in self.errors:
-                checker += len(self.errors[key])
-            if checker != 0:
-                return False
-            return True
+
+        for field in self.rules:
+            for valid in self.rules[field]:
+                if field in object and valid.validate(object[field]):
+                    continue
+
+                if field not in self.errors:
+                    self.errors[field] = []
+                self.errors[field].append(valid.message)
+
+        return len(self.errors) == 0
 
 
 class ValidatorRule(ABC):

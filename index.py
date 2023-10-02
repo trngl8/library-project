@@ -348,7 +348,8 @@ def admin_dashboard():
         return abort(404)
     if not session.get('email') == app.config['ADMIN_PERMISSION']:
         flash("You don't have permission to access this page", category="error")
-        return redirect(url_for('login'))
+        # TODO: redirect to login page
+        return redirect(url_for('home'))
     # TODO define charts
     return render_template('admin_dashboard.html', library=library)
 

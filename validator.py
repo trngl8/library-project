@@ -2,7 +2,7 @@ import re
 from abc import ABC, abstractmethod
 
 
-class Validator():
+class Validator:
     def __init__(self):
         self.rules = {}
         self.errors = {}
@@ -11,23 +11,13 @@ class Validator():
         for key in rules.keys():
             self.rules[key] = rules[key]
 
-    def validate_book(self, book):
-        if isinstance(book.isbn, self.rules["ISBN"]["type"]) and re.match(self.rules["ISBN"]["regexp"],
-                                                                            book.isbn) and \
-                isinstance(book.year, self.rules["year"]["type"]) and self.rules["year"]["min"] < book.year < \
-                self.rules["year"]["max"]:
-            return True
-        return False
-
-    def validate(self, object):
+    def validate(self, struct: dict) -> bool:
         if len(self.rules) == 0:
             return True
-        if not isinstance(object, dict):
-            return self.validate_book(object)
 
         for field in self.rules:
             for valid in self.rules[field]:
-                if field in object and valid.validate(object[field]):
+                if field in struct and valid.validate(struct[field]):
                     continue
 
                 if field not in self.errors:

@@ -271,20 +271,25 @@ class User(Visitor):
         return False
 
 
-class Book:
-    def __init__(self, title, author, year, ISBN=None, price=100):
+class Product:
+    def __init__(self, title, price=100):
         self.id = None
-        self.isbn = ISBN
         self.title = title
-        self.author = author
-        self.year = year
+        self.price = price
+        self.visible = False
         self.available = False
         self.count = 0
-        self.price = price
+
+
+class Book(Product):
+    def __init__(self, title, author, year, ISBN=None, price=100):
+        super().__init__(title, price)
+        self.isbn = ISBN
+        self.author = author
+        self.year = year
         self._width = None
         self._height = None
         self._length = None
-        self.visible = False
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:

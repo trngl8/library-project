@@ -14,7 +14,7 @@ from library import Library
 from processing import Processing
 from file import FileImport
 from error import DatabaseError, EntityNotFound
-from validator import Validator, Required, Expression, Email
+from validator import Validator, Required, Username, Email
 
 UPLOAD_FOLDER = 'var/import/'
 ALLOWED_EXTENSIONS = {'csv', 'tsv'}
@@ -44,7 +44,7 @@ def home():
         username = request.form["username"]
         email = request.form["email"]
         validator = Validator()
-        validator.add({'username': [Required(), Expression(r'^[a-zA-Z0-9_.-]+$')]})
+        validator.add({'username': [Required(), Username()]})
         validator.add({'email': [Required(), Email()]})
         if not validator.validate({'email': email, 'username': username}):
             flash("Email not valid", category="error")

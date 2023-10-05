@@ -18,13 +18,13 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.mimetype, 'text/html')
 
     def test_home_set_username_invalid(self):
-        response = self.app.post('/', data=dict(username='#st$%^'))
+        response = self.app.post('/', data=dict(email='#st$%^', username='localhost'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
 
     def test_home_set_username(self):
-        response = self.app.post('/', data=dict(username='test'))
+        response = self.app.post('/', data=dict(email='test@localhost', username='localhost'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')
@@ -126,8 +126,15 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.mimetype, 'application/json')
 
-    def test_admin_dashboard(self):
+    def test_admin_dashboard_default_user(self):
         response = self.app.get('/admin/dashboard')
+        # TODO: should be redirect on user with no permissions
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content_type, 'text/html; charset=utf-8')
+        self.assertEqual(response.mimetype, 'text/html')
+
+    def test_import(self):
+        response = self.app.get('/import')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'text/html; charset=utf-8')
         self.assertEqual(response.mimetype, 'text/html')

@@ -1,5 +1,5 @@
 import unittest
-from validator import Validator, Required, Email, Length, Phone, Isbn, Year, Choice
+from validator import Validator, Required, Email, Length, Phone, Isbn, Year, Choice, Username
 from library import Book
 
 
@@ -167,6 +167,24 @@ class TestValidator(unittest.TestCase):
         }
         result = validator.validate(data)
         self.assertEqual(False, result)
+
+    def test_validator_username_invalid(self):
+        validator = Validator()
+        validator.add({"username": [Username()]})
+        data = {
+            "username": "&2jdsd+"
+        }
+        result = validator.validate(data)
+        self.assertEqual(False, result)
+
+    def test_validator_username_valid(self):
+        validator = Validator()
+        validator.add({"username": [Username()]})
+        data = {
+            "username": "test.com"
+        }
+        result = validator.validate(data)
+        self.assertEqual(True, result)
 
 
 if __name__ == "__main__":

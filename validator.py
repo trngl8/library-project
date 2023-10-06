@@ -114,3 +114,8 @@ class Choice(ValidatorRule):
 
     def validate(self, value) -> bool:
         return value in self.choices
+
+
+class Username(Expression):
+    def __init__(self, message="Invalid username"):
+        super().__init__(r'^[a-zA-Z0-9_.-]+$', message)

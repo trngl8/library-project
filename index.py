@@ -1,4 +1,3 @@
-import re
 import dotenv
 import os
 from datetime import date
@@ -15,6 +14,7 @@ from library import Library
 from processing import Processing
 from file import FileImport
 from error import DatabaseError, EntityNotFound
+from validator import Validator, Required, Username, Email
 
 UPLOAD_FOLDER = 'var/import/'
 ALLOWED_EXTENSIONS = {'csv', 'tsv'}
@@ -43,8 +43,11 @@ def home():
     if request.method == 'POST':
         username = request.form["username"]
         email = request.form["email"]
-        if not re.match(r"[A-Za-z0-9_.-]+", username):
-            flash("Your name is not valid", category="error")
+        validator = Validator()
+        validator.add({'username': [Required(), Username()]})
+        validator.add({'email': [Required(), Email()]})
+        if not validator.validate({'email': email, 'username': username}):
+            flash("Email not valid", category="error")
             return redirect(url_for("home"))
         try:
             library.get_repository('users').find_by({
@@ -58,7 +61,7 @@ def home():
                 'ip_address': request.remote_addr,
                 'user_agent': request.user_agent.string
             })
-        session['username'] = email
+        session['username'] = username
         session['email'] = email
         return redirect(url_for('index'))
 

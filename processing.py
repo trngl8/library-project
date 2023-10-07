@@ -10,7 +10,7 @@ processing_address = os.getenv("URI_PROCESSING_ADDRESS")
 class Processing:
 
     @staticmethod
-    def create_order(form):
+    def send_order(form):
         response = requests.post(processing_address, {
             'firstname': form.firstname.data,
             'lastname': form.lastname.data,

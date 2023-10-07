@@ -1,5 +1,6 @@
 import unittest
-from library import Library, Book, User, Visitor
+from library import Library, Book, User, Visitor, Cart
+from storage import DataStorage
 from unittest.mock import Mock
 
 
@@ -105,7 +106,6 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(book2, library.catalog[1])
         self.assertEqual(book3, library.catalog[2])
 
-
     def test_find_books(self):
         library = self.library
 
@@ -157,13 +157,100 @@ class TestLibrary(unittest.TestCase):
         ]
         library = Library('test', storage)
         book = library.get_repository('books').find(2)
-        self.assertEqual('Python Hard Way', book.title)
+        self.assertEqual('Python Hard Way', book['title'])
         with self.assertRaises(Exception):
             library.get_repository('books').find(9)
 
     def test_add_user(self):
         library = self.library
-        library.add_user(User("Artem", 'artemkrayevskiy@gmail.com', "0676708881"))
+        library.add_user({'name': 'Artem', 'email': 'artemkrayevskiy@gmail.com', 'phone': '0676708881'})
+
+    def test_cart(self):
+        cart = Cart()
+        cart.add_item(Book("Python Crash Course", "Eric Matthes", 2019))
+        cart.add_item(Book("Python Hard Way", "Zed Shaw", 2013))
+        cart.add_item(Book("Head First Python", "Paul Barry", 2016))
+        self.assertAlmostEqual(300, cart.get_total())
+        cart.clear()
+        self.assertAlmostEqual(0, cart.get_total())
+
+    def test_books_repository(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        self.assertEqual(4, len(repo.items_data))
+
+    def test_add_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        result = repo.add_item({
+            'title': 'Test',
+            'author': 'Test',
+            'year': '2020'
+        })
+        self.assertEqual(5, result)
+
+    def test_add_item_duplicate(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        with self.assertRaises(Exception):
+            repo.add_item({
+                'title': 'Python Crash Course',
+                'author': 'Eric Matthes',
+                'year': '2019'
+            })
+
+    def test_get_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        result = repo.get_item(1)
+        self.assertEqual('Python Crash Course', result['title'])
+
+    def test_remove_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        repo.remove_item(1)
+        self.assertEqual(3, len(repo.items_data))
+
+    def test_update_item(self):
+        repo = self.library.get_repository('books')
+        repo.load_items_data()
+        repo.update_item(1, {
+            'title': 'Test',
+            'author': 'Test',
+            'year': '2020'
+        })
+        result = repo.get_item(1)
+        self.assertEqual('Test', result['title'])
+
+    def test_add_user_repository(self):
+        file_lines = Mock()
+        file_lines.read_lines.return_value = [
+            'ID,NAME,EMAIL,PHONE',
+            '1,test,test@localhost,123456789',
+            '2,test2,test2@localhost,123456780',
+        ]
+        library = Library('test', DataStorage(file_lines))
+        repo = library.get_repository('users')
+
+        result = repo.add({
+            'name': 'Test3',
+            'email': 'test3@localhost',
+            'phone': '123456789',
+        })
+        first = repo.find(1)
+        last = repo.find(2)
+        item = repo.find(result)
+
+        self.assertEqual('test@localhost', first['email'])
+        self.assertEqual('test2@localhost', last['email'])
+        self.assertEqual('test3@localhost', item['email'])
+
+    def test_dimensions(self):
+        book = Book("Python Crash Course", "Eric Matthes", 2019)
+        book.set_dimensions(10, 20, 30)
+        self.assertEqual(10, book._width)
+        self.assertEqual(20, book._height)
+        self.assertEqual(30, book._length)
 
 
 if __name__ == "__main__":

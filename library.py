@@ -1,12 +1,42 @@
+from abc import ABC, abstractmethod
 from storage import DataStorage
+from error import DatabaseError, UniqueError, EntityNotFound
+from validator import Validator, Required, Length, Year, Phone, Email
 
 
-class Repository:
+class BaseRepository(ABC):
+    @abstractmethod
+    def find_all(self) -> list:
+        pass
+
+    @abstractmethod
+    def find_by(self, criteria: dict) -> dict:
+        pass
+
+    @abstractmethod
+    def find(self, item_id: int) -> dict:
+        pass
+
+    @abstractmethod
+    def add(self, item: dict) -> int:
+        pass
+
+    @abstractmethod
+    def remove(self, item_id: int) -> None:
+        pass
+
+    @abstractmethod
+    def update(self, item_id: int, data: dict) -> dict:
+        pass
+
+
+class Repository(BaseRepository):
 
     def __init__(self, name, storage: DataStorage):
         self.name = name
         self.storage = storage
         self.items = []
+        self.items_data = {}
 
     def load_items(self):
         self.items = []
@@ -17,52 +47,126 @@ class Repository:
             values = line.split(',')
             self.items.append(dict(zip(columns, values)))
 
-    def save(self, item):
-        if 0 == len(self.items):
-            self.load_items()
+    def load_items_data(self):
+        self.items_data = {}
+        lines = self.storage.get_lines(self.name)
+        header = self.storage.get_header(self.name)
+        columns = [x.lower() for x in header.split(',')]
+        for line in lines:
+            values = line.split(',')
+            item_id = int(values[0])
+            self.items_data[item_id] = (dict(zip(columns, values)))
 
-        for item in self.items:
-            if item.id == item.id:
-                raise Exception(f"Item with id {item.id} already exists")
-
-        self.items.append(item)
+    def add_item(self, item):
+        self.load_items_data()
+        if 0 == len(self.items_data):
+            item_id = 1
+        else:
+            item_id = next(reversed(self.items_data)) + 1
+        for key, value in self.items_data.items():
+            hash_key = value['title'] + value['author'] + value['year']
+            if hash_key == item['title'] + item['author'] + item['year']:
+                raise Exception(f"Item {item} already exists")
+        self.items_data[item_id] = item
         self.storage.add_line(self.name, item)
+        return item_id
 
-    def remove(self, item_id):
-        if 0 == len(self.items):
-            self.load_items()
+    def get_item(self, item_id):
+        return self.items_data[item_id]
 
-        for item in self.items:
-            if item.id == item_id:
-                self.items.remove(item)
-                self.storage.remove_line(self.name, item_id)
-                return
+    def remove_item(self, item_id):
+        del self.items_data[item_id]
 
-        raise Exception(f"Item with id {item_id} not found")
+    def update_item(self, item_id, item):
+        self.items_data[item_id] = item
+
+    def save(self):
+        lines = []
+        for item_id, item in self.items_data.items():
+            line = str(item_id) + "," + ",".join(item.values())
+            lines.append(line)
+        self.storage.write_lines(self.name, lines)
+
+    def find_all(self) -> list:
+        self.load_items()
+        return self.items
+
+    def find_by(self, criteria: dict) -> list:
+        raise DatabaseError
+
+    def find(self, item_id: int) -> dict:
+        raise DatabaseError
+
+    def add(self, item: dict) -> int:
+        raise DatabaseError
+
+    def remove(self, item_id: int) -> None:
+        raise DatabaseError
+
+    def update(self, item_id: int, data: dict) -> dict:
+        raise DatabaseError
 
 
 class BooksRepository(Repository):
-    def find_all(self) -> list:
-        if 0 == len(self.items):
-            self.load_items()
+    def find(self, item_id: int) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        super().find(item_id)
 
-        result = []
-        for item in self.items:
-            book = Book(item['title'], item['author'], item['year'])
-            book.id = item['id']
-            result.append(book)
-        return result
+    def add(self, item: dict) -> int:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        for book in self.items_data.values():
+            if 'title' in book and 'author' in book and 'year' in book and book['title'] == item['title'] and book['author'] == item['author'] and book['year'] == item['year']:
+                raise UniqueError(f"Book already exists")
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
 
-    def find(self, item_id):
-        if 0 == len(self.items):
-            self.load_items()
 
-        for item in self.items:
-            if item_id == int(item['id']):
-                book = Book(item['title'], item['author'], item['year'])
-                book.id = item['id']
-                return book
-        raise Exception(f"Item with id {item_id} not found")
+class UsersRepository(Repository):
+    def add(self, item: dict) -> int:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        for user in self.items_data.values():
+            if 'email' in user and user['email'] == item['email']:
+                raise UniqueError(f"User with email {item['email']} already exists")
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
+
+    def find(self, item_id: int) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        super().find(item_id)
+
+    def find_by(self, criteria: dict) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        for user in self.items_data.values():
+            if 'email' in criteria and user['email'] == criteria['email']:
+                return user
+        raise EntityNotFound(f"User with {criteria['email']} not found")
+
+
+class OrdersRepository(Repository):
+    def add(self, item: dict) -> int:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        item_id = self.storage.add_line(self.name, item)
+        self.items_data[item_id] = item
+        return item_id
+
+    def find(self, item_id: int) -> dict:
+        if 0 == len(self.items_data):
+            self.load_items_data()
+        if item_id in self.items_data:
+            return self.items_data[item_id]
+        return super().find(item_id)
 
 
 class Library:
@@ -74,6 +178,9 @@ class Library:
         self.cart = Cart()
         self.repositories = {
             'books': BooksRepository('books', storage),
+            'users': UsersRepository('users', storage),
+            'orders': OrdersRepository('orders', storage),
+            'books_orders': OrdersRepository('books_orders', storage)
         }
 
     def get_count(self):
@@ -102,6 +209,15 @@ class Library:
             self.add_book(Book(item[1], item[2], item[3]))
 
     def add_user(self, user):
+        validator = Validator()
+        validator.add({
+            'name': [Required()],
+            'email': [Required(), Email()],
+            'phone': [Required(), Length(3, 13)]
+        })
+        repo = self.get_repository('users')
+        repo.add(user)
+        user = User(user['name'], user['email'], user['phone'])
         self.storage.save_user(user)
         self.users.append(user)
 
@@ -124,7 +240,7 @@ class Library:
 
         return filtered
 
-    def get_repository(self, name):
+    def get_repository(self, name) -> BaseRepository:
         return self.repositories.get(name)
 
 
@@ -155,20 +271,35 @@ class User(Visitor):
         return False
 
 
-class Book:
-    def __init__(self, title, author, year, ISBN=None):
+class Product:
+    def __init__(self, title, price):
         self.id = None
-        self.isbn = ISBN
         self.title = title
-        self.author = author
-        self.year = year
+        self.price = price
+        self.visible = False
         self.available = False
         self.count = 0
+
+
+class Book(Product):
+    def __init__(self, title, author, year, price=100, isbn=None):
+        super().__init__(title, price)
+        self.isbn = isbn
+        self.author = author
+        self.year = year
+        self._width = None
+        self._height = None
+        self._length = None
 
     def __eq__(self, another) -> bool:
         if self.title == another.title and self.author == another.author and self.year == another.year:
             return True
         return False
+
+    def set_dimensions(self, width, height, length):
+        self._width = width
+        self._height = height
+        self._length = length
 
 
 class Cart:
@@ -186,3 +317,15 @@ class Cart:
 
     def clear(self):
         self.items = []
+
+
+class Order:
+    def __init__(self, user, books: list):
+        self.user = user
+        self.books = books
+        self.price = 0
+        self._status = 'new'
+        self._id = None
+
+    def get_status(self):
+        return self._status

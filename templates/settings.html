@@ -1,9 +1,27 @@
 {% extends 'blank.html' %}
 
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+<li class="breadcrumb-item active" aria-current="page">Settings</li>
+{% endblock %}
+
 {% block content %}
 <div class="container p-0">
     <div class="col">
         <h1 class="display-5 mb-5">Settings</h1>
     </div>
+</div>
+<div class="container p-0">
+    {% from "_formhelpers_bootstrap.html" import render_field %}
+    <form action="{{ url_for('settings') }}" method="post">
+        <div class="row">
+            <div class="col mb-2">
+            {{ render_field(form.newname) }}
+            </div>
+        </div>
+        <button class="btn btn-lg btn-outline-primary" type="submit">Save</button>
+    </form>
 </div>
 {% endblock %}

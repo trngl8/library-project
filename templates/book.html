@@ -1,10 +1,5 @@
 {% extends 'blank.html' %}
 
-{% block scripts %}
-  {{ super() }}
-  <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
-{% endblock %}
-
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
@@ -49,8 +44,14 @@
 
               </div>
             </div>
-            <a href="{{ url_for('order', book_id=book.id) }}" class="btn btn-outline-primary" title="Borrow">Order</a>
-            <button type="button" id="order_button" onclick="addToCart(this, {{ book.id }})" data-url="{{ url_for('add_to_cart', book_id=book.id)}}" class="btn btn-outline-primary" title="Borrow">Add to cart</button>
+<!--            <a href="#" class="btn btn-outline-primary" title="Order">Order</a>-->
+            {% if book.in_cart %}
+              <button type="button" class="btn btn-outline-primary" disabled>+ Add to cart</button>
+            {% else %}
+              <button type="button" id="order_button" onclick="addToCart(this, {{ book.id }})" data-url="{{ url_for('add_to_cart', book_id=book.id)}}" class="btn btn-outline-primary" title="Order">Add to cart</button>
+            {% endif %}
+            <a href="{{ url_for('book_edit', book_id=book.id) }}" class="btn btn-primary" title="Edit">Edit</a>
+            <a href="{{ url_for('book_remove', book_id=book.id) }}" class="btn btn-outline-danger" title="Remove">Remove</a>
         </div>
     </div>
 

@@ -15,7 +15,9 @@
 <div class="container p-0">
   <div class="col">
     <h1 class="display-5 mb-5">Cart</h1>
+
     {% if cart.items|length > 0 %}
+    <form method="post">
       <table class="table">
         <thead>
           <tr>
@@ -34,10 +36,25 @@
         {% endfor %}
         </tbody>
       </table>
-    {% endif %}
-    <form method="post">
-      <button type="submit" class="btn btn-outline-primary">Clear</button>
+
+    <div class="d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary" name="order" value="submit">Order</button>
+      <button type="submit" class="btn btn-outline-primary" name="clear" value="clear">Clear</button>
+    </div>
+
     </form>
+
+    {% else %}
+    
+      <div class="alert alert-dark mb-5" role="alert">
+        No items found in the cart
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-primary">Index</a>
+      </div>
+
+    {% endif %}
+
   </div>
 </div>
 {% endblock %}

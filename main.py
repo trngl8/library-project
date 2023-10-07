@@ -1,6 +1,9 @@
-from library import Library, Book
+from library import Library
 from library import User
 from storage import DataStorage, FileLines
+from file import FileImport
+from validator import Validator, Required, Length
+from error import DatabaseError
 
 
 def print_item(index, value):
@@ -25,28 +28,41 @@ def find_user():
 
 
 def import_books(library: Library):
-    filename = input("Enter filename :> ")
-    list_of_books = library.storage.read_from_csv_catalog(filename)
-    number_of_imported_books = len(list_of_books)
-    library.import_books(list_of_books)
-    return f"Imported {number_of_imported_books} books"
+    importer = FileImport('var/import/')
+    for i in importer.get_dir_files('var/import/'):
+        print(i.split('/')[-1])
+    new_file = input('Enter one of filenames from above: ')
+    result = importer.import_file(new_file, library)
+    return f"{result} books have been imported"
 
 
 def add_user(library: Library):
     name = input("Name :> ")
     email = input("Email :> ")
     phone = input("Phone :> ")
-    user = User(name, email, phone)
-    library.add_user(user)
+    library.add_user(zip(name, email, phone))
     return f"User {name} added"
 
 
 def add_book(library: Library):
-    title = input("Title :> ")
-    author = input("Author :> ")
-    year = input("Year :> ")
-    result = library.add_book(Book(title, author, year))
-    return f"Book added with ID {result}"
+    book_item = {
+        'title': input("Title :> "),
+        'author': input("Author :> "),
+        'year': input("Year :> ")
+    }
+    validator = Validator()
+    validator.add({
+        'title': [Required()],
+        'author': [Required()],
+        'year': [Required(), Length(4, 4)]
+    })
+    if not validator.validate(book_item):
+        return f"Invalid data {validator.errors}"
+    try:
+        result = library.get_repository('books').add(book_item)
+        return f"Book added with ID {result}"
+    except DatabaseError as e:
+        return f"Database error: {e.message}"
 
 
 def remove_book(library: Library):

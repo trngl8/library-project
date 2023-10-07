@@ -3,55 +3,30 @@
 {% block breadcrumbs %}
 <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
 <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Index</a></li>
-<li class="breadcrumb-item"><a href="{{ url_for('book', book_id=book.id) }}">{{ book.title[:] }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">Order confirm</li>
+<li class="breadcrumb-item"><a href="{{ url_for('cart_index') }}">Cart</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('cart_order') }}">Order</a></li>
+<li class="breadcrumb-item active" aria-current="page">Order {{ order_id }} confirm</li>
 {% endblock %}
 
-{% block modal %}
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="confirmModalLabel">Confirmed</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Order confirmed. You may close the window.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/order.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="container p-0">
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-primary" role="alert">
-            {{ message }}
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1 class="display-5 mb-5">Confirm your order</h1>
+          <div class="mb-5">
+            <div class="spinner-border" role="status" id="spinner_loader">
+              <span class="visually-hidden">Loading...</span>
             </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h1 class="display-5 mb-5">Confirm your order</h1>
-        <div class="mb-5">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
           </div>
+          <button type="button" class="btn btn-lg btn-primary" id="confirm_button" onclick="refreshOrder(this, {{ order_id }})" data-url="{{ url_for('confirm_order', order_id=order_id) }}">
+            Confirm
+          </button>
         </div>
-
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">
-          Confirm
-        </button>
       </div>
-    </div>
     </div>
 {% endblock %}

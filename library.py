@@ -272,7 +272,7 @@ class User(Visitor):
 
 
 class Product:
-    def __init__(self, title, price=100):
+    def __init__(self, title, price):
         self.id = None
         self.title = title
         self.price = price
@@ -282,9 +282,9 @@ class Product:
 
 
 class Book(Product):
-    def __init__(self, title, author, year, ISBN=None, price=100):
+    def __init__(self, title, author, year, price=100, isbn=None):
         super().__init__(title, price)
-        self.isbn = ISBN
+        self.isbn = isbn
         self.author = author
         self.year = year
         self._width = None

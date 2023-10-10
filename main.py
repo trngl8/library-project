@@ -28,10 +28,10 @@ def find_user():
 
 
 def import_books(library: Library):
-    importer = FileImport('var/import/')
-    for i in importer.get_dir_files('var/import/'):
-        print(i.split('/')[-1])
+    for files in FileLines.get_files('var/import', '/'):
+        print(files.split('/')[-1])
     new_file = input('Enter one of filenames from above: ')
+    importer = FileImport('var/import/', new_file)
     result = importer.import_file(new_file, library)
     return f"{result} books have been imported"
 

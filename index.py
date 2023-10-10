@@ -9,7 +9,8 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 
 from forms import OrderForm, BookEditForm, BookRemoveForm, NewNameForm
-from storage import DataStorage, FileLines
+from storage import DataStorage
+from file import Directory, File
 from library import Library
 from processing import Processing
 from file import FileImport
@@ -30,7 +31,7 @@ app.secret_key = b'_57#y2L"F4hQ8z\n\xebc]/'
 
 bootstrap = Bootstrap5(app)
 
-library = Library("3 Books", DataStorage(FileLines()))
+library = Library("3 Books", DataStorage(Directory()))
 
 
 def allowed_file(filename):
@@ -83,7 +84,7 @@ def index():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            import_service = FileImport(app.config['UPLOAD_FOLDER'])
+            import_service = FileImport(app.config['UPLOAD_FOLDER'], filename)
             amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='success')
             return redirect(url_for('index'))
@@ -310,7 +311,7 @@ def import_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            import_service = FileImport(app.config['UPLOAD_FOLDER'])
+            import_service = FileImport(app.config['UPLOAD_FOLDER'], filename)
             amount = import_service.process_file(file, filename, library=library)
             flash(f"Your file was imported successfully. {amount} unique books imported", category='warning')
             return redirect(url_for('index'))

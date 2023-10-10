@@ -1,10 +1,10 @@
-from file import FileLines
+from file import Directory, File
 import csv
 
 
 class DataStorage:
 
-    def __init__(self, file_lines: FileLines):
+    def __init__(self, directory: Directory):
         struct = {
             'books': [
                 "ID", "TITLE", "AUTHOR", "YEAR", "ISBN", "AVAILABLE", "CREATED"
@@ -19,11 +19,10 @@ class DataStorage:
                 "ID", "BOOK_ID", "ORDER_ID", "PRICE"
             ]
         }
+        self.directory = directory
         self.delimiter = ","
         self.ext = '.csv'
-        self.lines = file_lines
-        self.path = file_lines.path
-        self.lines.write_headers(struct, self.ext, self.delimiter)
+        self.path = directory.path
         self.data = {}
         self.counters = {}
         self.headers = {}
@@ -52,7 +51,7 @@ class DataStorage:
     def get_lines(self, entity_name):
         if entity_name in self.data:
             return self.data[entity_name]
-        lines = self.lines.read_lines(entity_name + self.ext)
+        lines = self.directory.file(entity_name + self.ext).read_lines(entity_name + self.ext)
         self.headers[entity_name] = lines.pop(0)
         self.counters[entity_name] = len(lines)
         self.data[entity_name] = lines

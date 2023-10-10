@@ -2,16 +2,48 @@ from validator import Validator
 import os
 
 
-class FileLines:
-    def __init__(self, files_dir="/var/data/"):
-        self.path = os.path.dirname(__file__) + files_dir
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
+class Directory:
+    def __init__(self, files_dir="var/data/"):
+        self._relative_path = files_dir
+        self._path = os.path.dirname(__file__) + files_dir
+        if not os.path.exists(self._path):
+            os.makedirs(self._path)
+
+    def file(self, filename):
+        return File(self._relative_path + filename)
+
+    @property
+    def path(self):
+        return self._path
+
+    @property
+    def relative_path(self):
+        return self._relative_path
+
+    def get_files(self):
+        files = []
+        for file in os.listdir(self._path):
+            entry_path = os.path.join(self._path, file)
+            if os.path.isfile(entry_path):
+                files.append(entry_path)
+        return files
+
+
+class File(Directory):
+    def __init__(self, filename):
+        relative_dir = os.path.dirname(filename)
+        absolute_dir = os.path.dirname(__file__)
+        super().__init__(relative_dir)
+        if not os.path.exists(absolute_dir + '/' + filename):
+            raise FileNotFoundError(f"File {filename} not found in {absolute_dir}")
 
     def write_headers(self, headers, ext=".csv", delimiter=","):
         for key, value in headers.items():
             if not os.path.exists(self.path + key + ext):
                 self.write_lines(key + ext, [delimiter.join(value)])
+
+    def lines (self, filename):
+        return self.read_lines(filename)
 
     def read_lines(self, filename: str) -> list:
         if not os.path.exists(self.path + filename):
@@ -32,37 +64,23 @@ class FileLines:
 
 
 class FileImport:
-    def __init__(self, path, filename=None) -> None:
+    def __init__(self, path, filename) -> None:
         self.path = path
         self.filename = filename
-        if filename:
-            self.lines = FileLines(self.path).read_lines(self.filename)
+        self._lines = File(self.path + self.filename).read_lines(self.filename)
 
-    def get_files(self):
-        files = []
-        for file in os.listdir(self.path):
-            entry_path = os.path.join(self.path, file)
-            if os.path.isfile(entry_path):
-                files.append(entry_path)
-        return files
-
-    def read_data(self, filename: str) -> list:
-        if os.path.exists(self.path + filename):
-            lines = FileLines(self.path).read_lines(filename)
-            return lines[1:]
-        return []
-
-    def get_lines(self):
-        return self.lines
+    @property
+    def lines(self):
+        return self._lines
 
     def save_file(self, file, file_name):
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
         file.save(os.path.join(self.path, file_name))
 
     def process_file(self, file, file_name, library):
-        self.save_file(file, file_name)
-        lines = FileLines('/var/import/').read_lines(file_name)
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
+        file.save(os.path.join(self.path, file_name))
+        lines = File('/var/import/').read_lines(file_name)
         validator = Validator()
         counter = 0
         for i in lines[1:]:

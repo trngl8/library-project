@@ -28,7 +28,7 @@ def find_user():
 
 
 def import_books(library: Library):
-    for files in FileImport.get_files('var/import', '/'):
+    for files in FileLines.get_files('var/import', '/'):
         print(files.split('/')[-1])
     new_file = input('Enter one of filenames from above: ')
     importer = FileImport('var/import/', new_file)

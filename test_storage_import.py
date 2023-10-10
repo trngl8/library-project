@@ -5,10 +5,9 @@ from file import FileImport
 
 class TestStorageImport(unittest.TestCase):
     def test_import(self):
-        filename = "test.csv"
-        importer = FileImport("var/import/", filename)
-        data = importer.read_data(filename)
-        self.assertEqual(0, len(data))
+        importer = FileImport("var/import/", "test.csv")
+        data = importer.lines
+        self.assertEqual(1, len(data))
 
 
 if __name__ == '__main__':
